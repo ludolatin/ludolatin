@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/phraselist.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<section class="header">
+  <h2 class="title">{{phraselist.title|title}}</h2>
+  <div class="row">
+    <div class="three columns value-prop"></div>
+    <div class="six columns">
+      {% if form.errors %}
+        <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
+      {% endif %}
+      <form method=post>
+        {{ form.hidden_tag() }}
+        <dl>
+          <dd>{{ form.phrase(class_="u-full-width", placeholder="Enter your phrase", value="", maxlength=128) }}
+          <dt>{{ form.submit }}
+        </dl>
+      </form>
+    </div>
+    <div class="row">
+      <div class="one-half column open-todos">
+        <h6 class="docs-header">{{ phraselist.open_count }} open</h6>
+        <ul>
+          {% for phrase in phraselist.phrases %}
+            {% if not phrase.is_finished %}
+              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}"> {{ phrase.description }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="one-half column finished-todos">
+        <h6 class="docs-header">{{ phraselist.finished_count }} finished</h6>
+        <ul>
+          {% for phrase in phraselist.phrases %}
+            {% if phrase.is_finished %}
+              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}" checked="checked"> {{ phrase.description }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
