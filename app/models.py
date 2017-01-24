@@ -2,13 +2,12 @@
 
 import re
 from datetime import datetime
-
 from sqlalchemy.orm import synonym
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import url_for
 from flask_login import UserMixin
-
 from app import db, login_manager
+
 
 EMAIL_REGEX = re.compile(r'^\S+@\S+\.\S+$')
 USERNAME_REGEX = re.compile(r'^\S+$')
@@ -149,11 +148,6 @@ class TodoList(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     todos = db.relationship('Todo', backref='todolist', lazy='dynamic')
 
-    def __init__(self, title=None, creator=None, created_at=None):
-        self.title = title or 'untitled'
-        self.creator = creator
-        self.created_at = created_at or datetime.utcnow()
-
     def __repr__(self):
         return '<Todolist: {0}>'.format(self.title)
 
@@ -212,13 +206,6 @@ class Todo(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     todolist_id = db.Column(db.Integer, db.ForeignKey('todolist.id'))
 
-    def __init__(self, description, todolist_id, creator=None,
-                 created_at=None):
-        self.description = description
-        self.todolist_id = todolist_id
-        self.creator = creator
-        self.created_at = created_at or datetime.utcnow()
-
     def __repr__(self):
         return '<{0} Todo: {1} by {2}>'.format(
             self.status, self.description, self.creator or 'None')
@@ -245,7 +232,7 @@ class Todo(db.Model, BaseModel):
             'status': self.status,
         }
 
-    
+
 class PhraseList(db.Model, BaseModel):
     __tablename__ = 'phraselist'
     id = db.Column(db.Integer, primary_key=True)
@@ -253,11 +240,6 @@ class PhraseList(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phrases = db.relationship('Phrase', backref='phraselist', lazy='dynamic')
-
-    def __init__(self, title=None, creator=None, created_at=None):
-        self.title = title or 'untitled'
-        self.creator = creator
-        self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
         return '<Phraselist: {0}>'.format(self.title)
@@ -268,7 +250,6 @@ class PhraseList(db.Model, BaseModel):
 
     @title.setter
     def title(self, title):
-        print "moo: " + title
         if not check_length(title, 128):
             raise ValueError('{} is not a valid title'.format(title))
         self._title = title
@@ -311,20 +292,11 @@ class PhraseList(db.Model, BaseModel):
 class Phrase(db.Model, BaseModel):
     __tablename__ = 'phrase'
     id = db.Column(db.Integer, primary_key=True)
-    english = db.Column(db.String(128))
-    latin = db.Column(db.String(128))
+    phrase = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_correct = db.Column(db.Boolean, default=False)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phraselist_id = db.Column(db.Integer, db.ForeignKey('phraselist.id'))
-
-    def __init__(self, english, latin, phraselist_id, creator=None,
-                 created_at=None):
-        self.english = english
-        self.latin = latin
-        self.phraselist_id = phraselist_id
-        self.creator = creator
-        self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
         return '<{0} Phrase: {1} / {2} by {3}>'.format(
@@ -346,3 +318,43 @@ class Phrase(db.Model, BaseModel):
             'created_at': self.created_at,
             'status': self.status,
         }
+
+# http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
+# Table to join english_phrase & latin_phrase tables
+english_latin_phrase_assoc = db.Table('tags',
+    db.Column('english_phrase_id', db.Integer, db.ForeignKey('english_phrase.id')),
+    db.Column('latin_phrase_id', db.Integer, db.ForeignKey('latin_phrase.id'))
+)
+
+class EnglishPhrase(db.Model, BaseModel):
+    # name
+    __tablename__ = 'english_phrase'
+
+    # columns
+    id = db.Column(db.Integer, primary_key=True)
+    phrase = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    # association
+    latin_translations = db.relationship('LatinPhrase', secondary=english_latin_phrase_assoc,
+        backref=db.backref('english_phrases', lazy='dynamic'))
+
+    # description
+    def __repr__(self):
+        return '<Phrase: {0}>'.format(self.phrase)
+
+    # properties
+
+# Mirror image model of EnglishPhrase
+class LatinPhrase(db.Model, BaseModel):
+    __tablename__ = 'latin_phrase'
+
+    id = db.Column(db.Integer, primary_key=True)
+    phrase = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    english_translations = db.relationship('EnglishPhrase', secondary=english_latin_phrase_assoc,
+        backref=db.backref('latin_phrases', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<Phrase: {0}>'.format(self.phrase)

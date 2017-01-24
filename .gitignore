@@ -91,3 +91,7 @@ ENV/
 # Komodo edit
 .komodotools/
 *.komodoproject
+
+# Sqlite DB
+*.db
+

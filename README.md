@@ -46,7 +46,7 @@ env
 Finally, initialise the database with:
 
 ```
-flask db upgrade
+flask db init # (if migrations or db not present)
 flask db migrate
 flask db upgrade
 ```
