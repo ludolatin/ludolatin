@@ -391,3 +391,23 @@ def get_latinphrase(id):
         'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
         })
 
+
+@api.route('/randomenglishphrase/')
+def get_randomenglishphrase():
+    englishphrase = EnglishPhrase.query.order_by(func.random()).first()
+    return jsonify({
+        'created_at': englishphrase.created_at,
+        'phrase': englishphrase.phrase,
+        'latin_translations': [phrase.to_dict() for phrase in englishphrase.latin_translations]
+        })
+
+
+@api.route('/randomlatinphrase/')
+def get_lrandomatinphrase():
+    latinphrase = LatinPhrase.query.order_by(func.random()).first()
+    return jsonify({
+        'created_at': latinphrase.created_at,
+        'phrase': latinphrase.phrase,
+        'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
+        })
+
