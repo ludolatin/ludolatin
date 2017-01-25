@@ -43,13 +43,23 @@ You can see your configured environment variables with:
 env
 ```
 
+You will need to activate venv and set up the environment variables every time you open a new shell.
+As a shortcut you can run the following:
+
+```
+source setup
+```
+
 Finally, initialise the database with:
 
 ```
-flask db init # (if migrations or db not present)
+flask db init # (if migrations & db not present)
 flask db migrate
 flask db upgrade
 ```
+
+If the DB is not in sync for some reason, you can delete it and the migrations directory 
+and run the above commands to create an empty database with the current schema.
 
 ## Run
 
