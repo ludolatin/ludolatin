@@ -358,3 +358,36 @@ class LatinPhrase(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
+
+
+@api.route('/englishphrases/')
+def get_englishphrases():
+    phrases = EnglishPhrase.query.all()
+    return jsonify({'englishphrases': [phrase.to_dict() for phrase in phrases]})
+
+
+@api.route('/latinphrases/')
+def get_latinphrases():
+    phrases = LatinPhrase.query.all()
+    return jsonify({'latinphrases': [phrase.to_dict() for phrase in phrases]})
+
+
+@api.route('/englishphrase/<int:id>/')
+def get_englishphrase(id):
+    englishphrase = EnglishPhrase.query.filter_by(id=id).first_or_404()
+    return jsonify({
+        'created_at': englishphrase.created_at,
+        'phrase': englishphrase.phrase,
+        'latin_translations': [phrase.to_dict() for phrase in englishphrase.latin_translations]
+        })
+
+
+@api.route('/latinphrase/<int:id>/')
+def get_latinphrase(id):
+    latinphrase = LatinPhrase.query.filter_by(id=id).first_or_404()
+    return jsonify({
+        'created_at': latinphrase.created_at,
+        'phrase': latinphrase.phrase,
+        'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
+        })
+
