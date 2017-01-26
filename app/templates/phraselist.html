@@ -23,21 +23,21 @@
     </div>
     <div class="row">
       <div class="one-half column open-todos">
-        <h6 class="docs-header">{{ phraselist.open_count }} open</h6>
+        <h6 class="docs-header">{{ phraselist.incorrect_count }} incorrect</h6>
         <ul>
           {% for phrase in phraselist.phrases %}
-            {% if not phrase.is_finished %}
-              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}"> {{ phrase.description }}</li>
+            {% if not phrase.is_incorrect %}
+              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}"> {{ phrase.phrase }}</li>
             {% endif %}
           {% endfor %}
         </ul>
       </div>
       <div class="one-half column finished-todos">
-        <h6 class="docs-header">{{ phraselist.finished_count }} finished</h6>
+        <h6 class="docs-header">{{ phraselist.correct_count }} correct</h6>
         <ul>
           {% for phrase in phraselist.phrases %}
-            {% if phrase.is_finished %}
-              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}" checked="checked"> {{ phrase.description }}</li>
+            {% if phrase.is_correct %}
+              <li><input type="checkbox" id="checkbox" data-phrase-id="{{ phrase.id }}" checked="checked"> {{ phrase.phrase }}</li>
             {% endif %}
           {% endfor %}
         </ul>
@@ -46,3 +46,4 @@
   </div>
 </section>
 {% endblock %}
+

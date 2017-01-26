@@ -20,3 +20,4 @@ def phraselist(id):
         Phrase(form.phrase.data, phraselist.id, _get_user()).save()
         return redirect(url_for('phrases.phraselist', id=id))
     return render_template('phraselist.html', phraselist=phraselist, form=form)
+

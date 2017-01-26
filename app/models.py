@@ -148,6 +148,11 @@ class TodoList(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     todos = db.relationship('Todo', backref='todolist', lazy='dynamic')
 
+    def __init__(self, title=None, creator=None, created_at=None):
+        self.title = title or 'untitled'
+        self.creator = creator
+        self.created_at = created_at or datetime.utcnow()
+
     def __repr__(self):
         return '<Todolist: {0}>'.format(self.title)
 
@@ -206,6 +211,13 @@ class Todo(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     todolist_id = db.Column(db.Integer, db.ForeignKey('todolist.id'))
 
+    def __init__(self, description, todolist_id, creator=None,
+                 created_at=None):
+        self.description = description
+        self.todolist_id = todolist_id
+        self.creator = creator
+        self.created_at = created_at or datetime.utcnow()
+
     def __repr__(self):
         return '<{0} Todo: {1} by {2}>'.format(
             self.status, self.description, self.creator or 'None')
@@ -240,6 +252,11 @@ class PhraseList(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phrases = db.relationship('Phrase', backref='phraselist', lazy='dynamic')
+    
+    def __init__(self, title=None, creator=None, created_at=None):
+        self.title = title or 'untitled'
+        self.creator = creator
+        self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
         return '<Phraselist: {0}>'.format(self.title)
@@ -298,6 +315,13 @@ class Phrase(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phraselist_id = db.Column(db.Integer, db.ForeignKey('phraselist.id'))
 
+    def __init__(self, phrase, phraselist_id, creator=None,
+                 created_at=None):
+        self.phrase = phrase
+        self.phraselist_id = phraselist_id
+        self.creator = creator
+        self.created_at = created_at or datetime.utcnow()
+
     def __repr__(self):
         return '<{0} Phrase: {1} / {2} by {3}>'.format(
             self.status, self.english, self.latin, self.creator or 'None')
@@ -312,12 +336,12 @@ class Phrase(db.Model, BaseModel):
 
     def to_dict(self):
         return {
-            'english': self.english,
-            'latin': self.latin,
+            'phrase': self.phrase,
             'creator': self.creator,
             'created_at': self.created_at,
             'status': self.status,
         }
+
 
 # http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
 # Table to join english_phrase & latin_phrase tables
@@ -358,56 +382,4 @@ class LatinPhrase(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
-
-
-@api.route('/englishphrases/')
-def get_englishphrases():
-    phrases = EnglishPhrase.query.all()
-    return jsonify({'englishphrases': [phrase.to_dict() for phrase in phrases]})
-
-
-@api.route('/latinphrases/')
-def get_latinphrases():
-    phrases = LatinPhrase.query.all()
-    return jsonify({'latinphrases': [phrase.to_dict() for phrase in phrases]})
-
-
-@api.route('/englishphrase/<int:id>/')
-def get_englishphrase(id):
-    englishphrase = EnglishPhrase.query.filter_by(id=id).first_or_404()
-    return jsonify({
-        'created_at': englishphrase.created_at,
-        'phrase': englishphrase.phrase,
-        'latin_translations': [phrase.to_dict() for phrase in englishphrase.latin_translations]
-        })
-
-
-@api.route('/latinphrase/<int:id>/')
-def get_latinphrase(id):
-    latinphrase = LatinPhrase.query.filter_by(id=id).first_or_404()
-    return jsonify({
-        'created_at': latinphrase.created_at,
-        'phrase': latinphrase.phrase,
-        'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
-        })
-
-
-@api.route('/randomenglishphrase/')
-def get_randomenglishphrase():
-    englishphrase = EnglishPhrase.query.order_by(func.random()).first()
-    return jsonify({
-        'created_at': englishphrase.created_at,
-        'phrase': englishphrase.phrase,
-        'latin_translations': [phrase.to_dict() for phrase in englishphrase.latin_translations]
-        })
-
-
-@api.route('/randomlatinphrase/')
-def get_lrandomatinphrase():
-    latinphrase = LatinPhrase.query.order_by(func.random()).first()
-    return jsonify({
-        'created_at': latinphrase.created_at,
-        'phrase': latinphrase.phrase,
-        'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
-        })
 
