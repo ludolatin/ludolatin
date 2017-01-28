@@ -92,3 +92,8 @@ ENV/
 .komodotools/
 *.komodoproject
 
+# Sqlite DB
+*.db
+
+.DS_Store
+

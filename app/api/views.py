@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from flask import jsonify, request, abort, url_for
+from sqlalchemy.sql import func
 from app.api import api
-from app.models import User, Todo, TodoList, PhraseList, Phrase
+from app.models import User, Todo, TodoList, PhraseList, Phrase, EnglishPhrase, LatinPhrase
 from app.decorators import admin_required
 from flask_login import current_user
 
@@ -316,4 +317,3 @@ def get_lrandomatinphrase():
         'phrase': latinphrase.phrase,
         'english_translations': [phrase.to_dict() for phrase in latinphrase.english_translations]
         })
-

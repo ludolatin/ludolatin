@@ -152,7 +152,7 @@ class TodoList(db.Model, BaseModel):
         self.title = title or 'untitled'
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
-
+        
     def __repr__(self):
         return '<Todolist: {0}>'.format(self.title)
 
@@ -217,7 +217,7 @@ class Todo(db.Model, BaseModel):
         self.todolist_id = todolist_id
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
-
+        
     def __repr__(self):
         return '<{0} Todo: {1} by {2}>'.format(
             self.status, self.description, self.creator or 'None')
@@ -319,13 +319,14 @@ class Phrase(db.Model, BaseModel):
                  created_at=None):
         self.phrase = phrase
         self.phraselist_id = phraselist_id
+        self.is_correct = (phrase=="hello")
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
         return '<{0} Phrase: {1} / {2} by {3}>'.format(
-            self.status, self.english, self.latin, self.creator or 'None')
-
+            self.status, self.phrase, self.creator or 'None')
+    
     @property
     def status(self):
         return 'correct' if self.is_correct else 'incorrect'
@@ -342,7 +343,7 @@ class Phrase(db.Model, BaseModel):
             'status': self.status,
         }
 
-
+    
 # http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
 # Table to join english_phrase & latin_phrase tables
 english_latin_phrase_assoc = db.Table('tags',
@@ -368,6 +369,12 @@ class EnglishPhrase(db.Model, BaseModel):
         return '<Phrase: {0}>'.format(self.phrase)
 
     # properties
+    def to_dict(self):
+        return {
+            'phrase': self.phrase,
+            'created_at': self.created_at,
+        }
+
 
 # Mirror image model of EnglishPhrase
 class LatinPhrase(db.Model, BaseModel):
@@ -383,3 +390,8 @@ class LatinPhrase(db.Model, BaseModel):
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
 
+    def to_dict(self):
+        return {
+            'phrase': self.phrase,
+            'created_at': self.created_at,
+        }

@@ -11,7 +11,6 @@ class TodoForm(FlaskForm):
     )
     submit = SubmitField('Submit')
 
-
 class TodoListForm(FlaskForm):
     title = StringField(
         'Enter your todolist title', validators=[Required(), Length(1, 128)]
