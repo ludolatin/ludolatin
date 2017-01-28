@@ -25,6 +25,9 @@ def create_app(config_name):
     migrate.init_app(app, db=db)
     login_manager.init_app(app)
 
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
     from .phrases import phrases as phrases_blueprint
     app.register_blueprint(phrases_blueprint)
 
@@ -38,14 +41,12 @@ def create_app(config_name):
     app.register_blueprint(utils_blueprint)
 
     # Initialise flask-admin
+    from app.models import User, PhraseList, Phrase
     admin = Admin(app, name='ingenuity', template_mode='bootstrap3')
-    from app.models import User, PhraseList, Phrase, LatinPhrase, EnglishPhrase
 
     # Add administrative views here
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(PhraseList, db.session))
     admin.add_view(ModelView(Phrase, db.session))
-    admin.add_view(ModelView(LatinPhrase, db.session))
-    admin.add_view(ModelView(EnglishPhrase, db.session))
 
     return app
