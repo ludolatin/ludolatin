@@ -152,7 +152,7 @@ class TodoList(db.Model, BaseModel):
         self.title = title or 'untitled'
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
-        
+
     def __repr__(self):
         return '<Todolist: {0}>'.format(self.title)
 
@@ -217,7 +217,7 @@ class Todo(db.Model, BaseModel):
         self.todolist_id = todolist_id
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
-        
+
     def __repr__(self):
         return '<{0} Todo: {1} by {2}>'.format(
             self.status, self.description, self.creator or 'None')
@@ -252,7 +252,7 @@ class PhraseList(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phrases = db.relationship('Phrase', backref='phraselist', lazy='dynamic')
-    
+
     def __init__(self, title=None, creator=None, created_at=None):
         self.title = title or 'untitled'
         self.creator = creator
@@ -315,18 +315,32 @@ class Phrase(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     phraselist_id = db.Column(db.Integer, db.ForeignKey('phraselist.id'))
 
-    def __init__(self, phrase, phraselist_id, creator=None,
-                 created_at=None):
+    def __init__(self, phrase, phraselist_id, englishphrase, creator=None, created_at=None):
+        is_correct = False
+        for latinphrase in englishphrase.latin_translations:
+            print "\nIn model:"
+            print "\nlastphrase: "
+            print englishphrase.phrase
+            print "\nanswer: "
+            print phrase
+            print "\nmodel latin translation: "
+            print latinphrase.phrase
+            print
+
+            if phrase == latinphrase.phrase:
+                is_correct = True
+                break
+
         self.phrase = phrase
         self.phraselist_id = phraselist_id
-        self.is_correct = (phrase=="hello")
+        self.is_correct = is_correct
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
         return '<{0} Phrase: {1} / {2} by {3}>'.format(
             self.status, self.phrase, self.creator or 'None')
-    
+
     @property
     def status(self):
         return 'correct' if self.is_correct else 'incorrect'
@@ -343,7 +357,7 @@ class Phrase(db.Model, BaseModel):
             'status': self.status,
         }
 
-    
+
 # http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
 # Table to join english_phrase & latin_phrase tables
 english_latin_phrase_assoc = db.Table('tags',
