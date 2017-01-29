@@ -41,11 +41,13 @@ def create_app(config_name):
     app.register_blueprint(utils_blueprint)
 
     # Initialise flask-admin
-    from app.models import User, PhraseList, Phrase
+    from app.models import User, PhraseList, Phrase, EnglishPhrase, LatinPhrase
     admin = Admin(app, name='ingenuity', template_mode='bootstrap3')
 
     # Add administrative views here
     admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(EnglishPhrase, db.session))
+    admin.add_view(ModelView(LatinPhrase, db.session))
     admin.add_view(ModelView(PhraseList, db.session))
     admin.add_view(ModelView(Phrase, db.session))
 

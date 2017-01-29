@@ -2,7 +2,7 @@
 
 from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
-from sqlalchemy.sql import func
+from sqlalchemy.sql import *
 
 from app.phrases import phrases
 from app.phrases.forms import PhraseForm
@@ -27,11 +27,15 @@ def phraselist(id):
         return redirect(url_for('phrases.phraselist', id=id))
 
     englishphrase = EnglishPhrase.query.order_by(func.random()).first()
-    print "\nenglishphrase: "
-    print englishphrase
-    print
+    correct = Phrase.query.with_entities(Phrase.phrase).filter_by(phraselist_id=id, is_correct=True).all()
+    correct = [r for r, in correct]
 
-    response = make_response(render_template('phraselist.html', phraselist=phraselist, englishphrase=englishphrase, form=form))
+    latin_translations = []
+    for phrase in englishphrase.latin_translations:
+        latin_translations.append(phrase.phrase)
+
+    unknown = set(latin_translations).isdisjoint(correct)
+
+    response = make_response(render_template('phraselist.html', phraselist=phraselist, englishphrase=englishphrase, unknown=unknown, form=form))
     response.set_cookie('question_id', str(englishphrase.id))
     return response
-

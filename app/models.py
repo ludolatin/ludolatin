@@ -229,8 +229,7 @@ class Phrase(db.Model, BaseModel):
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
-        return '<{0} Phrase: {1} / {2} by {3}>'.format(
-            self.status, self.phrase, self.creator or 'None')
+        return '<{0} Phrase: {1} by {2}>'.format(self.status, self.phrase, self.creator or 'None')
 
     @property
     def status(self):
