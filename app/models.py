@@ -200,29 +200,29 @@ class AnswerList(db.Model, BaseModel):
 class Answer(db.Model, BaseModel):
     __tablename__ = 'answer'
     id = db.Column(db.Integer, primary_key=True)
-    phrase = db.Column(db.String(128))
+    text = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_correct = db.Column(db.Boolean, default=False)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
 
-    def __init__(self, phrase, answerlist_id, englishphrase, creator=None, created_at=None):
+    def __init__(self, text, answerlist_id, englishphrase, creator=None, created_at=None):
 
         # Is the submitted anser correct?
         is_correct = False
         for latinphrase in englishphrase.latin_translations:
-            if phrase == latinphrase.phrase:
+            if text == latinphrase.phrase:
                 is_correct = True
                 break
 
-        self.phrase = phrase
+        self.text = text
         self.answerlist_id = answerlist_id
         self.is_correct = is_correct
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
-        return '<{0} answer: {1} by {2}>'.format(self.status, self.phrase, self.creator or 'None')
+        return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.creator or 'None')
 
     @property
     def status(self):
