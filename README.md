@@ -36,6 +36,7 @@ and optionally another to enable debugging output:
 ```sh
 export FLASK_APP=ingenuity.py
 export FLASK_DEBUG=1
+```
 
 You can see your configured environment variables with:
 
@@ -58,7 +59,7 @@ flask db migrate
 flask db upgrade
 ```
 
-If the DB is not in sync for some reason, you can delete it and the migrations directory 
+If the DB is not in sync for some reason, you can delete it and the migrations directory
 and run the above commands to create an empty database with the current schema.
 
 ## Run
@@ -89,7 +90,7 @@ Model & ORM         | [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/lates
 Migration           | [Flaks-Migrate](http://flask-migrate.readthedocs.io/en/latest/)
 Forms               | [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/)
 Login               | [Flask-Login](https://flask-login.readthedocs.org/en/latest/)
-Admin               | Flask-Admin(https://flask-admin.readthedocs.io/en/latest/)
+Admin               | [Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)
 
 ## Other libraries used
 CSS | [Skeleton](http://getskeleton.com/)
