@@ -5,12 +5,11 @@
 <script> // Don't know why this code doesn't work when placed in site.js...
   $(function() {
     // Enables popover
-    $("#hintpopover").popover({
+    $("#hint-popover").popover({
       html : true,
       content: function() {
-        return $("#user-popover-content").html();
+        return $("#hint-popover-content").html();
       },
-      title: "Where to?"
     });
   });
 </script>
@@ -19,7 +18,7 @@
 {% block body %}
 <section class="header">
   <h2 class="title">{{answerlist.title|title}}</h2>
-  <h3>{{englishphrase.phrase}}</h3>
+  <span>{{englishphrase.phrase}}</span>
 
   {% if unknown %}
     <a
@@ -27,11 +26,11 @@
      href="#"
      tabindex="0"
      data-placement="bottom"
-     data-trigger="focus"
+     data-trigger="hover"
     >
       ?
     </a>
-    <ul id="user-popover-content" class="hidden">
+    <ul id="hint-popover-content" class="hidden">
       {% for phrase in englishphrase.latin_translations %}
         <li class="list-group-item">{{ phrase.phrase }}</li>
       {% endfor %}
