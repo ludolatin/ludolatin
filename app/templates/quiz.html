@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block js %}
-<script src="{{ url_for('static', filename='js/phraselist.js') }}"></script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -26,7 +26,7 @@
       <form method=post>
         {{ form.hidden_tag() }}
         <dl>
-          <dd>{{ form.phrase(class_="u-full-width", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
+          <dd>{{ form.answer(class_="u-full-width", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
           <dt>{{ form.submit }}
         </dl>
       </form>
@@ -43,7 +43,7 @@
           {% endfor %}
         </ul>
       </div>
-      
+
       <div class="one-half column finished-todos">
         <h6 class="docs-header">{{ phraselist.incorrect_count }} incorrect</h6>
         <ul>

@@ -2,6 +2,6 @@
 
 from flask import Blueprint
 
-phrases = Blueprint('phrases', __name__)
+quiz = Blueprint('quiz', __name__)
 
 from . import views
