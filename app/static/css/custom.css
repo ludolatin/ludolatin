@@ -1,4 +1,8 @@
 
+.header {
+  padding-bottom: 1rem;
+}
+
 h2.title {
   word-wrap: break-word;
 }
@@ -49,7 +53,7 @@ tr td.todolist-title {
   margin-bottom: 10px;
 }
 
- /* For user menu popup content */
+ /* For hint-popup content */
 .hidden {
   display: none;
 }

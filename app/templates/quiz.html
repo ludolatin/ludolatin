@@ -2,7 +2,8 @@
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
-<script> // Don't know why this code doesn't work when placed in site.js...
+<script>
+// Don't know why this code doesn't work when placed in site.js...
   $(function() {
     // Enables popover
     $("#hint-popover").popover({
@@ -16,64 +17,67 @@
 {% endblock %}
 
 {% block body %}
-<section class="header">
-  <h2 class="title">{{answerlist.title|title}}</h2>
-  <span>{{englishphrase.phrase}}</span>
-
-  {% if unknown %}
-    <a
-     id="hint-popover"
-     href="#"
-     tabindex="0"
-     data-placement="bottom"
-     data-trigger="hover"
-    >
-      ?
-    </a>
-    <ul id="hint-popover-content" class="hidden">
-      {% for phrase in englishphrase.latin_translations %}
-        <li class="list-group-item">{{ phrase.phrase }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+<div class="jumbotron">
+  <h1 class="mb-5 text-center">{{answerlist.title|title}}</h1>
 
   <div class="row">
-    <div class="six columns">
-      {% if form.errors %}
-        <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
-      {% endif %}
-      <form method=post>
+    <div class="col-lg-6">
+      <h2 class="mb-4 text-center">
+        {{englishphrase.phrase}}
+        {% if unknown %}
+          <a
+           id="hint-popover"
+           href="#"
+           tabindex="0"
+           data-placement="right"
+           data-trigger="hover"
+          >
+            <sup>?</sup>
+          </a>
+          <ul id="hint-popover-content" class="hidden">
+            {% for phrase in englishphrase.latin_translations %}
+              <li class="list-group-item">{{ phrase.phrase }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </h2>
+    </div> <!-- col -->
+    <div class="col-lg-6">
+      <form class="form-quiz" method=post>
+        {% if form.errors %}
+          <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
+        {% endif %}
         {{ form.hidden_tag() }}
-        <dl>
-          <dd>{{ form.answer(class_="u-full-width", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
-          <dt>{{ form.submit }}
-        </dl>
+
+        <label class="sr-only" for="answer">Answer</label>
+        {{ form.answer(class_="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
+        {{ form.submit(class="hidden") }}
       </form>
-    </div>
+    </div> <!-- col -->
+  </div> <!-- row -->
+</div>
 
-    <div class="row">
-      <div class="one-half column open-todos">
-        <h6 class="docs-header">{{ answerlist.correct_count }} correct</h6>
-        <ul>
-          {% for answer in answerlist.answers %}
-            {% if answer.is_correct %}
-              <li>{{ answer.text }}</li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
+<div class="row">
+  <div class="col-lg-6">
+    <h4>{{ answerlist.correct_count }} correct</h4>
+    <ul class="list-group">
+      {% for answer in answerlist.answers %}
+        {% if answer.is_correct %}
+          <li class="list-group-item">{{ answer.text }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div> <!-- col -->
 
-      <div class="one-half column finished-todos">
-        <h6 class="docs-header">{{ answerlist.incorrect_count }} incorrect</h6>
-        <ul>
-          {% for answer in answerlist.answers %}
-            {% if not answer.is_correct %}
-              <li>{{ answer.text }}</li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+  <div class="col-lg-6">
+    <h4>{{ answerlist.incorrect_count }} incorrect</h4>
+    <ul class="list-group">
+      {% for answer in answerlist.answers %}
+        {% if not answer.is_correct %}
+          <li class="list-group-item">{{ answer.text }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div> <!-- col -->
+</div> <!-- row -->
 {% endblock %}
