@@ -53,6 +53,15 @@ tr td.todolist-title {
   margin-bottom: 10px;
 }
 
+.form-quiz .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 23px;
+}
+
  /* For hint-popup content */
 .hidden {
   display: none;

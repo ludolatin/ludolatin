@@ -44,7 +44,7 @@ def quiz(id):
     # Retreive a random English phrase
     englishphrase = EnglishPhrase.query.order_by(func.random()).first()
 
-    # Collection of correct answers previously given, returning just the `phrase` column
+    # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
     # Convert it to a list
     correct = [r for r, in correct]

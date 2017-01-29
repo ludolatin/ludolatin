@@ -22,7 +22,7 @@
 
   <div class="row">
     <div class="col-lg-6">
-      <h2 class="mb-4 text-center">
+      <h4 class="mb-4 text-center list-group-item">
         {{englishphrase.phrase}}
         {% if unknown %}
           <a
@@ -50,7 +50,7 @@
         {{ form.hidden_tag() }}
 
         <label class="sr-only" for="answer">Answer</label>
-        {{ form.answer(class_="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
+        {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
         {{ form.submit(class="hidden") }}
       </form>
     </div> <!-- col -->
