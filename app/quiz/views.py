@@ -6,7 +6,7 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
-from app.models import Answer, PhraseList, EnglishPhrase
+from app.models import AnswerList, Answer, EnglishPhrase
 
 
 def _get_user():
@@ -15,7 +15,7 @@ def _get_user():
 
 @quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
 def quiz(id):
-    phraselist = PhraseList.query.filter_by(id=id).first_or_404()
+    answerlist = AnswerList.query.filter_by(id=id).first_or_404()
 
     form = QuizForm()
     # POST request:
@@ -32,7 +32,7 @@ def quiz(id):
         answer=form.answer.data
 
         # Save to the db via Answer model
-        Answer(answer, phraselist.id, question, _get_user()).save()
+        Answer(answer, answerlist.id, question, _get_user()).save()
 
         # Reload the page with a GET request
         return redirect(url_for('quiz.quiz', id=id))
@@ -44,7 +44,7 @@ def quiz(id):
     englishphrase = EnglishPhrase.query.order_by(func.random()).first()
 
     # Collection of correct answers previously given, returning just the `phrase` column
-    correct = Answer.query.with_entities(Answer.phrase).filter_by(phraselist_id=id, is_correct=True).all()
+    correct = Answer.query.with_entities(Answer.phrase).filter_by(answerlist_id=id, is_correct=True).all()
     # Convert it to a list
     correct = [r for r, in correct]
 
@@ -57,6 +57,6 @@ def quiz(id):
     unknown = set(latin_translations).isdisjoint(correct)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie
-    response = make_response(render_template('quiz.html', phraselist=phraselist, englishphrase=englishphrase, unknown=unknown, form=form))
+    response = make_response(render_template('quiz.html', answerlist=answerlist, englishphrase=englishphrase, unknown=unknown, form=form))
     response.set_cookie('question_id', str(englishphrase.id))
     return response

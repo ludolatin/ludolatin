@@ -58,7 +58,7 @@ class User(UserMixin, db.Model, BaseModel):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
 
-    phraselists = db.relationship('PhraseList', backref='user', lazy='dynamic')
+    answerlists = db.relationship('AnswerList', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -122,8 +122,8 @@ class User(UserMixin, db.Model, BaseModel):
             ),
             'member_since': self.member_since,
             'last_seen': self.last_seen,
-            'phraselists': url_for('api.get_phraselists', username=self.username, _external=True),
-            'phraselist_count': self.phraselists.count()
+            'answerlists': url_for('api.get_answerlists', username=self.username, _external=True),
+            'answerlist_count': self.answerlists.count()
         }
 
     def promote_to_admin(self):
@@ -136,13 +136,13 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class PhraseList(db.Model, BaseModel):
-    __tablename__ = 'phraselist'
+class AnswerList(db.Model, BaseModel):
+    __tablename__ = 'answerlist'
     id = db.Column(db.Integer, primary_key=True)
     _title = db.Column('title', db.String(128))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    answers = db.relationship('Answer', backref='phraselist', lazy='dynamic')
+    answers = db.relationship('Answer', backref='answerlist', lazy='dynamic')
 
     def __init__(self, title=None, creator=None, created_at=None):
         self.title = title or 'untitled'
@@ -150,7 +150,7 @@ class PhraseList(db.Model, BaseModel):
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
-        return '<Phraselist: {0}>'.format(self.title)
+        return '<Answerlist: {0}>'.format(self.title)
 
     @property
     def title(self):
@@ -167,11 +167,11 @@ class PhraseList(db.Model, BaseModel):
     @property
     def answers_url(self):
         url = None
-        kwargs = dict(phraselist_id=self.id, _external=True)
+        kwargs = dict(answerlist_id=self.id, _external=True)
         if self.creator:
             kwargs['username'] = self.creator
-            url = 'api.get_phraselist_answers'
-        return url_for(url or 'api.get_phraselist_answers', **kwargs)
+            url = 'api.get_answerlist_answers'
+        return url_for(url or 'api.get_answerlist_answers', **kwargs)
 
     def to_dict(self):
         return {
@@ -204,9 +204,9 @@ class Answer(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_correct = db.Column(db.Boolean, default=False)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    phraselist_id = db.Column(db.Integer, db.ForeignKey('phraselist.id'))
+    answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
 
-    def __init__(self, phrase, phraselist_id, englishphrase, creator=None, created_at=None):
+    def __init__(self, phrase, answerlist_id, englishphrase, creator=None, created_at=None):
 
         # Is the submitted anser correct?
         is_correct = False
@@ -216,7 +216,7 @@ class Answer(db.Model, BaseModel):
                 break
 
         self.phrase = phrase
-        self.phraselist_id = phraselist_id
+        self.answerlist_id = answerlist_id
         self.is_correct = is_correct
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()

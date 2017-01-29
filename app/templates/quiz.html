@@ -6,7 +6,7 @@
 
 {% block body %}
 <section class="header">
-  <h2 class="title">{{phraselist.title|title}}</h2>
+  <h2 class="title">{{answerlist.title|title}}</h2>
   <h3>{{englishphrase.phrase}}</h3>
 
   {% if unknown %}
@@ -34,9 +34,9 @@
 
     <div class="row">
       <div class="one-half column open-todos">
-        <h6 class="docs-header">{{ phraselist.correct_count }} correct</h6>
+        <h6 class="docs-header">{{ answerlist.correct_count }} correct</h6>
         <ul>
-          {% for answer in phraselist.answers %}
+          {% for answer in answerlist.answers %}
             {% if answer.is_correct %}
               <li>{{ answer.phrase }}</li>
             {% endif %}
@@ -45,9 +45,9 @@
       </div>
 
       <div class="one-half column finished-todos">
-        <h6 class="docs-header">{{ phraselist.incorrect_count }} incorrect</h6>
+        <h6 class="docs-header">{{ answerlist.incorrect_count }} incorrect</h6>
         <ul>
-          {% for answer in phraselist.answers %}
+          {% for answer in answerlist.answers %}
             {% if not answer.is_correct %}
               <li>{{ answer.phrase }}</li>
             {% endif %}

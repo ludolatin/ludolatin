@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, abort, url_for
 from app.api import api
-from app.models import User, PhraseList, Answer
+from app.models import User, AnswerList, Answer
 from app.decorators import admin_required
 from flask_login import current_user
 
@@ -11,7 +11,7 @@ from flask_login import current_user
 def get_routes():
     return jsonify({
         'users': url_for('api.get_users', _external=True),
-        'phraselists': url_for('api.get_phraselists', _external=True),
+        'answerlists': url_for('api.get_answerlists', _external=True),
     })
 
 
@@ -55,57 +55,57 @@ def delete_user(username):
         abort(400)
 
 
-@api.route('/phraselists/')
-def get_phraselists():
+@api.route('/answerlists/')
+def get_answerlists():
     user = User.query.filter_by(username=current_user.username).first_or_404()
-    phraselists = user.phraselists
+    answerlists = user.answerlists
     return jsonify({
-        'phraselists': [phraselist.to_dict() for phraselist in phraselists]
+        'answerlists': [answerlist.to_dict() for answerlist in answerlists]
     })
 
 
-@api.route('/phraselist/<int:phraselist_id>/')
-def get_phraselist(phraselist_id):
+@api.route('/answerlist/<int:answerlist_id>/')
+def get_answerlist(answerlist_id):
     username = current_user.username
-    phraselist = PhraseList.query.get_or_404(phraselist_id)
-    if username != phraselist.creator:
+    answerlist = PhraseList.query.get_or_404(answerlist_id)
+    if username != answerlist.creator:
         abort(404)
-    return jsonify(phraselist.to_dict())
+    return jsonify(answerlist.to_dict())
 
 
-@api.route('/phraselist/', methods=['POST'])
-def add_phraselist():
+@api.route('/answerlist/', methods=['POST'])
+def add_answerlist():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     print user
     print request.json
     try:
-        phraselist = PhraseList(
+        answerlist = PhraseList(
             title=request.json.get('title'),
             creator=user.username
         ).save()
     except:
         abort(400)
-    return jsonify(phraselist.to_dict()), 201
+    return jsonify(answerlist.to_dict()), 201
 
 
-@api.route('/phraselist/<int:phraselist_id>/answers/')
-def get_phraselist_phrases(phraselist_id):
-    phraselist = PhraseList.query.get_or_404(phraselist_id)
-    if phraselist.creator != current_user.username:
+@api.route('/answerlist/<int:answerlist_id>/answers/')
+def get_answerlist_answers(answerlist_id):
+    answerlist = PhraseList.query.get_or_404(answerlist_id)
+    if answerlist.creator != current_user.username:
         abort(404)
     return jsonify({
-        'answers': [answer.to_dict() for answer in phraselist.answers]
+        'answers': [answer.to_dict() for answer in answerlist.answers]
     })
 
 
-@api.route('/phraselist/<int:todolist_id>/',
+@api.route('/answerlist/<int:todolist_id>/',
            methods=['POST'])
-def add_phraselist_answer(phraselist_id):
-    phraselist = PhraseList.query.get_or_404(phraselist_id)
+def add_answerlist_answer(answerlist_id):
+    answerlist = PhraseList.query.get_or_404(answerlist_id)
     try:
         answer = Answer(
             description=request.json.get('description'),
-            phraselist_id=phraselist.id,
+            answerlist_id=answerlist.id,
             creator=current_user.username
         ).save()
     except:
