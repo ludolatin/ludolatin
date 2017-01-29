@@ -14,6 +14,7 @@ def _get_user():
 
 
 @quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def quiz(id):
     answerlist = AnswerList.query.filter_by(id=id).first_or_404()
 

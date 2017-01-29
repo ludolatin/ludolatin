@@ -22,12 +22,6 @@ tr td.todolist-title {
 }
 
 /* Bootstrap form */
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
-}
-
 .form-signin {
   max-width: 330px;
   padding: 15px;
@@ -44,7 +38,6 @@ body {
   position: relative;
   height: auto;
   -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
           box-sizing: border-box;
   padding: 10px;
   font-size: 16px;
@@ -62,6 +55,7 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
  /* For user menu popup content */
 .hidden {
   display: none;

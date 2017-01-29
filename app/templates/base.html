@@ -49,44 +49,46 @@
 
     <!-- Navigation
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <nav class="navbar navbar-light bg-faded rounded navbar-toggleable-md" >
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarContent"
-              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="{{ url_for('quiz.quiz', id=1) }}">Ingenuity</a>
+    <div class="header clearfix">
+      <nav class="navbar navbar-light bg-faded rounded navbar-toggleable-md" >
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('quiz.quiz', id=1) }}">Ingenuity</a>
 
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav float-right">
-          {% if not current_user.is_authenticated %}
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home</a>
+            </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+              <a class="nav-link" href="#">Link</a>
             </li>
-          {% else %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle float-right" href="#" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
-              <div class="dropdown-menu" aria-labelledby="user-dropdown">
-                <a class="dropdown-item" href="{{ url_for('quiz.quiz', id=1) }}">Go learn</a>
-                <a class="dropdown-item" href="#">Dashboard</a>
-                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
-              </div>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Disabled</a>
             </li>
-          {% endif %}
-        </ul>
-      </div>
-    </nav>
-    
+          </ul>
+          <ul class="navbar-nav float-right">
+            {% if not current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+              </li>
+            {% else %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle float-right" href="#" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                <div class="dropdown-menu" aria-labelledby="user-dropdown">
+                  <a class="dropdown-item" href="{{ url_for('quiz.quiz', id=1) }}">Go learn</a>
+                  <a class="dropdown-item" href="#">Dashboard</a>
+                  <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                </div>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </div>
+
     {% block body %}{% endblock %}
   </div>
 </body>
