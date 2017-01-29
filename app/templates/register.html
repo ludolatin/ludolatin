@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 
 {% block body %}
-<section class="header">
-  <h2 class="title">Register</h2>
-  <div class="row">
-    <div class="three columns value-prop"></div>
-    <div class="six columns">
-      {% if form.errors %}
-        <div class="has-error"><strong>Your registration contains errors.</strong></div>
-      {% endif %}
-      <form method=post>
-        {{ form.hidden_tag() }}
-        <dl>
-          <dd>{{ form.username(class_="u-full-width", placeholder="Username", maxlength=64) }}
-          <dd>{{ form.email(class_="u-full-width", placeholder="Email", maxlength=64) }}
-          <dd>{{ form.password(class_="u-full-width", placeholder="Password") }}
-          <dd>{{ form.password_confirmation(class_="u-full-width", placeholder="Confirm your Password") }}
-          <dt>{{ form.submit }}
-        </dl>
-      </form>
-      <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
-    </div>
-  </div>
-</section>
+<form class="form-signin" method=post>
+  <h2 class="form-signin-heading">Register</h2>
+  {% if form.errors %}
+    <div class="has-error"><strong>Your registration contains errors.</strong></div>
+  {% endif %}
+
+  {{ form.hidden_tag() }}
+
+  <label for="inputUsername" class="sr-only">Username</label>
+  {{ form.username(id="inputUsername", class="form-control", type="text", placeholder="Username", maxlength=64) }}
+
+  <label for="inputEmail" class="sr-only">Email address</label>
+  {{ form.email(id="inputEmail", class="form-control", type="email", placeholder="Email", maxlength=128) }}
+
+  <label for="inputPassword" class="sr-only">Password</label>
+  {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
+
+  <label for="inputPassword" class="sr-only">Password confirmation</label>
+  {{ form.password_confirmation(class_="form-control", type="password", placeholder="Confirm your Password") }}
+
+  {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+  <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
+</form>
 {% endblock %}

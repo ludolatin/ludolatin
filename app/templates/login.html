@@ -1,22 +1,20 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="container">
-  <form class="form-signin" method=post>
-    <h2 class="form-signin-heading">Please sign in</h2>
-    {% if form.errors %}
-      <div class="has-error"><strong>Unable to login. Typo?</strong></div>
-    {% endif %}
+<form class="form-signin" method=post>
+  <h2 class="form-signin-heading">Please sign in</h2>
+  {% if form.errors %}
+    <div class="has-error"><strong>Unable to login. Typo?</strong></div>
+  {% endif %}
 
-    {{ form.hidden_tag() }}
-    <label for="inputEmail" class="sr-only">Email address</label>
-    {{ form.email_or_username(id="inputEmail", class="form-control", placeholder="Email or Username", maxlength=128)}}
+  {{ form.hidden_tag() }}
+  <label for="inputEmail" class="sr-only">Email address</label>
+  {{ form.email_or_username(id="inputEmail", class="form-control", type="email", placeholder="Email or Username", maxlength=128) }}
 
-    <label for="inputPassword" class="sr-only">Password</label>
-    {{ form.password(id="inputPassword", class="form-control", placeholder="Password") }}
+  <label for="inputPassword" class="sr-only">Password</label>
+  {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
 
-    {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
-    <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
-  </form>
-</div>
+  {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+  <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+</form>
 {% endblock %}
