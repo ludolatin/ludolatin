@@ -2,6 +2,18 @@
 
 {% block js %}
 <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+<script> // Don't know why this code doesn't work when placed in site.js...
+  $(function() {
+    // Enables popover
+    $("#hintpopover").popover({
+      html : true,
+      content: function() {
+        return $("#user-popover-content").html();
+      },
+      title: "Where to?"
+    });
+  });
+</script>
 {% endblock %}
 
 {% block body %}
@@ -10,15 +22,23 @@
   <h3>{{englishphrase.phrase}}</h3>
 
   {% if unknown %}
-    <ul>
+    <a
+     id="hint-popover"
+     href="#"
+     tabindex="0"
+     data-placement="bottom"
+     data-trigger="focus"
+    >
+      ?
+    </a>
+    <ul id="user-popover-content" class="hidden">
       {% for phrase in englishphrase.latin_translations %}
-        <li>{{ phrase.phrase }}</li>
+        <li class="list-group-item">{{ phrase.phrase }}</li>
       {% endfor %}
     </ul>
   {% endif %}
 
   <div class="row">
-    <div class="three columns value-prop"></div>
     <div class="six columns">
       {% if form.errors %}
         <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>

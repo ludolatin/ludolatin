@@ -18,79 +18,80 @@
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
+
   <!-- Bootstrap 4 alpha -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"> {% block css %}{% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  {% block css %}{% endblock %}
 
 
   <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="{{ url_for('static', filename='js/site.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
+   {% block js %}{% endblock %}
 
-  <script> // Don't know why this code doesn't work when placed in site.js...
-    $(function() {
-      // Enables popover
-      $("#user-popover").popover({
-        html : true,
-        content: function() {
-          return $("#user-popover-content").html();
-        },
-        title: "Where to?"
-      });
-    });
-  </script>
-
-  {% block js %}{% endblock %}
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" />
 </head>
 
 <body>
+
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
+
     <!-- Navigation
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <div class="navbar-spacer"></div>
-    <nav class="navbar">
-      <div class="container">
-        <ul class="navbar-list">
-          <li class="navbar-item"><a class="navbar-link" href="{{ url_for('quiz.quiz', id=1) }}">Ingenuity</a></li>
+    <nav class="navbar navbar-light bg-faded rounded navbar-toggleable-md" >
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarContent"
+              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{{ url_for('quiz.quiz', id=1) }}">Ingenuity</a>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav float-right">
           {% if not current_user.is_authenticated %}
-            <li class="navbar-item">
-              <a class="navbar-link" href="{{ url_for('auth.login') }}">Login</a>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
             </li>
           {% else %}
-            <li class="navbar-item">
-              <a class="navbar-link"
-                 id="user-popover"
-                 href="#"
-                 tabindex="0"
-                 data-placement="bottom"
-                 data-trigger="focus"
-              >
-                {{ current_user.username }}
-              </a>
-            </li
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle float-right" href="#" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+              <div class="dropdown-menu" aria-labelledby="user-dropdown">
+                <a class="dropdown-item" href="{{ url_for('quiz.quiz', id=1) }}">Go learn</a>
+                <a class="dropdown-item" href="#">Dashboard</a>
+                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+              </div>
+            </li>
           {% endif %}
         </ul>
       </div>
     </nav>
+    
     {% block body %}{% endblock %}
   </div>
-
-  <div id="user-popover-content" class="hidden">
-    <a href="{{ url_for('quiz.quiz', id=1) }}" class="list-group-item list-group-item-action">Go learn</a>
-    <a href="{{ url_for('auth.logout') }}" class="list-group-item list-group-item-action">Logout</a>
-  </div>
-  <!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
+}
 
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </html>
