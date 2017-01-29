@@ -6,7 +6,7 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
-from app.models import Phrase, PhraseList, EnglishPhrase
+from app.models import Answer, PhraseList, EnglishPhrase
 
 
 def _get_user():
@@ -31,8 +31,8 @@ def quiz(id):
         # Retrieve the answer from the POST request data
         answer=form.answer.data
 
-        # Save to the db via Phrase model
-        Phrase(answer, phraselist.id, question, _get_user()).save()
+        # Save to the db via Answer model
+        Answer(answer, phraselist.id, question, _get_user()).save()
 
         # Reload the page with a GET request
         return redirect(url_for('quiz.quiz', id=id))
@@ -44,7 +44,7 @@ def quiz(id):
     englishphrase = EnglishPhrase.query.order_by(func.random()).first()
 
     # Collection of correct answers previously given, returning just the `phrase` column
-    correct = Phrase.query.with_entities(Phrase.phrase).filter_by(phraselist_id=id, is_correct=True).all()
+    correct = Answer.query.with_entities(Answer.phrase).filter_by(phraselist_id=id, is_correct=True).all()
     # Convert it to a list
     correct = [r for r, in correct]
 

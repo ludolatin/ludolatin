@@ -36,9 +36,9 @@
       <div class="one-half column open-todos">
         <h6 class="docs-header">{{ phraselist.correct_count }} correct</h6>
         <ul>
-          {% for phrase in phraselist.phrases %}
-            {% if phrase.is_correct %}
-              <li>{{ phrase.phrase }}</li>
+          {% for answer in phraselist.answers %}
+            {% if answer.is_correct %}
+              <li>{{ answer.phrase }}</li>
             {% endif %}
           {% endfor %}
         </ul>
@@ -47,9 +47,9 @@
       <div class="one-half column finished-todos">
         <h6 class="docs-header">{{ phraselist.incorrect_count }} incorrect</h6>
         <ul>
-          {% for phrase in phraselist.phrases %}
-            {% if not phrase.is_correct %}
-              <li>{{ phrase.phrase }}</li>
+          {% for answer in phraselist.answers %}
+            {% if not answer.is_correct %}
+              <li>{{ answer.phrase }}</li>
             {% endif %}
           {% endfor %}
         </ul>

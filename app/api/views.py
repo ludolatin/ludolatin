@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, abort, url_for
 from app.api import api
-from app.models import User, PhraseList, Phrase
+from app.models import User, PhraseList, Answer
 from app.decorators import admin_required
 from flask_login import current_user
 
@@ -88,26 +88,26 @@ def add_phraselist():
     return jsonify(phraselist.to_dict()), 201
 
 
-@api.route('/phraselist/<int:phraselist_id>/phrases/')
+@api.route('/phraselist/<int:phraselist_id>/answers/')
 def get_phraselist_phrases(phraselist_id):
     phraselist = PhraseList.query.get_or_404(phraselist_id)
     if phraselist.creator != current_user.username:
         abort(404)
     return jsonify({
-        'phrases': [phrase.to_dict() for phrase in phraselist.phrases]
+        'answers': [answer.to_dict() for answer in phraselist.answers]
     })
 
 
 @api.route('/phraselist/<int:todolist_id>/',
            methods=['POST'])
-def add_phraselist_phrase(phraselist_id):
+def add_phraselist_answer(phraselist_id):
     phraselist = PhraseList.query.get_or_404(phraselist_id)
     try:
-        phrase = Phrase(
+        answer = Answer(
             description=request.json.get('description'),
             phraselist_id=phraselist.id,
             creator=current_user.username
         ).save()
     except:
         abort(400)
-    return jsonify(phrase.to_dict()), 201
+    return jsonify(answer.to_dict()), 201

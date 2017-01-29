@@ -142,7 +142,7 @@ class PhraseList(db.Model, BaseModel):
     _title = db.Column('title', db.String(128))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    phrases = db.relationship('Phrase', backref='phraselist', lazy='dynamic')
+    answers = db.relationship('Answer', backref='phraselist', lazy='dynamic')
 
     def __init__(self, title=None, creator=None, created_at=None):
         self.title = title or 'untitled'
@@ -165,40 +165,40 @@ class PhraseList(db.Model, BaseModel):
     title = synonym('_title', descriptor=title)
 
     @property
-    def phrases_url(self):
+    def answers_url(self):
         url = None
         kwargs = dict(phraselist_id=self.id, _external=True)
         if self.creator:
             kwargs['username'] = self.creator
-            url = 'api.get_phraselist_phrases'
-        return url_for(url or 'api.get_phraselist_phrases', **kwargs)
+            url = 'api.get_phraselist_answers'
+        return url_for(url or 'api.get_phraselist_answers', **kwargs)
 
     def to_dict(self):
         return {
             'title': self.title,
             'creator': self.creator,
             'created_at': self.created_at,
-            'total_phrase_count': self.phrase_count,
-            'incorrect_phrase_count': self.incorrect_count,
-            'correct_phrase_count': self.correct_count,
-            'phrases': self.phrases_url,
+            'total_answer_count': self.phrase_count,
+            'incorrect_answer_count': self.incorrect_count,
+            'correct_answer_count': self.correct_count,
+            'answers': self.answers_url,
         }
 
     @property
-    def phrase_count(self):
-        return self.phrases.order_by(None).count()
+    def answer_count(self):
+        return self.answers.order_by(None).count()
 
     @property
     def correct_count(self):
-        return self.phrases.filter_by(is_correct=True).count()
+        return self.answers.filter_by(is_correct=True).count()
 
     @property
     def incorrect_count(self):
-        return self.phrases.filter_by(is_correct=False).count()
+        return self.answers.filter_by(is_correct=False).count()
 
 
-class Phrase(db.Model, BaseModel):
-    __tablename__ = 'phrase'
+class Answer(db.Model, BaseModel):
+    __tablename__ = 'answer'
     id = db.Column(db.Integer, primary_key=True)
     phrase = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -207,17 +207,10 @@ class Phrase(db.Model, BaseModel):
     phraselist_id = db.Column(db.Integer, db.ForeignKey('phraselist.id'))
 
     def __init__(self, phrase, phraselist_id, englishphrase, creator=None, created_at=None):
+
+        # Is the submitted anser correct?
         is_correct = False
         for latinphrase in englishphrase.latin_translations:
-            print "\nIn model:"
-            print "\nlastphrase: "
-            print englishphrase.phrase
-            print "\nanswer: "
-            print phrase
-            print "\nmodel latin translation: "
-            print latinphrase.phrase
-            print
-
             if phrase == latinphrase.phrase:
                 is_correct = True
                 break
@@ -229,11 +222,11 @@ class Phrase(db.Model, BaseModel):
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
-        return '<{0} Phrase: {1} by {2}>'.format(self.status, self.phrase, self.creator or 'None')
+        return '<{0} answer: {1} by {2}>'.format(self.status, self.phrase, self.creator or 'None')
 
     @property
     def status(self):
-        return 'correct' if self.is_correct else 'incorrect'
+        return 'Correct' if self.is_correct else 'Incorrect'
 
     def correct(self):
         self.is_correct = True
