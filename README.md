@@ -93,5 +93,5 @@ Login               | [Flask-Login](https://flask-login.readthedocs.org/en/lates
 Admin               | [Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)
 
 ## Other libraries used
-CSS | [Skeleton](http://getskeleton.com/)
+CSS | [Bootstrap 4 Alpha](https://v4-alpha.getbootstrap.com/)
 JS  | [jQuery](https://jquery.com/)
