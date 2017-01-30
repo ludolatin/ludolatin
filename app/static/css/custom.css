@@ -6,24 +6,6 @@
 h2.title {
   word-wrap: break-word;
 }
-.open-todos ul,
-.finished-todos ul {
-  list-style: none;
-  text-align: left;
-  word-wrap: break-word;
-}
-
-th.todolist-title,
-tr td.todolist-title {
-  width: 50%;
-  word-break: break-word;
-}
-
-.finished-todos li {
-  color: #aaa;
-  padding-left: 5pt;
-  text-decoration: line-through;
-}
 
 /* Bootstrap form */
 .form-signin {
@@ -69,4 +51,10 @@ tr td.todolist-title {
 
 .popover-content {
   padding: 0px;
+}
+
+/* Progress bar */
+.progress {
+  background-color: #d9dada;
+  margin-bottom: 30px;
 }

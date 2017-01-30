@@ -46,18 +46,21 @@ def quiz(id):
 
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
-    # Convert it to a list
-    correct = [r for r, in correct]
+    # Convert it to a list, and the list to a set
+    correct = set([r for r, in correct])
 
-    # The set of latin translations for the current english phrase (normally only one, but can be many)
+    # The list of latin translations for the current english phrase (normally only one, but can be many)
     latin_translations = []
     for phrase in englishphrase.latin_translations:
         latin_translations.append(phrase.phrase)
 
-    # True the set (list of unique) latin translations is not in the list of correct answers
+    # True if the set (list of unique) latin translations is not in the set of correct answers
     unknown = set(latin_translations).isdisjoint(correct)
 
-    # Rather than returning `render_template`, build a response so that we can attach a cookie
-    response = make_response(render_template('quiz.html', answerlist=answerlist, englishphrase=englishphrase, unknown=unknown, form=form))
+    # The percentage of questions that have been answered correctly
+    progress = float(len(correct)) / EnglishPhrase.query.count() * 100
+
+    # Rather than returning `render_template`, build a response so that we can attach a cookie to it
+    response = make_response(render_template('quiz.html', answerlist=answerlist, englishphrase=englishphrase, unknown=unknown, form=form, progress=progress))
     response.set_cookie('question_id', str(englishphrase.id))
     return response
