@@ -6,41 +6,41 @@ An open-source tool for learning Latin.
 [virtualenv](https://virtualenv.pypa.io/en/stable/) provides a local install of python, pip, and any installed extensions.
 If virtualenv isn't already installed, you may need a user with admin privelidges to install it:
 
-```sh
+```
 [sudo] pip install virtualenv
 ```
 
 Now clone this project:
 
-```sh
+```
 git clone https://github.com/merelinguist/ingenuity.git
 cd ingenuity
 ```
 
 To create & use a virtual environment in the project directory:
 
-```sh
+```
 virtualenv venv
 source venv/bin/activate
 ```
 
 Then install the project requirements in the created `venv` directory:
 
-```sh
+```
 pip install -r requirements.txt
 ```
 
 Flask requires that an enviroment variable is set to identify the file to run,
 and optionally another to enable debugging output:
 
-```sh
+```
 export FLASK_APP=ingenuity.py
 export FLASK_DEBUG=1
 ```
 
 You can see your configured environment variables with:
 
-```sh
+```
 env
 ```
 
@@ -54,33 +54,47 @@ source setup
 Finally, initialise the database with:
 
 ```
+flask db upgrade
+```
+
+If the DB is not in sync for some reason, you can delete it and the migrations directory
+and run the following commands to create an empty database with the current schema:
+
+```
 flask db init # (if migrations & db not present)
 flask db migrate
 flask db upgrade
 ```
 
-If the DB is not in sync for some reason, you can delete it and the migrations directory
-and run the above commands to create an empty database with the current schema.
-
 ## Run
 
 To run the app:
 
-```sh
+```
 flask run
 ```
 
 Or, to make the server available to other devices:
 
-```sh
+```
 flask run --host=0.0.0.0
 ```
 
 You will now find the server running on: http://localhost:5000, or for other devices, http://<your_local_ip>:5000
 
-Now you can browse the API:
-http://localhost:5000/api/
+You can also browse the API at: http://localhost:5000/api/ (Note, most of the API is unused.)
 
+To add an admin user, load data etc, use:
+
+```
+python manage.py <command>
+```
+
+For a list of commands type:
+
+```
+python manage.py
+```
 
 ## Flask extensions used
 

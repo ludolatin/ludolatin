@@ -243,7 +243,7 @@ class Answer(db.Model, BaseModel):
 
 # http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
 # Table to join english_phrase & latin_phrase tables
-english_latin_phrase_assoc = db.Table('tags',
+english_latin = db.Table('english_latin',
     db.Column('english_phrase_id', db.Integer, db.ForeignKey('english_phrase.id')),
     db.Column('latin_phrase_id', db.Integer, db.ForeignKey('latin_phrase.id'))
 )
@@ -258,7 +258,7 @@ class EnglishPhrase(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     # association
-    latin_translations = db.relationship('LatinPhrase', secondary=english_latin_phrase_assoc,
+    latin_translations = db.relationship('LatinPhrase', secondary=english_latin,
         backref=db.backref('english_phrases', lazy='dynamic'))
 
     # description
@@ -280,9 +280,6 @@ class LatinPhrase(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     phrase = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-    english_translations = db.relationship('EnglishPhrase', secondary=english_latin_phrase_assoc,
-        backref=db.backref('latin_phrases', lazy='dynamic'))
 
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
