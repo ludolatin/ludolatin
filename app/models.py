@@ -58,7 +58,7 @@ class User(UserMixin, db.Model, BaseModel):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
 
-    answerlists = db.relationship('AnswerList', backref='user', lazy='dynamic')
+    # answerlists = db.relationship('AnswerList', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -122,8 +122,8 @@ class User(UserMixin, db.Model, BaseModel):
             ),
             'member_since': self.member_since,
             'last_seen': self.last_seen,
-            'answerlists': url_for('api.get_answerlists', username=self.username, _external=True),
-            'answerlist_count': self.answerlists.count()
+            # 'answerlists': url_for('api.get_answerlists', username=self.username, _external=True),
+            # 'answerlist_count': self.answerlists.count()
         }
 
     def promote_to_admin(self):
@@ -136,65 +136,65 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class AnswerList(db.Model, BaseModel):
-    __tablename__ = 'answerlist'
-    id = db.Column(db.Integer, primary_key=True)
-    _title = db.Column('title', db.String(128))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    answers = db.relationship('Answer', backref='answerlist', lazy='dynamic')
-
-    def __init__(self, title=None, creator=None, created_at=None):
-        self.title = title or 'untitled'
-        self.creator = creator
-        self.created_at = created_at or datetime.utcnow()
-
-    def __repr__(self):
-        return '<Answerlist: {0}>'.format(self.title)
-
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, title):
-        if not check_length(title, 128):
-            raise ValueError('{} is not a valid title'.format(title))
-        self._title = title
-
-    title = synonym('_title', descriptor=title)
-
-    @property
-    def answers_url(self):
-        url = None
-        kwargs = dict(answerlist_id=self.id, _external=True)
-        if self.creator:
-            kwargs['username'] = self.creator
-            url = 'api.get_answerlist_answers'
-        return url_for(url or 'api.get_answerlist_answers', **kwargs)
-
-    def to_dict(self):
-        return {
-            'title': self.title,
-            'creator': self.creator,
-            'created_at': self.created_at,
-            'total_answer_count': self.phrase_count,
-            'incorrect_answer_count': self.incorrect_count,
-            'correct_answer_count': self.correct_count,
-            'answers': self.answers_url,
-        }
-
-    @property
-    def answer_count(self):
-        return self.answers.order_by(None).count()
-
-    @property
-    def correct_count(self):
-        return self.answers.filter_by(is_correct=True).count()
-
-    @property
-    def incorrect_count(self):
-        return self.answers.filter_by(is_correct=False).count()
+# class AnswerList(db.Model, BaseModel):
+#     __tablename__ = 'answerlist'
+#     id = db.Column(db.Integer, primary_key=True)
+#     _title = db.Column('title', db.String(128))
+#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+#     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
+#     answers = db.relationship('Answer', backref='answerlist', lazy='dynamic')
+#
+#     def __init__(self, title=None, creator=None, created_at=None):
+#         self.title = title or 'untitled'
+#         self.creator = creator
+#         self.created_at = created_at or datetime.utcnow()
+#
+#     def __repr__(self):
+#         return '<Answerlist: {0}>'.format(self.title)
+#
+#     @property
+#     def title(self):
+#         return self._title
+#
+#     @title.setter
+#     def title(self, title):
+#         if not check_length(title, 128):
+#             raise ValueError('{} is not a valid title'.format(title))
+#         self._title = title
+#
+#     title = synonym('_title', descriptor=title)
+#
+#     @property
+#     def answers_url(self):
+#         url = None
+#         kwargs = dict(answerlist_id=self.id, _external=True)
+#         if self.creator:
+#             kwargs['username'] = self.creator
+#             url = 'api.get_answerlist_answers'
+#         return url_for(url or 'api.get_answerlist_answers', **kwargs)
+#
+#     def to_dict(self):
+#         return {
+#             'title': self.title,
+#             'creator': self.creator,
+#             'created_at': self.created_at,
+#             'total_answer_count': self.phrase_count,
+#             'incorrect_answer_count': self.incorrect_count,
+#             'correct_answer_count': self.correct_count,
+#             'answers': self.answers_url,
+#         }
+#
+#     @property
+#     def answer_count(self):
+#         return self.answers.order_by(None).count()
+#
+#     @property
+#     def correct_count(self):
+#         return self.answers.filter_by(is_correct=True).count()
+#
+#     @property
+#     def incorrect_count(self):
+#         return self.answers.filter_by(is_correct=False).count()
 
 
 class Answer(db.Model, BaseModel):
@@ -204,7 +204,7 @@ class Answer(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_correct = db.Column(db.Boolean, default=False)
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
+    # answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
 
     def __init__(self, text, answerlist_id, englishphrase, creator=None, created_at=None):
 
@@ -216,7 +216,7 @@ class Answer(db.Model, BaseModel):
                 break
 
         self.text = text
-        self.answerlist_id = answerlist_id
+        # self.answerlist_id = answerlist_id
         self.is_correct = is_correct
         self.creator = creator
         self.created_at = created_at or datetime.utcnow()

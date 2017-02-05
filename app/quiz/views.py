@@ -6,7 +6,7 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
-from app.models import AnswerList, Answer, EnglishPhrase
+from app.models import Answer, EnglishPhrase
 
 
 def _get_user():
@@ -16,7 +16,7 @@ def _get_user():
 @quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def quiz(id):
-    answerlist = AnswerList.query.filter_by(id=id).first_or_404()
+    #answerlist = AnswerList.query.filter_by(id=id).first_or_404()
 
     form = QuizForm()
     # POST request:
@@ -33,7 +33,8 @@ def quiz(id):
         answer=form.answer.data
 
         # Save to the db via Answer model
-        Answer(answer, answerlist.id, question, _get_user()).save()
+        # Answer(answer, answerlist.id, question, _get_user()).save()
+        Answer(answer, question, _get_user()).save()
 
         # Reload the page with a GET request
         return redirect(url_for('quiz.quiz', id=id))
@@ -45,7 +46,8 @@ def quiz(id):
     englishphrase = EnglishPhrase.query.order_by(func.random()).first()
 
     # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
+    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True).all()
+    # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
 
@@ -61,6 +63,7 @@ def quiz(id):
     progress = float(len(correct)) / EnglishPhrase.query.count() * 100
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
-    response = make_response(render_template('quiz.html', answerlist=answerlist, englishphrase=englishphrase, unknown=unknown, form=form, progress=progress))
+    response = make_response(render_template('quiz.html', englishphrase=englishphrase, unknown=unknown, form=form, progress=progress))
+    # response = make_response(render_template('quiz.html', answerlist=answerlist, englishphrase=englishphrase, unknown=unknown, form=form, progress=progress))
     response.set_cookie('question_id', str(englishphrase.id))
     return response
