@@ -25,25 +25,28 @@
   <div class="row">
     <div class="col-lg-6">
       <h4 class="mb-4 text-center list-group-item">
-        {{englishphrase.phrase}}
         {% if unknown %}
-          <a
-           id="hint-popover"
-           href="#"
-           tabindex="0"
-           data-placement="right"
-           data-trigger="hover"
-          >
-            <sup>?</sup>
-          </a>
-          <ul id="hint-popover-content" class="hidden">
-            {% for phrase in englishphrase.latin_translations %}
-              <li class="list-group-item">{{ phrase.phrase }}</li>
-            {% endfor %}
-          </ul>
+        <span
+          class="question underline"
+          id="hint-popover"
+          tabindex="0"
+          data-placement="bottom"
+          data-trigger="hover"
+        >
+          {{englishphrase.phrase}}
+        </span>
+
+        <ul id="hint-popover-content" class="hidden">
+          {% for phrase in englishphrase.latin_translations %}
+            <li class="list-group-item">{{ phrase.phrase }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <span class="question">{{englishphrase.phrase}}</span>
         {% endif %}
-      </h2>
+      </h4>
     </div> <!-- col -->
+
     <div class="col-lg-6">
       <form class="form-quiz" method=post>
         {% if form.errors %}

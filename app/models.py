@@ -206,7 +206,7 @@ class Answer(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     # answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
 
-    def __init__(self, text, answerlist_id, englishphrase, creator=None, created_at=None):
+    def __init__(self, text, englishphrase, creator=None, created_at=None):
 
         # Is the submitted answer correct?
         is_correct = False
@@ -268,4 +268,3 @@ class LatinPhrase(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
-

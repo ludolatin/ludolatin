@@ -37,11 +37,19 @@ h2.title {
 
 .form-quiz .form-control {
   position: relative;
-  height: auto;
+  height: 57px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 10px;
   font-size: 23px;
+}
+
+.question {
+  height:31px;
+}
+
+.underline {
+  background-image: url(/static/images/underline.png);
 }
 
  /* For hint-popup content */
