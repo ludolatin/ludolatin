@@ -14,7 +14,7 @@ USERNAME_REGEX = re.compile(r'^\S+$')
 
 
 def check_length(attribute, length):
-    """Checks the attribute's length."""
+    # Checks the attribute's length.
     try:
         return bool(attribute) and len(attribute) <= length
     except:
@@ -22,10 +22,10 @@ def check_length(attribute, length):
 
 
 class BaseModel:
-    """Base for all models, providing save, delete and from_dict methods."""
+    # Base for all models, providing save, delete and from_dict methods.
 
     def __commit(self):
-        """Commits the current db.session, does rollback on failure."""
+        # Commits the current db.session, does rollback on failure.
         from sqlalchemy.exc import IntegrityError
         try:
             db.session.commit()
@@ -33,12 +33,12 @@ class BaseModel:
             db.session.rollback()
 
     def delete(self):
-        """Deletes this model from the db (through db.session)"""
+        # Deletes this model from the db (through db.session)
         db.session.delete(self)
         self.__commit()
 
     def save(self):
-        """Adds this model to the db (through db.session)"""
+        # Adds this model to the db (through db.session)
         db.session.add(self)
         self.__commit()
         return self
@@ -114,6 +114,10 @@ class User(UserMixin, db.Model, BaseModel):
         self.last_seen = datetime.utcnow()
         return self.save()
 
+    def promote_to_admin(self):
+        self.is_admin = True
+        return self.save()
+
     def to_dict(self):
         return {
             'username': self.username,
@@ -125,10 +129,6 @@ class User(UserMixin, db.Model, BaseModel):
             # 'answerlists': url_for('api.get_answerlists', username=self.username, _external=True),
             # 'answerlist_count': self.answerlists.count()
         }
-
-    def promote_to_admin(self):
-        self.is_admin = True
-        return self.save()
 
 
 @login_manager.user_loader
@@ -208,7 +208,7 @@ class Answer(db.Model, BaseModel):
 
     def __init__(self, text, answerlist_id, englishphrase, creator=None, created_at=None):
 
-        # Is the submitted anser correct?
+        # Is the submitted answer correct?
         is_correct = False
         for latinphrase in englishphrase.latin_translations:
             if text == latinphrase.phrase:
@@ -231,14 +231,6 @@ class Answer(db.Model, BaseModel):
     def correct(self):
         self.is_correct = True
         self.save()
-
-    def to_dict(self):
-        return {
-            'phrase': self.phrase,
-            'creator': self.creator,
-            'created_at': self.created_at,
-            'status': self.status,
-        }
 
 
 # http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
@@ -265,13 +257,6 @@ class EnglishPhrase(db.Model, BaseModel):
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
 
-    # properties
-    def to_dict(self):
-        return {
-            'phrase': self.phrase,
-            'created_at': self.created_at,
-        }
-
 
 # Mirror image model of EnglishPhrase
 class LatinPhrase(db.Model, BaseModel):
@@ -284,8 +269,3 @@ class LatinPhrase(db.Model, BaseModel):
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.phrase)
 
-    def to_dict(self):
-        return {
-            'phrase': self.phrase,
-            'created_at': self.created_at,
-        }
