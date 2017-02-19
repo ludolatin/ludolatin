@@ -55,7 +55,7 @@
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{{ url_for('quiz.quiz', id=1) }}">Ingenuity</a>
+        <a class="navbar-brand" href="{{ url_for('quiz.ask', id=1) }}">Ingenuity</a>
 
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav mr-auto">
@@ -78,7 +78,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle float-right" href="#" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
-                  <a class="dropdown-item" href="{{ url_for('quiz.quiz', id=1) }}">Go learn</a>
+                  <a class="dropdown-item" href="{{ url_for('quiz.ask', id=1) }}">Go learn</a>
                   <a class="dropdown-item" href="#">Dashboard</a>
                   <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
                 </div>
