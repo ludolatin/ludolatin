@@ -210,7 +210,7 @@ class Answer(db.Model, BaseModel):
 
         # Is the submitted answer correct?
         is_correct = False
-        for latinphrase in englishphrase.latin_translations:
+        for latinphrase in englishphrase.translations:
             if text == latinphrase.phrase:
                 is_correct = True
                 break
@@ -250,8 +250,8 @@ class EnglishPhrase(db.Model, BaseModel):
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     # association
-    latin_translations = db.relationship('LatinPhrase', secondary=english_latin,
-        backref=db.backref('english_phrases', lazy='dynamic'))
+    translations = db.relationship('LatinPhrase', secondary=english_latin,
+        backref=db.backref('translations', lazy='dynamic'))
 
     # description
     def __repr__(self):

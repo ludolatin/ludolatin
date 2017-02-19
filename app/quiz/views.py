@@ -52,12 +52,12 @@ def quiz(id):
     correct = set([r for r, in correct])
 
     # The list of latin translations for the current english phrase (normally only one, but can be many)
-    latin_translations = []
-    for phrase in englishphrase.latin_translations:
-        latin_translations.append(phrase.phrase)
+    translations = []
+    for phrase in englishphrase.translations:
+        translations.append(phrase.phrase)
 
     # True if the set (list of unique) latin translations is not in the set of correct answers
-    unknown = set(latin_translations).isdisjoint(correct)
+    unknown = set(translations).isdisjoint(correct)
 
     # The percentage of questions that have been answered correctly
     progress = float(len(correct)) / EnglishPhrase.query.count() * 100
