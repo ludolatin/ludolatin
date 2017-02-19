@@ -206,12 +206,12 @@ class Answer(db.Model, BaseModel):
     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
     # answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
 
-    def __init__(self, text, englishphrase, creator=None, created_at=None):
+    def __init__(self, text, question, creator=None, created_at=None):
 
         # Is the submitted answer correct?
         is_correct = False
-        for latinphrase in englishphrase.translations:
-            if text == latinphrase.phrase:
+        for translation in question.translations:
+            if text == translation.text:
                 is_correct = True
                 break
 
@@ -246,7 +246,7 @@ class EnglishPhrase(db.Model, BaseModel):
 
     # columns
     id = db.Column(db.Integer, primary_key=True)
-    phrase = db.Column(db.String(128))
+    text = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     # association
@@ -255,7 +255,7 @@ class EnglishPhrase(db.Model, BaseModel):
 
     # description
     def __repr__(self):
-        return '<Phrase: {0}>'.format(self.phrase)
+        return '<Phrase: {0}>'.format(self.text)
 
 
 # Mirror image model of EnglishPhrase
@@ -263,8 +263,8 @@ class LatinPhrase(db.Model, BaseModel):
     __tablename__ = 'latin_phrase'
 
     id = db.Column(db.Integer, primary_key=True)
-    phrase = db.Column(db.String(128))
+    text = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Phrase: {0}>'.format(self.phrase)
+        return '<Phrase: {0}>'.format(self.text)

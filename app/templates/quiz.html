@@ -33,16 +33,16 @@
           data-placement="bottom"
           data-trigger="hover"
         >
-          {{englishphrase.phrase}}
+          {{question.text}}
         </span>
 
         <ul id="hint-popover-content" class="hidden">
-          {% for phrase in englishphrase.translations %}
-            <li class="list-group-item">{{ phrase.phrase }}</li>
+          {% for translation in question.translations %}
+            <li class="list-group-item">{{ translation.text }}</li>
           {% endfor %}
         </ul>
         {% else %}
-        <span class="question">{{englishphrase.phrase}}</span>
+        <span class="question">{{question.text}}</span>
         {% endif %}
       </h4>
     </div> <!-- col -->

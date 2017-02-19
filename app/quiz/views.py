@@ -42,7 +42,7 @@ def quiz(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    englishphrase = EnglishPhrase.query.order_by(func.random()).first()
+    question = EnglishPhrase.query.order_by(func.random()).first()
 
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True).all()
@@ -53,8 +53,8 @@ def quiz(id):
 
     # The list of latin translations for the current english phrase (normally only one, but can be many)
     translations = []
-    for phrase in englishphrase.translations:
-        translations.append(phrase.phrase)
+    for translation in question.translations:
+        translations.append(translation.text)
 
     # True if the set (list of unique) latin translations is not in the set of correct answers
     unknown = set(translations).isdisjoint(correct)
@@ -66,7 +66,7 @@ def quiz(id):
     response = make_response(
         render_template(
             'quiz.html',
-            englishphrase=englishphrase,
+            question=question,
             unknown=unknown,
             form=form,
             progress=progress
@@ -77,11 +77,11 @@ def quiz(id):
     #     render_template(
     #         'quiz.html',
     #         answerlist=answerlist,
-    #         englishphrase=englishphrase,
+    #         question=question,
     #         unknown=unknown,
     #         form=form,
     #         progress=progress
     #    )
     # )
-    response.set_cookie('question_id', str(englishphrase.id))
+    response.set_cookie('question_id', str(question.id))
     return response

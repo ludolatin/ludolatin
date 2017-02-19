@@ -4,7 +4,7 @@ import json
 from flask_script import Manager, prompt_bool
 from ingenuity import app
 from app import db
-from app.models import User, EnglishPhrase, LatinPhrase
+from app.models import User, EnglishPhrase, LatinPhrase, english_latin
 
 from yaml import load, dump
 try:
@@ -48,20 +48,20 @@ def load_data():
     print data
     words = data['english-latin']
 
-    for english, latin_translations in words.items():
-        e = (EnglishPhrase.query.filter_by(phrase=english).first() or
+    for english, translations in words.items():
+        e = (EnglishPhrase.query.filter_by(text=english).first() or
             EnglishPhrase(
-                phrase=english
+                text=english
             )
         )
 
-        for latin in latin_translations:
-            l = (LatinPhrase.query.filter_by(phrase=latin).first() or
+        for latin in translations:
+            l = (LatinPhrase.query.filter_by(text=latin).first() or
                 LatinPhrase(
-                    phrase=latin
+                    text=latin
                 )
             )
-            e.latin_translations.append(l)
+            e.translations.append(l)
         db.session.add(e)
         db.session.commit()
     dump_data()
@@ -69,12 +69,12 @@ def load_data():
 @manager.command
 def dump_data():
     "Output the content of the English / Latin tables as YAML"
-    english = EnglishPhrase.query.all()
+    english_phrases = EnglishPhrase.query.all()
     print "english-latin:"
-    for e in english:
-        print "  " + e.phrase + ":"
-        for l in e.latin_translations:
-            print "    - " + l.phrase
+    for phrase in english_phrases:
+        print "  " + phrase.text + ":"
+        for latin in phrase.translations:
+            print "    - " + latin.text
 
 
 @manager.command
@@ -84,9 +84,9 @@ def delete_data():
         EnglishPhrase.query.delete()
         LatinPhrase.query.delete()
 
-        # Delete contents of the (Model-less) english_latin assocication table
-        db.session.query(english_latin).delete()
-        db.session.commit()
+        # Delete contents of the (Model-less) english_latin association table
+       # db.session.query(english_latin).delete()
+       # db.session.commit()
     dump_data()
 
 @manager.command
@@ -99,4 +99,3 @@ def db_meta():
 
 if __name__ == "__main__":
     manager.run()
-
