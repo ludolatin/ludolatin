@@ -6,17 +6,16 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
-from app.models import Answer, EnglishPhrase
+from app.models import Answer, Sentence, Language
 
 
 def _get_user():
-    return current_user.username if current_user.is_authenticated else None
+    return current_user if current_user.is_authenticated else None
 
 
 @quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def ask(id):
-    # answerlist = AnswerList.query.filter_by(id=id).first_or_404()
     form = QuizForm()
 
     # POST request:
@@ -27,7 +26,7 @@ def ask(id):
 
         # Retrieve the question from the database
         # (passed to the model where used to determine correctness)
-        question = EnglishPhrase.query.filter_by(id=question_id).first_or_404()
+        question = Sentence.query.filter_by(id=question_id).first_or_404()
 
         # Retrieve the answer from the POST request data
         answer = form.answer.data
@@ -46,7 +45,7 @@ def ask(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    question = EnglishPhrase.query.order_by(func.random()).first()
+    question = Sentence.query.filter(Language.name == "English").order_by(func.random()).first()
 
     progress, unknown = template_setup(question)
 
@@ -61,16 +60,6 @@ def ask(id):
         )
     )
 
-    # response = make_response(
-    #     render_template(
-    #         'quiz.html',
-    #         answerlist=answerlist,
-    #         question=question,
-    #         unknown=unknown,
-    #         form=form,
-    #         progress=progress
-    #    )
-    # )
     response.set_cookie('question_id', str(question.id))
     return response
 
@@ -88,10 +77,7 @@ def validate(id):
 
     # Retrieve the question from the database
     # (passed to the model where used to determine correctness)
-    question = EnglishPhrase.query.filter_by(id=question_id).first_or_404()
-
-    # # Retrieve a random English phrase
-    # question = EnglishPhrase.query.order_by(func.random()).first()
+    question = Sentence.query.filter_by(id=question_id).first_or_404()
 
     # Retrieve the question from the database
     # (passed to the model where used to determine correctness)
@@ -112,7 +98,7 @@ def validate(id):
 
 def template_setup(question):
     # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, creator=_get_user()).all()
+    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, user=_get_user()).all()
     # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
@@ -124,5 +110,5 @@ def template_setup(question):
     # True if the set (list of unique) latin translations is not in the set of correct answers
     unknown = set(translations).isdisjoint(correct)
     # The percentage of questions that have been answered correctly
-    progress = float(len(correct)) / EnglishPhrase.query.count() * 100
+    progress = float(len(correct)) / Sentence.query.count() * 100
     return progress, unknown

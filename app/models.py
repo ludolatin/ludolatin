@@ -58,7 +58,7 @@ class User(UserMixin, db.Model, BaseModel):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
 
-    # answerlists = db.relationship('AnswerList', backref='user', lazy='dynamic')
+    answers = db.relationship('Answer', backref='user')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -126,8 +126,6 @@ class User(UserMixin, db.Model, BaseModel):
             ),
             'member_since': self.member_since,
             'last_seen': self.last_seen,
-            # 'answerlists': url_for('api.get_answerlists', username=self.username, _external=True),
-            # 'answerlist_count': self.answerlists.count()
         }
 
 
@@ -136,93 +134,32 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# class AnswerList(db.Model, BaseModel):
-#     __tablename__ = 'answerlist'
-#     id = db.Column(db.Integer, primary_key=True)
-#     _title = db.Column('title', db.String(128))
-#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-#     creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-#     answers = db.relationship('Answer', backref='answerlist', lazy='dynamic')
-#
-#     def __init__(self, title=None, creator=None, created_at=None):
-#         self.title = title or 'untitled'
-#         self.creator = creator
-#         self.created_at = created_at or datetime.utcnow()
-#
-#     def __repr__(self):
-#         return '<Answerlist: {0}>'.format(self.title)
-#
-#     @property
-#     def title(self):
-#         return self._title
-#
-#     @title.setter
-#     def title(self, title):
-#         if not check_length(title, 128):
-#             raise ValueError('{} is not a valid title'.format(title))
-#         self._title = title
-#
-#     title = synonym('_title', descriptor=title)
-#
-#     @property
-#     def answers_url(self):
-#         url = None
-#         kwargs = dict(answerlist_id=self.id, _external=True)
-#         if self.creator:
-#             kwargs['username'] = self.creator
-#             url = 'api.get_answerlist_answers'
-#         return url_for(url or 'api.get_answerlist_answers', **kwargs)
-#
-#     def to_dict(self):
-#         return {
-#             'title': self.title,
-#             'creator': self.creator,
-#             'created_at': self.created_at,
-#             'total_answer_count': self.phrase_count,
-#             'incorrect_answer_count': self.incorrect_count,
-#             'correct_answer_count': self.correct_count,
-#             'answers': self.answers_url,
-#         }
-#
-#     @property
-#     def answer_count(self):
-#         return self.answers.order_by(None).count()
-#
-#     @property
-#     def correct_count(self):
-#         return self.answers.filter_by(is_correct=True).count()
-#
-#     @property
-#     def incorrect_count(self):
-#         return self.answers.filter_by(is_correct=False).count()
-
-
 class Answer(db.Model, BaseModel):
     __tablename__ = 'answer'
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     is_correct = db.Column(db.Boolean, default=False)
-    creator = db.Column(db.String(64), db.ForeignKey('user.username'))
-    # answerlist_id = db.Column(db.Integer, db.ForeignKey('answerlist.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
 
-    def __init__(self, text, question, creator=None, created_at=None):
+    def __init__(self, text, sentence, user=None, created_at=None):
 
         # Is the submitted answer correct?
         is_correct = False
-        for translation in question.translations:
+        for translation in sentence.translations:
             if text == translation.text:
                 is_correct = True
                 break
 
         self.text = text
-        # self.answerlist_id = answerlist_id
+        self.sentence_id = sentence.id
         self.is_correct = is_correct
-        self.creator = creator
+        self.user = user
         self.created_at = created_at or datetime.utcnow()
 
     def __repr__(self):
-        return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.creator or 'None')
+        return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.user or 'None')
 
     @property
     def status(self):
@@ -231,44 +168,6 @@ class Answer(db.Model, BaseModel):
     def correct(self):
         self.is_correct = True
         self.save()
-
-
-# http://flask-sqlalchemy.pocoo.org/2.1/models/#many-to-many-relationships
-# Table to join english_phrase & latin_phrase tables
-english_latin = db.Table('english_latin',
-    db.Column('english_phrase_id', db.Integer, db.ForeignKey('english_phrase.id')),
-    db.Column('latin_phrase_id', db.Integer, db.ForeignKey('latin_phrase.id'))
-)
-
-
-class EnglishPhrase(db.Model, BaseModel):
-    # name
-    __tablename__ = 'english_phrase'
-
-    # columns
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(128))
-    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-    # association
-    translations = db.relationship('LatinPhrase', secondary=english_latin,
-        backref=db.backref('translations', lazy='dynamic'))
-
-    # description
-    def __repr__(self):
-        return '<Phrase: {0}>'.format(self.text)
-
-
-# Mirror image model of EnglishPhrase
-class LatinPhrase(db.Model, BaseModel):
-    __tablename__ = 'latin_phrase'
-
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(128))
-    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Phrase: {0}>'.format(self.text)
 
 
 sentence_to_sentence = db.Table("sentence_to_sentence", db.Model.metadata,
@@ -280,14 +179,15 @@ sentence_to_sentence = db.Table("sentence_to_sentence", db.Model.metadata,
 class Sentence(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(128))
-    right_sentences = db.relationship(
+    translations = db.relationship(
         "Sentence",
         secondary=sentence_to_sentence,
-        primaryjoin=id==sentence_to_sentence.c.left_sentence_id,
-        secondaryjoin=id==sentence_to_sentence.c.right_sentence_id,
-        backref="left_sentences"
+        primaryjoin=id == sentence_to_sentence.c.left_sentence_id,
+        secondaryjoin=id == sentence_to_sentence.c.right_sentence_id,
+        backref="back-translations"
     )
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
+    answers = db.relationship('Answer', backref='sentence')
 
     def __repr__(self):
         return '<Sentence: {0}>'.format(self.text)
