@@ -60,3 +60,7 @@ function putNewStatus(todoID, isFinished) {
     });
   });
 }
+
+function nextQuestion(url) {
+  window.location.href = url;
+}

@@ -1,92 +1,38 @@
-{% extends "base.html" %}
+{% extends "quiz_base.html" %}
 
-{% block js %}
-<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
-<script>
-// Don't know why this code doesn't work when placed in quiz.js...
-  $(function() {
-    // Enables popover
-    $("#hint-popover").popover({
-      html : true,
-      content: function() {
-        return $("#hint-popover-content").html();
-      },
-    });
-  });
-</script>
-
-<script>
-  function nextQuestion() {
-      window.location.href = '{{ url_for('quiz.ask', id=1) }}';
-  }
-</script>
-{% endblock %}
-
-{% block body %}
-<div class="jumbotron">
-  <h1 class="mb-5 text-center">Title</h1>
-    <div class="progress">
-      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <h4 class="mb-4 text-center list-group-item">
-        {% if unknown %}
-        <span
-          class="question underline"
-          id="hint-popover"
-          tabindex="0"
-          data-placement="bottom"
-          data-trigger="hover"
-        >
-          {{question.text}}
-        </span>
-
-        <ul id="hint-popover-content" class="hidden">
-          {% for translation in question.translations %}
-            <li class="list-group-item">{{ translation.text }}</li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <span class="question">{{question.text}}</span>
-        {% endif %}
-      </h4>
-    </div> <!-- col -->
-
-    <div class="col-lg-6">
+{% block right_col %}
       <h4 class="mb-4 text-center list-group-item disabled">
         <span class="answer">{{answer.text}}</span>
       </h4>
-    </div> <!-- col -->
-  </div> <!-- row -->
-</div>
+{% endblock %}
 
+{% block body_content %}
 <div class="row">
-    <div class="col-lg">
-      {% if answer.is_correct == True %}
-      <div class="checkmark-container">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134.2 134.2">
-          <circle class="path circle" fill="none" stroke="#5cb85c" stroke-width="10" stroke-miterlimit="10" cx="67.1" cy="67.1" r="62.1"/>
-          <polyline class="path check" fill="none" stroke="#5cb85c" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-        </svg>
-        <p class="success">Oh Yeah!</p>
-      </div>
-      <audio src="/static/audio/correct.mp3" autoplay></audio>
-      {% else %}
-      <div class="checkmark-container">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134.2 134.2">
-          <circle class="path circle" fill="none" stroke="#d9534f" stroke-width="10" stroke-miterlimit="10" cx="67.1" cy="67.1" r="62.1"/>
-          <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
-          <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
-        </svg>
-        <p class="error">Bummer!</p>
-      </div>
-      <audio src="/static/audio/incorrect.mp3" autoplay></audio>
-      {% endif %}
-    </div> <!-- col -->
+  <div class="col-lg">
+    {% if answer.is_correct == True %}
+    <div class="checkmark-container">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134.2 134.2">
+        <circle class="path circle" fill="none" stroke="#5cb85c" stroke-width="10" stroke-miterlimit="10" cx="67.1" cy="67.1" r="62.1"/>
+        <polyline class="path check" fill="none" stroke="#5cb85c" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+      </svg>
+      <p class="success">Oh Yeah!</p>
+    </div>
+    <audio src="/static/audio/correct.mp3" autoplay></audio>
+    {% else %}
+    <div class="checkmark-container">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 134.2 134.2">
+        <circle class="path circle" fill="none" stroke="#d9534f" stroke-width="10" stroke-miterlimit="10" cx="67.1" cy="67.1" r="62.1"/>
+        <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
+        <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
+      </svg>
+      <p class="error">Bummer!</p>
+    </div>
+    <audio src="/static/audio/incorrect.mp3" autoplay></audio>
+    {% endif %}
+  </div> <!-- col -->
 
-    <div class="col-lg-2">
-      <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion()" autofocus>Continue</button>
-    </div> <!-- col -->
+  <div class="col-lg-2">
+    <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('quiz.ask', id=1) }}')" autofocus>Continue</button>
+  </div> <!-- col -->
 </div> <!-- row -->
 {% endblock %}

@@ -49,23 +49,7 @@ def ask(id):
     # Retrieve a random English phrase
     question = EnglishPhrase.query.order_by(func.random()).first()
 
-    # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, creator=_get_user()).all()
-    # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
-
-    # Convert it to a list, and the list to a set
-    correct = set([r for r, in correct])
-
-    # The list of latin translations for the current english phrase (normally only one, but can be many)
-    translations = []
-    for translation in question.translations:
-        translations.append(translation.text)
-
-    # True if the set (list of unique) latin translations is not in the set of correct answers
-    unknown = set(translations).isdisjoint(correct)
-
-    # The percentage of questions that have been answered correctly
-    progress = float(len(correct)) / EnglishPhrase.query.count() * 100
+    progress, unknown = template_setup(question)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     response = make_response(
@@ -114,23 +98,7 @@ def validate(id):
     # (passed to the model where used to determine correctness)
     answer = Answer.query.filter_by(id=answer_id).first()
 
-    # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, creator=_get_user()).all()
-    # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
-
-    # Convert it to a list, and the list to a set
-    correct = set([r for r, in correct])
-
-    # The list of latin translations for the current english phrase (normally only one, but can be many)
-    translations = []
-    for translation in question.translations:
-        translations.append(translation.text)
-
-    # True if the set (list of unique) latin translations is not in the set of correct answers
-    unknown = set(translations).isdisjoint(correct)
-
-    # The percentage of questions that have been answered correctly
-    progress = float(len(correct)) / EnglishPhrase.query.count() * 100
+    progress, unknown = template_setup(question)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     return render_template(
@@ -141,3 +109,21 @@ def validate(id):
         form=form,
         progress=progress
     )
+
+
+def template_setup(question):
+    # Collection of correct answers previously given, returning just the `text` column
+    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, creator=_get_user()).all()
+    # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
+    # Convert it to a list, and the list to a set
+    correct = set([r for r, in correct])
+    # The list of latin translations for the current english phrase (normally only one, but can be many)
+    translations = []
+    for translation in question.translations:
+        translations.append(translation.text)
+
+    # True if the set (list of unique) latin translations is not in the set of correct answers
+    unknown = set(translations).isdisjoint(correct)
+    # The percentage of questions that have been answered correctly
+    progress = float(len(correct)) / EnglishPhrase.query.count() * 100
+    return progress, unknown

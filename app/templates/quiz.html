@@ -1,64 +1,14 @@
-{% extends "base.html" %}
+{% extends "quiz_base.html" %}
 
-{% block js %}
-<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
-<script>
-// Don't know why this code doesn't work when placed in quiz.js...
-  $(function() {
-    // Enables popover
-    $("#hint-popover").popover({
-      html : true,
-      content: function() {
-        return $("#hint-popover-content").html();
-      },
-    });
-  });
-</script>
-{% endblock %}
+{% block right_col %}
+<form class="form-quiz" method=post>
+  {{ form.hidden_tag() }}
 
-{% block body %}
-<div class="jumbotron">
-  <h1 class="mb-5 text-center">Title</h1>
-    <div class="progress">
-      <div class="progress-bar bg-success" role="progressbar" style="width: {{progress}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-  <div class="row">
-    <div class="col-lg-6">
-      <h4 class="mb-4 text-center list-group-item">
-        {% if unknown %}
-        <span
-          class="question underline"
-          id="hint-popover"
-          tabindex="0"
-          data-placement="bottom"
-          data-trigger="hover"
-        >
-          {{question.text}}
-        </span>
-
-        <ul id="hint-popover-content" class="hidden">
-          {% for translation in question.translations %}
-            <li class="list-group-item">{{ translation.text }}</li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <span class="question">{{question.text}}</span>
-        {% endif %}
-      </h4>
-    </div> <!-- col -->
-
-    <div class="col-lg-6">
-      <form class="form-quiz" method=post>
-        {{ form.hidden_tag() }}
-
-        <label class="sr-only" for="answer">Answer</label>
-        {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
-        {{ form.submit(class="hidden") }}
-        {% if form.errors %}
-          <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
-        {% endif %}
-      </form>
-    </div> <!-- col -->
-  </div> <!-- row -->
-</div>
+  <label class="sr-only" for="answer">Answer</label>
+  {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
+  {{ form.submit(class="hidden") }}
+  {% if form.errors %}
+    <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
+  {% endif %}
+</form>
 {% endblock %}
