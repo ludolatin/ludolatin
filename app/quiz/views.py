@@ -35,7 +35,6 @@ def ask(id):
         # Save to the db via Answer model
         # Answer(answer, answerlist.id, question, _get_user()).save()
         answer = Answer(answer, question, _get_user()).save()
-        print answer
 
         # Reload the page with a GET request
         response = make_response(

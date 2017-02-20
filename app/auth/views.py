@@ -39,10 +39,11 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        User(
+        user = User(
             email=form.email.data,
             username=form.username.data,
             password=form.password.data
         ).save()
-        return redirect(url_for('auth.login'))
+        login_user(user)
+        return redirect(url_for('quiz.ask', id=1))
     return render_template('register.html', form=form)
