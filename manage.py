@@ -1,9 +1,10 @@
 # manage.py
 
 import json
-from flask_script import Manager, prompt_bool
+from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
+from app import models
 from app.models import User, EnglishPhrase, LatinPhrase, english_latin
 
 from yaml import load, dump
@@ -15,6 +16,12 @@ except ImportError:
 # output = dump(data, Dumper=Dumper)
 
 manager = Manager(app)
+
+
+def _make_context():
+    return dict(app=app, db=db, models=models)
+
+manager.add_command("shell", Shell(make_context=_make_context))
 
 
 @manager.command

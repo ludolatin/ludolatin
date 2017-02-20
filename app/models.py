@@ -240,6 +240,7 @@ english_latin = db.Table('english_latin',
     db.Column('latin_phrase_id', db.Integer, db.ForeignKey('latin_phrase.id'))
 )
 
+
 class EnglishPhrase(db.Model, BaseModel):
     # name
     __tablename__ = 'english_phrase'
@@ -268,3 +269,34 @@ class LatinPhrase(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Phrase: {0}>'.format(self.text)
+
+
+sentence_to_sentence = db.Table("sentence_to_sentence", db.Model.metadata,
+                        db.Column("left_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True),
+                        db.Column("right_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True)
+                        )
+
+
+class Sentence(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(128))
+    right_sentences = db.relationship(
+        "Sentence",
+        secondary=sentence_to_sentence,
+        primaryjoin=id==sentence_to_sentence.c.left_sentence_id,
+        secondaryjoin=id==sentence_to_sentence.c.right_sentence_id,
+        backref="left_sentences"
+    )
+    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
+
+    def __repr__(self):
+        return '<Sentence: {0}>'.format(self.text)
+
+
+class Language(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(16))
+    sentences = db.relationship('Sentence', backref='language')
+
+    def __repr__(self):
+        return '<Language: {0}>'.format(self.name)
