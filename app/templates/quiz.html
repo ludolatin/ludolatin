@@ -5,7 +5,7 @@
   {{ form.hidden_tag() }}
 
   <label class="sr-only" for="answer">Answer</label>
-  {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", placeholder="Enter your translation", value="", maxlength=128) }}
+  {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", spellcheck="false", placeholder="Enter your translation", value="", maxlength=128) }}
   {{ form.submit(class="hidden") }}
   {% if form.errors %}
     <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
