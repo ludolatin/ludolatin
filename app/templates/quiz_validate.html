@@ -15,7 +15,7 @@
         <circle class="path circle" fill="none" stroke="#5cb85c" stroke-width="10" stroke-miterlimit="10" cx="67.1" cy="67.1" r="62.1"/>
         <polyline class="path check" fill="none" stroke="#5cb85c" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
       </svg>
-      <p class="success">Oh Yeah!</p>
+      <p class="success">You are correct</p>
     </div>
     <audio src="/static/audio/correct.mp3" autoplay></audio>
     {% else %}
@@ -25,7 +25,11 @@
         <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
         <line class="path line" fill="none" stroke="#d9534f" stroke-width="10" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
       </svg>
-      <p class="error">Bummer!</p>
+      <p class="error">Correct solution:
+      {% for translation in question.translations %}
+        {{ translation.text }}
+      {% endfor %}
+      </p>
     </div>
     <audio src="/static/audio/incorrect.mp3" autoplay></audio>
     {% endif %}
