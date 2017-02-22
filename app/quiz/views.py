@@ -45,7 +45,7 @@ def ask(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    question = Sentence.query.filter(Language.name == "English").order_by(func.random()).first()
+    question = Sentence.query.join(Sentence.language).filter(Language.name == "English").order_by(func.random()).first()
 
     progress, unknown = template_setup(question)
 

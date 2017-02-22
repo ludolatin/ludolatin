@@ -15,6 +15,7 @@ english-latin:
     - navigo
   I kill:
     - neco
+    - interficio
   I announce:
     - nuntio
   I attack:
@@ -29,3 +30,5 @@ english-latin:
     - supero
   I call:
     - voco
+  I murder:
+    - neco

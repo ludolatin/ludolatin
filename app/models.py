@@ -65,8 +65,8 @@ class User(UserMixin, db.Model, BaseModel):
 
     def __repr__(self):
         if self.is_admin:
-            return '<Admin {0}>'.format(self.username)
-        return '<User {0}>'.format(self.username)
+            return '<Admin: {0}>'.format(self.username)
+        return '<User: {0}>'.format(self.username)
 
     @property
     def username(self):
@@ -170,24 +170,34 @@ class Answer(db.Model, BaseModel):
         self.save()
 
 
-sentence_to_sentence = db.Table("sentence_to_sentence", db.Model.metadata,
-                        db.Column("left_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True),
-                        db.Column("right_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True)
-                        )
+sentence_to_sentence = db.Table(
+    "sentence_to_sentence",
+    db.Model.metadata,
+    db.Column("left_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True),
+    db.Column("right_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True)
+)
 
 
 class Sentence(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(128))
-    translations = db.relationship(
+    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
+    answers = db.relationship('Answer', backref='sentence')
+
+    _translations = db.relationship(
         "Sentence",
         secondary=sentence_to_sentence,
         primaryjoin=id == sentence_to_sentence.c.left_sentence_id,
         secondaryjoin=id == sentence_to_sentence.c.right_sentence_id,
-        backref="back-translations"
+        backref=db.backref("_r_translations", collection_class=set),
+        collection_class=set
     )
-    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
-    answers = db.relationship('Answer', backref='sentence')
+
+    @property
+    def translations(self):
+        return db.object_session(self).query(Sentence).with_parent(self, "_translations").union(
+            db.object_session(self).query(Sentence).with_parent(self, "_r_translations")
+        ).all()
 
     def __repr__(self):
         return '<Sentence: {0}>'.format(self.text)
