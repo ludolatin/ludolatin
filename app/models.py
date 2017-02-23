@@ -184,20 +184,13 @@ class Sentence(db.Model, BaseModel):
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     answers = db.relationship('Answer', backref='sentence')
 
-    _translations = db.relationship(
+    translations = db.relationship(
         "Sentence",
         secondary=sentence_to_sentence,
         primaryjoin=id == sentence_to_sentence.c.left_sentence_id,
         secondaryjoin=id == sentence_to_sentence.c.right_sentence_id,
-        backref=db.backref("_r_translations", collection_class=set),
-        collection_class=set
+        backref=db.backref("back_translations"),
     )
-
-    @property
-    def translations(self):
-        return db.object_session(self).query(Sentence).with_parent(self, "_translations").union(
-            db.object_session(self).query(Sentence).with_parent(self, "_r_translations")
-        ).all()
 
     def __repr__(self):
         return '<Sentence: {0}>'.format(self.text)

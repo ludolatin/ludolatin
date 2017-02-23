@@ -46,6 +46,7 @@ def add_admin():
     print "Visit http://localhost/admin, login as admin, "
     print  "promote an existing user to admin, then delete this temporary admin user.\n"
 
+
 @manager.command
 def initialise_languages():
     """ Initialise languages"""
@@ -84,6 +85,7 @@ def load_sentences():
                 )
             )
             e.translations.append(l)
+            l.translations.append(e)
 
         db.session.add(e)
         db.session.commit()
