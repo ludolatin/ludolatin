@@ -8,7 +8,7 @@
   {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", spellcheck="false", placeholder="Enter your translation", value="", maxlength=128) }}
   {{ form.submit(class="hidden") }}
   {% if form.errors %}
-    <div class="has-error"><strong>Translations should neither be empty nor be longer than 128 characters.</strong></div>
+    <div class="has-error"><strong>Your translation was too short or too long.</strong></div>
   {% endif %}
 </form>
 {% endblock %}

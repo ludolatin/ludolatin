@@ -48,7 +48,7 @@ h2.title {
   height:31px;
 }
 
-.question {
+.answer {
   height:31px;
 }
 
@@ -73,13 +73,13 @@ h2.title {
 
 /* Checkmark */
 
-.checkmark-container {
-  display: inline-block;
+.validation-container {
+  display: block;
 }
 
 svg {
-  width: 100px;
-  display: block;
+  width: 70px;
+  margin-right: 10px;
 }
 
 .path {
@@ -104,17 +104,15 @@ svg {
   animation: dash-check 0.9s 0.35s ease-in-out forwards;
 }
 
-p.success {
-  text-align: center;
+div.success {
   font-size: 1.25em;
-  color: #73AF55;
+  color: #5cb85c;
   margin-top: 10px;
 }
 
-p.error {
-  text-align: center;
+div.error {
   font-size: 1.25em;
-  color: #D06079;
+  color: #d9534f;
 }
 
 @-webkit-keyframes dash {
