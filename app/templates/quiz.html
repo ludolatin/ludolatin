@@ -6,9 +6,14 @@
 
   <label class="sr-only" for="answer">Answer</label>
   {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", spellcheck="false", placeholder="Enter your translation", value="", maxlength=128) }}
-  {{ form.submit(class="hidden") }}
   {% if form.errors %}
     <div class="has-error"><strong>Your translation was too short or too long.</strong></div>
   {% endif %}
+{% endblock %}
+
+{% block card_bottom %}
+  <div class="card-block rounded-bottom neutral">
+    {{ form.submit(class="btn btn-lg btn-success float-right", role="button") }}
+  </div>
 </form>
 {% endblock %}

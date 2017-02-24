@@ -1,3 +1,6 @@
+body {
+    background-color: rgb(233, 233, 233)
+}
 
 .header {
   padding-bottom: 1rem;
@@ -5,6 +8,10 @@
 
 h2.title {
   word-wrap: break-word;
+}
+
+.card.quiz {
+  box-shadow: 0 0 30px rgba(0,0,0,0.08);
 }
 
 /* Bootstrap form */
@@ -69,6 +76,11 @@ h2.title {
 .progress {
   background-color: #d9dada;
   margin-bottom: 30px;
+}
+
+/* Card bottom grey */
+.neutral {
+  background-color: #d9dada;
 }
 
 /* Checkmark */
