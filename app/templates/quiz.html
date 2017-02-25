@@ -5,9 +5,21 @@
   {{ form.hidden_tag() }}
 
   <label class="sr-only" for="answer">Answer</label>
-  {{ form.answer(class="form-control", id="answer", type="text", autocomplete="off", spellcheck="false", placeholder="Enter your translation", value="", maxlength=128) }}
+  {{ form.answer(
+    class="form-control",
+    id="answer", type="text",
+    autocomplete="off",
+    spellcheck="false",
+    placeholder="Enter your translation",
+    value="",
+    maxlength=128
+  ) }}
   {% if form.errors %}
-    <div class="has-error"><strong>Your translation was too short or too long.</strong></div>
+    {% for field, errors in form.errors.items(): %}
+      {% for error in errors: %}
+        <div class="has-error"><strong>{{ error }}</strong></div>
+      {% endfor %}
+    {% endfor %}
   {% endif %}
 {% endblock %}
 
