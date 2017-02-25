@@ -1,4 +1,4 @@
-english-latin:
+1:
   I build:
     - aedifico
   I walk:
@@ -13,6 +13,8 @@ english-latin:
     - libero
   I sail:
     - navigo
+
+2:
   I kill:
     - neco
     - interficio

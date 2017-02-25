@@ -4,8 +4,8 @@ from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
 from sqlalchemy.sql import * # Inefficient
 
-from app.quiz import quiz
-from app.quiz.forms import QuizForm
+from app.quizzes import quizzes
+from app.quizzes.forms import QuizForm
 from app.models import Answer, Sentence, Language
 
 
@@ -13,7 +13,7 @@ def _get_user():
     return current_user if current_user.is_authenticated else None
 
 
-@quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
+@quizzes.route('/quiz/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def ask(id):
     form = QuizForm()
@@ -64,7 +64,7 @@ def ask(id):
     return response
 
 
-@quiz.route('/quiz/<int:id>/validate', methods=['GET'])
+@quizzes.route('/quiz/<int:id>/validate', methods=['GET'])
 @login_required
 def validate(id):
     form = QuizForm()

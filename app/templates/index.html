@@ -8,7 +8,7 @@
     <p><a class="btn btn-lg btn-success" href="{{ url_for('auth.register') }}" role="button">Sign up today</a>
     <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
   {% else %}
-    <p><a class="btn btn-lg btn-success" href="{{ url_for('quiz.ask', id=1) }}" role="button">Begin practise</a></p>
+    <p><a class="btn btn-lg btn-success" href="{{ url_for('quizzes.ask', id=1) }}" role="button">Begin practise</a></p>
   {% endif %}
 </div>
 
