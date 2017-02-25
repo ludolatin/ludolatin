@@ -56,6 +56,7 @@ class User(UserMixin, db.Model, BaseModel):
     member_since = db.Column(db.DateTime, default=datetime.utcnow)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), default=1)
 
     answers = db.relationship('Answer', backref='user')
 
@@ -209,6 +210,7 @@ class Quiz(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     sentences = db.relationship('Sentence', backref='quiz')
     name = db.Column(db.String(16))
+    users = db.relationship('User', backref='quiz')
 
     def __repr__(self):
         return '<Quiz: {0}>'.format(self.name)

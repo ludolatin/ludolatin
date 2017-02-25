@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 76358a874c64
+Revision ID: 5ea683d93b8f
 Revises: 
-Create Date: 2017-02-25 17:42:03.597544
+Create Date: 2017-02-25 23:49:17.196102
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '76358a874c64'
+revision = '5ea683d93b8f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,18 +28,6 @@ def upgrade():
     sa.Column('name', sa.String(length=16), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('user',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('username', sa.String(length=64), nullable=True),
-    sa.Column('email', sa.String(length=64), nullable=True),
-    sa.Column('password_hash', sa.String(length=128), nullable=True),
-    sa.Column('member_since', sa.DateTime(), nullable=True),
-    sa.Column('last_seen', sa.DateTime(), nullable=True),
-    sa.Column('is_admin', sa.Boolean(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('username')
-    )
     op.create_table('sentence',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=128), nullable=True),
@@ -48,6 +36,20 @@ def upgrade():
     sa.ForeignKeyConstraint(['language_id'], ['language.id'], ),
     sa.ForeignKeyConstraint(['quiz_id'], ['quiz.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('email', sa.String(length=64), nullable=True),
+    sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.Column('member_since', sa.DateTime(), nullable=True),
+    sa.Column('last_seen', sa.DateTime(), nullable=True),
+    sa.Column('is_admin', sa.Boolean(), nullable=True),
+    sa.Column('quiz_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['quiz_id'], ['quiz.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('username')
     )
     op.create_table('answer',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -76,8 +78,8 @@ def downgrade():
     op.drop_table('sentence_to_sentence')
     op.drop_index(op.f('ix_answer_created_at'), table_name='answer')
     op.drop_table('answer')
-    op.drop_table('sentence')
     op.drop_table('user')
+    op.drop_table('sentence')
     op.drop_table('quiz')
     op.drop_table('language')
     # ### end Alembic commands ###
