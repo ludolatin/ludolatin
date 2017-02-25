@@ -182,6 +182,7 @@ class Sentence(db.Model, BaseModel):
     text = db.Column(db.String(128))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     answers = db.relationship('Answer', backref='sentence')
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
 
     translations = db.relationship(
         "Sentence",
@@ -203,11 +204,11 @@ class Language(db.Model, BaseModel):
     def __repr__(self):
         return '<Language: {0}>'.format(self.name)
 
+
 class Quiz(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
     sentences = db.relationship('Sentence', backref='quiz')
     name = db.Column(db.String(16))
 
     def __repr__(self):
-        return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.user or 'None')
+        return '<Quiz: {0}>'.format(self.name)

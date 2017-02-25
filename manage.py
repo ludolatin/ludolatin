@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
 from app import models
-from app.models import User, Sentence, Language
+from app.models import User, Sentence, Language, Quiz
 
 from yaml import load, dump
 try:
@@ -69,26 +69,31 @@ def load_sentences():
     filename = open('data.yml')
     data = load(filename, Loader=Loader)
     print data
-    words = data['english-latin']
 
-    for english, translations in words.items():
-        e = (Sentence.query.filter_by(text=english).first() or Sentence(
-                text=english,
-                language=Language.query.filter_by(name="English").first()
-            )
-        )
+    for name, sentences in data.items():
+        language = Language.query.filter_by(name="English").first()
+        quiz = (Quiz.query.filter_by(name=name).first() or Quiz(name=name))
+        print quiz
 
-        for latin in translations:
-            l = (Sentence.query.filter_by(text=latin).first() or Sentence(
-                    text=latin,
-                    language=Language.query.filter_by(name="Latin").first()
+        for english, translations in sentences.items():
+            e = (Sentence.query.filter_by(text=english).first() or Sentence(
+                    text=english,
+                    language=language,
+                    quiz=quiz
                 )
             )
-            e.translations.append(l)
-            l.translations.append(e)
 
-        db.session.add(e)
-        db.session.commit()
+            for latin in translations:
+                l = (Sentence.query.filter_by(text=latin).first() or Sentence(
+                        text=latin,
+                        language=Language.query.filter_by(name="Latin").first()
+                    )
+                )
+                e.translations.append(l)
+                l.translations.append(e)
+
+            db.session.add(e)
+            db.session.commit()
 
 
 @manager.command
@@ -102,12 +107,16 @@ def load_data():
 @manager.command
 def dump_data():
     """Output the content of the English / Latin tables as YAML"""
-    english_sentences = Sentence.query.join(Sentence.language).filter(Language.name == "English").all()
-    print "english-latin:"
-    for sentence in english_sentences:
-        print "  " + sentence.text + ":"
-        for latin in sentence.translations:
-            print "    - " + latin.text
+    quizzes = Quiz.query.all()
+    print quizzes
+    for quiz in quizzes:
+        english_sentences = Sentence.query.join(Sentence.language, Sentence.quiz).\
+            filter(Language.name == "English", Quiz.name == quiz.name).all()
+        print quiz.name + ":"
+        for sentence in english_sentences:
+            print "  " + sentence.text + ":"
+            for latin in sentence.translations:
+                print "    - " + latin.text
 
 
 @manager.command

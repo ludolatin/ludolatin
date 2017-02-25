@@ -6,7 +6,7 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quizzes import quizzes
 from app.quizzes.forms import QuizForm
-from app.models import Answer, Sentence, Language
+from app.models import Answer, Sentence, Language, Quiz
 
 
 def _get_user():
@@ -37,7 +37,7 @@ def ask(id):
 
         # Reload the page with a GET request
         response = make_response(
-            redirect(url_for('quiz.validate', id=id))
+            redirect(url_for('quizzes.validate', id=id))
         )
         response.set_cookie('answer_id', str(answer.id))
         return response
@@ -45,9 +45,10 @@ def ask(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    question = Sentence.query.join(Sentence.language).filter(Language.name == "English").order_by(func.random()).first()
+    question = Sentence.query.join(Sentence.language, Sentence.quiz).\
+        filter(Language.name == "English", Quiz.id == id).order_by(func.random()).first()
 
-    progress, unknown = template_setup(question)
+    progress, unknown, quiz = template_setup(question, id)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     response = make_response(
@@ -56,7 +57,8 @@ def ask(id):
             question=question,
             unknown=unknown,
             form=form,
-            progress=progress
+            progress=progress,
+            quiz=quiz
         )
     )
 
@@ -83,7 +85,7 @@ def validate(id):
     # (passed to the model where used to determine correctness)
     answer = Answer.query.filter_by(id=answer_id).first()
 
-    progress, unknown = template_setup(question)
+    progress, unknown, quiz = template_setup(question, id)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     return render_template(
@@ -92,16 +94,18 @@ def validate(id):
         question=question,
         unknown=unknown,
         form=form,
-        progress=progress
+        progress=progress,
+        quiz=quiz
     )
 
 
-def template_setup(question):
+def template_setup(question, id):
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, user=_get_user()).all()
-    # correct = Answer.query.with_entities(Answer.text).filter_by(answerlist_id=id, is_correct=True).all()
+
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
+
     # The list of latin translations for the current english phrase (normally only one, but can be many)
     translations = []
     for translation in question.translations:
@@ -109,6 +113,11 @@ def template_setup(question):
 
     # True if the set (list of unique) latin translations is not in the set of correct answers
     unknown = set(translations).isdisjoint(correct)
+
     # The percentage of questions that have been answered correctly
     progress = float(len(correct)) / Sentence.query.count() * 100
-    return progress, unknown
+
+    quiz = Quiz.query.filter_by(id=id).first()
+
+    return progress, unknown, quiz
+
