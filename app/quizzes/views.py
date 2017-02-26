@@ -6,7 +6,7 @@ from sqlalchemy.sql import * # Inefficient
 
 from app.quizzes import quizzes
 from app.quizzes.forms import QuizForm
-from app.models import Answer, Sentence, Language, Quiz
+from app.models import Answer, Sentence, Quiz, User
 
 
 def _get_user():
@@ -17,6 +17,7 @@ def _get_user():
 @login_required
 def ask(id):
     form = QuizForm()
+    user = _get_user()
 
     # POST request:
     if form.validate_on_submit():
@@ -32,8 +33,7 @@ def ask(id):
         answer = form.answer.data
 
         # Save to the db via Answer model
-        # Answer(answer, answerlist.id, question, _get_user()).save()
-        answer = Answer(answer, question, _get_user()).save()
+        answer = Answer(answer, question, user).save()
 
         # Reload the page with a GET request
         response = make_response(
@@ -45,8 +45,31 @@ def ask(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    question = Sentence.query.join(Sentence.language, Sentence.quiz).\
-        filter(Language.name == "English", Quiz.id == id).order_by(func.random()).first()
+    # question = Sentence.query.join(Sentence.language, Sentence.quiz).\
+    #     filter(Language.name == "English", Quiz.id == id).order_by(func.random()).first()
+
+    answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
+        filter(Sentence.quiz_id == id, Answer.is_correct == True, User.id == user.id).all()
+    print "Answered: ", answered_sentences
+    all_sentences = Sentence.query.filter(Sentence.quiz_id == id).order_by(func.random()).all()
+    print "All: ", all_sentences
+
+    questions = set(all_sentences) - set(answered_sentences)
+    print "Qs: ", questions
+
+    print "len: ", len(questions)
+
+    if len(questions) == 0:
+        print "Moo"
+        user.quiz_id = id + 1
+        user.save()
+        print "id: ", id
+        new_id = id + 1
+        print "new_id: ", new_id
+        return redirect(url_for('quizzes.ask', id=new_id))
+
+    question = list(questions)[0]
+    print "Q: ", question
 
     progress, unknown, quiz = template_setup(question, id)
 
@@ -101,7 +124,8 @@ def validate(id):
 
 def template_setup(question, id):
     # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.with_entities(Answer.text).filter_by(is_correct=True, user=_get_user()).all()
+    correct = Answer.query.join(Sentence).with_entities(Answer.text).\
+        filter(Answer.is_correct == True, Sentence.quiz_id == id, Answer.user == _get_user()).all()
 
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
@@ -115,7 +139,7 @@ def template_setup(question, id):
     unknown = set(translations).isdisjoint(correct)
 
     # The percentage of questions that have been answered correctly
-    progress = float(len(correct)) / Sentence.query.count() * 100
+    progress = float(len(correct)) / Sentence.query.filter_by(quiz_id=id).count() * 100
 
     quiz = Quiz.query.filter_by(id=id).first()
 
