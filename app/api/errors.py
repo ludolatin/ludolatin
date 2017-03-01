@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from flask import jsonify, make_response
 
 from app.api import api

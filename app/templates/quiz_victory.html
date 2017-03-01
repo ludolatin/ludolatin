@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="card quiz">
+  <div class="card-block">
+    <h1 class="mb-4 text-center">Hooray!</h1>
+    <h2 class="mb-4 text-center">You've earned {{ score }} denarii!</h2>
+    <audio src="/static/audio/level-up.mp3" autoplay></audio>
+    <div class="row">
+      <div class="col">
+        <div style="padding: 50px;">
+          {% for n in range(0,score) %}
+          <img src="/static/images/denarius.png" alt="Roman coin" width="60" height="60">
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col">
+        <div class="chartContainer">
+          <canvas id="xpChart" width="400" height="300"></canvas>
+        </div>
+        <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('quizzes.ask', id=id) }}')" autofocus>Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  var labels = {{days|tojson}};
+  var data = {{daily}};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="/static/js/victory.js"></script>
+<script src="/static/js/quizzes.js"></script>
+{% endblock %}

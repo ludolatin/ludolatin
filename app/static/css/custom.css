@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(233, 233, 233)
+  background-color: rgb(233, 233, 233)
 }
 
 .header {
@@ -161,4 +161,12 @@ div.error {
   100% {
     stroke-dashoffset: 900;
   }
+}
+
+/* XP chart */
+.chartContainer {
+  width: 400px;
+  height: 300px;
+  margin: 20px auto;
+  background-color: white;
 }

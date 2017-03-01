@@ -3,6 +3,7 @@
 import re
 from datetime import datetime
 from sqlalchemy.orm import synonym
+from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import url_for
 from flask_login import UserMixin
@@ -43,6 +44,14 @@ class BaseModel:
         return self
 
     @classmethod
+    def count_by_hour(cls, column):
+        return db.session.query(func.count(column)).group_by(func.strftime("%Y-%m-%d %H", column))
+
+    @classmethod
+    def count_by_day(cls, column):
+        return db.session.query(func.count(column)).group_by(func.strftime("%Y-%m-%d", column))
+
+    @classmethod
     def from_dict(cls, model_dict):
         return cls(**model_dict).save()
 
@@ -57,6 +66,8 @@ class User(UserMixin, db.Model, BaseModel):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=False)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), default=1)
+    total_score = db.Column(db.Integer, default=0)
+    scores = db.relationship('Score', backref='user')
 
     answers = db.relationship('Answer', backref='user')
 
@@ -211,6 +222,22 @@ class Quiz(db.Model, BaseModel):
     sentences = db.relationship('Sentence', backref='quiz')
     name = db.Column(db.String(16))
     users = db.relationship('User', backref='quiz')
+    scores = db.relationship('Score', backref='quiz')
 
     def __repr__(self):
         return '<Quiz: {0}>'.format(self.name)
+
+
+class Score(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    score = db.Column(db.Integer, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
+
+    @classmethod
+    def sum_by_day(cls):
+        return db.session.query(func.sum(cls.score)).group_by(func.strftime("%Y-%m-%d", cls.created_at))
+
+    def __repr__(self):
+        return '<Score: {0}>'.format(self.score)

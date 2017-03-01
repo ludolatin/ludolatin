@@ -34,7 +34,6 @@
 
   <script type="text/javascript" src="{{ url_for('static', filename='js/site.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/tether.min.js') }}"></script>
-   {% block js %}{% endblock %}
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -91,6 +90,10 @@
 
     {% block body %}{% endblock %}
   </div>
+
+  <!-- Custom JS at end for faster page load
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block js %}{% endblock %}
 </body>
 
 <!-- End Document

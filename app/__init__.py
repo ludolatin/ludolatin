@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -16,6 +14,7 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
+
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
@@ -31,6 +30,9 @@ def create_app(config_name):
     from .quizzes import quizzes as quiz_blueprint
     app.register_blueprint(quiz_blueprint)
 
+    from .dashboard import dashboard as dashboard_blueprint
+    app.register_blueprint(dashboard_blueprint)
+
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
@@ -41,7 +43,7 @@ def create_app(config_name):
     app.register_blueprint(utils_blueprint)
 
     # Initialise flask-admin
-    from app.models import User, Answer, Sentence, Language, Quiz
+    from app.models import User, Answer, Sentence, Language, Quiz, Score
     admin = Admin(app, name='ingenuity', template_mode='bootstrap3')
 
     # Add administrative views here
@@ -50,5 +52,6 @@ def create_app(config_name):
     admin.add_view(ModelView(Sentence, db.session))
     admin.add_view(ModelView(Language, db.session))
     admin.add_view(ModelView(Quiz, db.session))
+    admin.add_view(ModelView(Score, db.session))
 
     return app

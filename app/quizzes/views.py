@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+
 from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
 from sqlalchemy.sql import * # Inefficient
 
 from app.quizzes import quizzes
 from app.quizzes.forms import QuizForm
-from app.models import Answer, Sentence, Quiz, User
+from app.models import Answer, Sentence, Quiz, User, Score
 
 
 def _get_user():
@@ -45,31 +47,25 @@ def ask(id):
     # If it wasn't a POST request, must be a GET, so we arrive here
 
     # Retrieve a random English phrase
-    # question = Sentence.query.join(Sentence.language, Sentence.quiz).\
-    #     filter(Language.name == "English", Quiz.id == id).order_by(func.random()).first()
 
+    # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
         filter(Sentence.quiz_id == id, Answer.is_correct == True, User.id == user.id).all()
-    print "Answered: ", answered_sentences
+
+    # All sentences for the current quiz
     all_sentences = Sentence.query.filter(Sentence.quiz_id == id).order_by(func.random()).all()
-    print "All: ", all_sentences
 
+    # The set of unanswered questions
+    # TODO: can we do this in a single DB query instead of the two above?
     questions = set(all_sentences) - set(answered_sentences)
-    print "Qs: ", questions
 
-    print "len: ", len(questions)
-
+    # If there are no unanswered questions, bump level
     if len(questions) == 0:
-        print "Moo"
-        user.quiz_id = id + 1
-        user.save()
-        print "id: ", id
-        new_id = id + 1
-        print "new_id: ", new_id
-        return redirect(url_for('quizzes.ask', id=new_id))
+
+        # TODO: Redirect to a victory page instead
+        return redirect(url_for('quizzes.victory', id=id))
 
     question = list(questions)[0]
-    print "Q: ", question
 
     progress, unknown, quiz = template_setup(question, id)
 
@@ -118,7 +114,7 @@ def validate(id):
         unknown=unknown,
         form=form,
         progress=progress,
-        quiz=quiz
+        quiz=quiz,
     )
 
 
@@ -130,13 +126,13 @@ def template_setup(question, id):
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
 
-    # The list of latin translations for the current english phrase (normally only one, but can be many)
-    translations = []
-    for translation in question.translations:
-        translations.append(translation.text)
-
     # True if the set (list of unique) latin translations is not in the set of correct answers
-    unknown = set(translations).isdisjoint(correct)
+    unknown = not(Answer.query.join(Sentence).filter(
+        Sentence.quiz_id == id,
+        Answer.sentence == question,
+        Answer.user == _get_user(),
+        Answer.is_correct == True
+    ).count())
 
     # The percentage of questions that have been answered correctly
     progress = float(len(correct)) / Sentence.query.filter_by(quiz_id=id).count() * 100
@@ -145,3 +141,44 @@ def template_setup(question, id):
 
     return progress, unknown, quiz
 
+
+@quizzes.route('/quiz/<int:id>/victory', methods=['GET'])
+@login_required
+def victory(id):
+    user = _get_user()
+
+    score = Sentence.query.filter_by(quiz_id=id).count() * 2
+    neg_score = Answer.query.join(Sentence).filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
+    final_score = score - neg_score
+
+    if user.quiz.id == id:
+        user.total_score += final_score
+        Score(score=final_score, user=user, quiz_id = id)
+        user.quiz_id = id + 1
+
+    daily = Score.\
+        sum_by_day().\
+        filter_by(user=_get_user()).\
+        order_by(Score.created_at.desc()).\
+        limit(7).\
+        all()
+
+    # remove the tuple wrappers
+    daily = [i[0] for i in daily]
+    # Pad to seven entries
+    daily += [0] * (7 - len(daily))
+    # most recent last
+    daily.reverse()
+
+    days = ['Tu',  'W', 'Th', 'F', 'Sa', 'Su', 'M']
+    today = datetime.date.today().weekday()
+    # Rotate the array so that today is last
+    days = days[today:] + days[:today]
+
+    return render_template(
+        'quiz_victory.html',
+        id=user.quiz_id,
+        score=final_score,
+        days=days,
+        daily=daily
+    )
