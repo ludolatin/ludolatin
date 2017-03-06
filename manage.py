@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
 from app import models
-from app.models import User, Sentence, Language, Quiz
+from app.models import User, Sentence, Language, Quiz, Answer, Score
 
 from yaml import load, dump
 try:
@@ -19,7 +19,19 @@ manager = Manager(app)
 
 
 def _make_context():
-    return dict(app=app, db=db, models=models)
+
+    return dict(
+        app=app,
+        db=db,
+        models=models,
+        user=User.query.first(),
+        User=User,
+        Sentence=Sentence,
+        Language=Language,
+        Quiz=Quiz,
+        Answer=Answer,
+        Score=Score,
+    )
 
 manager.add_command("shell", Shell(make_context=_make_context))
 
