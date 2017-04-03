@@ -11,7 +11,9 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-8">
-      Main content
+      <div class="doughnutChartContainer">
+        <canvas id="doughnutChart" width="200" height="200"></canvas>
+      </div>
     </div><!-- /.blog-main -->
 
     <div class="col-sm-3 offset-sm-1r">
@@ -37,4 +39,36 @@
     </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
 </div><!-- /.container -->
+{% endblock %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+var ctx = document.getElementById('doughnutChart').getContext('2d');
+var data = {
+    datasets: [
+        {
+            data: {{ data }},
+            backgroundColor: [
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#36A2EB",
+                "#FFCE56"
+            ]
+        }
+     ]
+};
+var options = {
+  tooltips: {
+    enabled: false
+  }
+}
+  var myDoughnutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+    options: options
+  });
+</script>
 {% endblock %}

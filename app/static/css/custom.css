@@ -164,9 +164,17 @@ div.error {
 }
 
 /* XP chart */
-.chartContainer {
+.xpChartContainer {
   width: 400px;
   height: 300px;
+  margin: 20px auto;
+  background-color: white;
+}
+
+/* Doughnut chart */
+.doughnutChartContainer {
+  width: 200px;
+  height: 200px;
   margin: 20px auto;
   background-color: white;
 }

@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="chartContainer">
+        <div class="xpChartContainer">
           <canvas id="xpChart" width="400" height="300"></canvas>
         </div>
       </div>
@@ -23,9 +23,9 @@
 
 {% block js %}
 <script>
-  var labels = {{days|tojson}};
-  var data = {{daily}};
-  var score = {{score}};
+  var labels = {{ days|tojson }};
+  var data = {{ daily }};
+  var score = {{ score }};
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="/static/js/victory.js"></script>

@@ -148,7 +148,8 @@ def victory(id):
     user = _get_user()
 
     score = Sentence.query.filter_by(quiz_id=id).count() * 2
-    neg_score = Answer.query.join(Sentence).filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
+    neg_score = Answer.query.join(Sentence)\
+        .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
     final_score = score - neg_score
 
     if user.quiz.id == id:

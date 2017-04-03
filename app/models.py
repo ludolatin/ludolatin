@@ -223,6 +223,7 @@ class Quiz(db.Model, BaseModel):
     name = db.Column(db.String(16))
     users = db.relationship('User', backref='quiz')
     scores = db.relationship('Score', backref='quiz')
+    topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
 
     def __repr__(self):
         return '<Quiz: {0}>'.format(self.name)
@@ -241,3 +242,11 @@ class Score(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Score: {0}>'.format(self.score)
+
+class Topic(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    quizzes = db.relationship('Quiz', backref='topic')
+    name = db.Column(db.String(32))
+
+    def __repr__(self):
+        return '<Topic: {0}>'.format(self.name)

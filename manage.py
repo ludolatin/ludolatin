@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
 from app import models
-from app.models import User, Sentence, Language, Quiz, Answer, Score
+from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic
 
 from yaml import load, dump
 try:
@@ -82,30 +82,35 @@ def load_sentences():
     data = load(filename, Loader=Loader)
     print data
 
-    for name, sentences in data.items():
-        language = Language.query.filter_by(name="English").first()
-        quiz = (Quiz.query.filter_by(name=name).first() or Quiz(name=name))
-        print quiz
+    for topic_name, quizzes in data.items():
+        topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
+        print topic
 
-        for english, translations in sentences.items():
-            e = (Sentence.query.filter_by(text=english).first() or Sentence(
+        for quiz_name, sentences in quizzes.items():
+            language = Language.query.filter_by(name="English").first()
+            quiz = (Quiz.query.filter_by(name=quiz_name).first() or Quiz(
+                name=quiz_name,
+                topic=topic
+            ))
+            print quiz
+
+            for english, translations in sentences.items():
+                e = (Sentence.query.filter_by(text=english).first() or Sentence(
                     text=english,
                     language=language,
                     quiz=quiz
-                )
-            )
+                ))
 
-            for latin in translations:
-                l = (Sentence.query.filter_by(text=latin).first() or Sentence(
+                for latin in translations:
+                    l = (Sentence.query.filter_by(text=latin).first() or Sentence(
                         text=latin,
                         language=Language.query.filter_by(name="Latin").first()
-                    )
-                )
-                e.translations.append(l)
-                l.translations.append(e)
+                    ))
+                    e.translations.append(l)
+                    l.translations.append(e)
 
-            db.session.add(e)
-            db.session.commit()
+                db.session.add(e)
+                db.session.commit()
 
 
 @manager.command
