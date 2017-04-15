@@ -33,6 +33,9 @@ def create_app(config_name):
     from .dashboard import dashboard as dashboard_blueprint
     app.register_blueprint(dashboard_blueprint)
 
+    from .topic import topic as topic_blueprint
+    app.register_blueprint(topic_blueprint)
+
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
@@ -49,7 +52,7 @@ def create_app(config_name):
     # Add administrative views here
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Language, db.session))
-    admin.add_view(ModelView(Topic, db.session))
+    admin.add_view(ModelView(Topic, db.session, endpoint="admin_topic"))
     admin.add_view(ModelView(Quiz, db.session))
     admin.add_view(ModelView(Sentence, db.session))
     admin.add_view(ModelView(Answer, db.session))

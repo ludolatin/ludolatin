@@ -202,3 +202,11 @@ div.error {
   right: 0;
   min-height: 70px;
 }
+
+.comma :not(:last-of-type):after {
+  content: ", ";
+}
+
+.fullStop :last-of-type:after {
+  content: ".";
+}

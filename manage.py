@@ -26,6 +26,7 @@ def _make_context():
         Quiz=Quiz,
         Answer=Answer,
         Score=Score,
+        Topic=Topic,
     )
 
 manager.add_command("shell", Shell(make_context=_make_context))
