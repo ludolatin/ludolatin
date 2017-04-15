@@ -1,17 +1,12 @@
 # manage.py
 
 import json
+import ruamel.yaml
 from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
 from app import models
 from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic
-
-from yaml import load, dump
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
 
 # output = dump(data, Dumper=Dumper)
 
@@ -59,7 +54,6 @@ def add_admin():
     print  "promote an existing user to admin, then delete this temporary admin user.\n"
 
 
-@manager.command
 def initialise_languages():
     """ Initialise languages"""
 
@@ -78,8 +72,8 @@ def initialise_languages():
 @manager.command
 def load_sentences():
     """Load the content of data.yml into the English / Latin tables"""
-    filename = open('data.yml')
-    data = load(filename, Loader=Loader)
+    yaml = open('data.yml')
+    data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
     print data
 
     for topic_name, quizzes in data.items():
