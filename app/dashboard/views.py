@@ -1,8 +1,10 @@
+import datetime
+
 from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from app.dashboard import dashboard
-from app.models import Quiz
+from app.models import Quiz, Sentence, Answer, Score
 
 
 def _get_user():
@@ -20,4 +22,29 @@ def dashboard():
     progress = topic.quizzes.index(quiz) + 1
 
     data = "[%s, %s]" % (progress, topic_size - progress)
-    return render_template('dashboard.html', data=data)
+
+    daily = Score.\
+        sum_by_day().\
+        filter_by(user=_get_user()).\
+        order_by(Score.created_at.desc()).\
+        limit(7).\
+        all()
+
+    # remove the tuple wrappers
+    daily = [i[0] for i in daily]
+    # Pad to seven entries
+    daily += [0] * (7 - len(daily))
+    # most recent last
+    daily.reverse()
+
+    days = ['Tu',  'W', 'Th', 'F', 'Sa', 'Su', 'M']
+    today = datetime.date.today().weekday()
+    # Rotate the array so that today is last
+    days = days[today:] + days[:today]
+
+    return render_template(
+        'dashboard.html',
+        data=data,
+        days=days,
+        daily=daily
+    )

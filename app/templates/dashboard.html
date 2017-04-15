@@ -10,31 +10,21 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-7">
       <div class="doughnutChartContainer">
         <canvas id="doughnutChart" width="200" height="200"></canvas>
       </div>
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-3 offset-sm-1r">
-      <div class="sidebar-module sidebar-module-inset">
-        <h4>About</h4>
-        <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-      </div>
-      <div class="sidebar-module">
-        <h4>Archives</h4>
-        <ol class="list-unstyled">
-          <li><a href="#">March 2014</a></li>
-          <li><a href="#">February 2014</a></li>
-        </ol>
-      </div>
-      <div class="sidebar-module">
-        <h4>Elsewhere</h4>
-        <ol class="list-unstyled">
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Facebook</a></li>
-        </ol>
+    <div class="col-sm-4 offset-sm-1">
+      <div class="card">
+        <div class="card-block">
+          <h4 class="card-title">Progress</h4>
+          <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
+          <div class="dashboardXPChartContainer">
+            <canvas id="xpChart" width="300" height="225"></canvas>
+          </div>
+        </div>
       </div>
     </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
@@ -42,10 +32,15 @@
 {% endblock %}
 
 {% block js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
-var ctx = document.getElementById('doughnutChart').getContext('2d');
-var data = {
+var labels = {{ days|tojson }};
+var data = {{ daily }};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="/static/js/progress_chart.js"></script>
+<script>
+var donutContext = document.getElementById('doughnutChart').getContext('2d');
+var donutData = {
     datasets: [
         {
             data: {{ data }},
@@ -65,10 +60,11 @@ var options = {
     enabled: false
   }
 }
-  var myDoughnutChart = new Chart(ctx, {
+  var myDoughnutChart = new Chart(donutContext, {
     type: 'doughnut',
-    data: data,
+    data: donutData,
     options: options
   });
 </script>
+<script>xpChart()</script>
 {% endblock %}

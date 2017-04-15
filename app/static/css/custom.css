@@ -167,10 +167,18 @@ div.error {
   }
 }
 
-/* XP chart */
+/* Victory XP chart */
 .xpChartContainer {
   width: 400px;
   height: 300px;
+  margin: 20px auto;
+  background-color: white;
+}
+
+/* Dashboard XP chart */
+.dashboardXPChartContainer {
+  width: 300px;
+  height: 225px;
   margin: 20px auto;
   background-color: white;
 }
@@ -193,9 +201,4 @@ div.error {
   bottom: 0;
   right: 0;
   min-height: 70px;
-}
-
-/* Dashboard jumbotron */
-.dashboardJumbotron{
-background-color: white !important;
 }
