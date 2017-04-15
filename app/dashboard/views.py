@@ -15,11 +15,20 @@ def _get_user():
 @login_required
 def dashboard():
     user = _get_user()
-    quiz = Quiz.query.filter_by(id=user.quiz_id - 1).first()
+
+    if user.quiz_id == 1:
+        quiz_id = 1
+    else:
+        quiz_id = user.quiz_id - 1
+    quiz = Quiz.query.filter_by(id=quiz_id).first()
 
     topic = quiz.topic
     topic_size = len(topic.quizzes)
-    progress = topic.quizzes.index(quiz) + 1
+
+    if user.quiz_id == 1:
+        progress = 0
+    else:
+        progress = topic.quizzes.index(quiz) + 1
 
     data = "[%s, %s]" % (progress, topic_size - progress)
 
