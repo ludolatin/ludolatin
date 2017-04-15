@@ -13,14 +13,36 @@
         <h4 class="card-title">{{topic.name}}</h4>
         <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
         <div class="card-deck">
-          {% for quiz in topic.quizzes %}
+          {% for quiz in topic.quiz %}
           <div class="card">
             <div class="card-block">
               <h4 class="card-title">{{ quiz.name }}</h4>
               <p class="card-text comma fullStop">
                 {% for sentence in quiz.sentences %} <span>{{ sentence.text }}</span> {% endfor %}
               </p>
-              <a href="{{ url_for('quizzes.ask', id=current_user.quiz.id) }}" class="btn btn-primary {% if quiz.id > current_user.quiz.id %} disabled {% endif %}" style=" margin-top: auto;">Begin</a>
+
+              {% if quiz.id < current_user.quiz.id %}
+                <a
+                  href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
+                  class="btn btn-success disabled"
+                 >
+                  Complete
+                </a>
+              {% elif quiz.id == current_user.quiz.id %}
+                <a
+                  href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
+                  class="btn btn-primary"
+                >
+                  Begin
+                </a>
+              {% else %}
+                <a
+                  href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
+                  class="btn btn-secondary disabled"
+                >
+                  Locked
+                </a>
+              {% endif %}
             </div>
           </div>
           {% endfor %}

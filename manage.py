@@ -77,11 +77,11 @@ def load_sentences():
     data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
     print data
 
-    for topic_name, quizzes in data.items():
+    for topic_name, quiz in data.items():
         topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
         print topic
 
-        for quiz_name, sentences in quizzes.items():
+        for quiz_name, sentences in quiz.items():
             language = Language.query.filter_by(name="English").first()
             quiz = (Quiz.query.filter_by(name=quiz_name).first() or Quiz(
                 name=quiz_name,
@@ -119,9 +119,9 @@ def load_data():
 @manager.command
 def dump_data():
     """Output the content of the English / Latin tables as YAML"""
-    quizzes = Quiz.query.all()
-    print quizzes
-    for quiz in quizzes:
+    quiz = Quiz.query.all()
+    print quiz
+    for quiz in quiz:
         english_sentences = Sentence.query.join(Sentence.language, Sentence.quiz).\
             filter(Language.name == "English", Quiz.name == quiz.name).all()
         print quiz.name + ":"

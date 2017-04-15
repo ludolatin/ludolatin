@@ -6,8 +6,8 @@ from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
 from sqlalchemy.sql import * # Inefficient
 
-from app.quizzes import quizzes
-from app.quizzes.forms import QuizForm
+from app.quiz import quiz
+from app.quiz.forms import QuizForm
 from app.models import Answer, Sentence, Quiz, User, Score
 
 
@@ -15,7 +15,7 @@ def _get_user():
     return current_user if current_user.is_authenticated else None
 
 
-@quizzes.route('/quiz/<int:id>/', methods=['GET', 'POST'])
+@quiz.route('/quiz/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def ask(id):
     form = QuizForm()
@@ -39,7 +39,7 @@ def ask(id):
 
         # Reload the page with a GET request
         response = make_response(
-            redirect(url_for('quizzes.validate', id=id))
+            redirect(url_for('quiz.validate', id=id))
         )
         response.set_cookie('answer_id', str(answer.id))
         return response
@@ -63,7 +63,7 @@ def ask(id):
     if len(questions) == 0:
 
         # TODO: Redirect to a victory page instead
-        return redirect(url_for('quizzes.victory', id=id))
+        return redirect(url_for('quiz.victory', id=id))
 
     question = list(questions)[0]
 
@@ -86,7 +86,7 @@ def ask(id):
     return response
 
 
-@quizzes.route('/quiz/<int:id>/validate', methods=['GET'])
+@quiz.route('/quiz/<int:id>/validate', methods=['GET'])
 @login_required
 def validate(id):
     form = QuizForm()
@@ -154,7 +154,7 @@ def template_setup(question, id):
     return progress, unknown, quiz
 
 
-@quizzes.route('/quiz/<int:id>/victory', methods=['GET'])
+@quiz.route('/quiz/<int:id>/victory', methods=['GET'])
 @login_required
 def victory(id):
     user = _get_user()

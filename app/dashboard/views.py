@@ -23,12 +23,12 @@ def dashboard():
     quiz = Quiz.query.filter_by(id=quiz_id).first()
 
     topic = quiz.topic
-    topic_size = len(topic.quizzes)
+    topic_size = len(topic.quiz)
 
     if user.quiz_id == 1:
         progress = 0
     else:
-        progress = topic.quizzes.index(quiz) + 1
+        progress = topic.quiz.index(quiz) + 1
 
     data = "[%s, %s]" % (progress, topic_size - progress)
 

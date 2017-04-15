@@ -245,7 +245,7 @@ class Score(db.Model, BaseModel):
 
 class Topic(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    quizzes = db.relationship('Quiz', backref='topic')
+    quiz = db.relationship('Quiz', backref='topic')
     name = db.Column(db.String(32))
 
     def __repr__(self):

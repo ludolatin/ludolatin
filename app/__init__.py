@@ -27,7 +27,7 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    from .quizzes import quizzes as quiz_blueprint
+    from .quiz import quiz as quiz_blueprint
     app.register_blueprint(quiz_blueprint)
 
     from .dashboard import dashboard as dashboard_blueprint
@@ -53,7 +53,7 @@ def create_app(config_name):
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Language, db.session))
     admin.add_view(ModelView(Topic, db.session, endpoint="admin_topic"))
-    admin.add_view(ModelView(Quiz, db.session))
+    admin.add_view(ModelView(Quiz, db.session, endpoint="admin_quiz"))
     admin.add_view(ModelView(Sentence, db.session))
     admin.add_view(ModelView(Answer, db.session))
     admin.add_view(ModelView(Score, db.session))
