@@ -78,6 +78,10 @@ h2.title {
   margin-bottom: 30px;
 }
 
+.progress-bar {
+  transition-duration: 0.5s;
+}
+
 /* Card bottom grey */
 .neutral {
   background-color: #d9dada;
@@ -189,4 +193,9 @@ div.error {
   bottom: 0;
   right: 0;
   min-height: 70px;
+}
+
+/* Dashboard jumbotron */
+.dashboardJumbotron{
+background-color: white !important;
 }

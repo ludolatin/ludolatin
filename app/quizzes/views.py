@@ -77,6 +77,7 @@ def ask(id):
             unknown=unknown,
             form=form,
             progress=progress,
+            last_progress=progress,
             quiz=quiz
         )
     )
@@ -106,6 +107,12 @@ def validate(id):
 
     progress, unknown, quiz = template_setup(question, id)
 
+    # Get previous progress for progress bar animation
+    if answer.is_correct:
+        last_progress = float(len(correct_answers(id)) - 1) / Sentence.query.filter_by(quiz_id=id).count() * 100
+    else:
+        last_progress = progress
+
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     return render_template(
         'quiz_validate.html',
@@ -114,17 +121,25 @@ def validate(id):
         unknown=unknown,
         form=form,
         progress=progress,
+        last_progress=last_progress,
         quiz=quiz,
     )
 
 
-def template_setup(question, id):
+def correct_answers(id):
     # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.join(Sentence).with_entities(Answer.text).\
+    correct = Answer.query.join(Sentence).with_entities(Answer.text). \
         filter(Answer.is_correct == True, Sentence.quiz_id == id, Answer.user == _get_user()).all()
-
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
+    return correct
+
+
+def template_setup(question, id):
+    correct = correct_answers(id)
+
+    # The percentage of questions that have been answered correctly
+    progress = float(len(correct)) / Sentence.query.filter_by(quiz_id=id).count() * 100
 
     # True if the set (list of unique) latin translations is not in the set of correct answers
     unknown = not(Answer.query.join(Sentence).filter(
@@ -133,9 +148,6 @@ def template_setup(question, id):
         Answer.user == _get_user(),
         Answer.is_correct == True
     ).count())
-
-    # The percentage of questions that have been answered correctly
-    progress = float(len(correct)) / Sentence.query.filter_by(quiz_id=id).count() * 100
 
     quiz = Quiz.query.filter_by(id=id).first()
 

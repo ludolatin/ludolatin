@@ -64,3 +64,25 @@ function putNewStatus(todoID, isFinished) {
 function nextQuestion(url) {
   window.location.href = url;
 }
+
+// popover hint
+$(document).ready(function() {
+  $(function() {
+    // Enables popover
+    $("#hint-popover").popover({
+      html : true,
+      content: function() {
+        return $("#hint-popover-content").html();
+      },
+    });
+  });
+});
+
+// animate progress bar
+$(document).ready(function() {
+  $('.progress .progress-bar').css("width",
+    function() {
+      return $(this).attr("aria-valuenow") + "%";
+    }
+  )
+});

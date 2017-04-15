@@ -5,7 +5,7 @@
   <div class="card-block">
     <h1 class="mb-4 text-center">{{ quiz.name }}</h1>
     <div class="progress">
-      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{progress}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width:{{last_progress}}%;" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
     <div class="row">
       <div class="col-lg-6">
@@ -43,16 +43,4 @@
 
 {% block js %}
 <script src="/static/js/quizzes.js"></script>
-<script>
-// Don't know why this code doesn't work when placed in quiz.js...
-  $(function() {
-    // Enables popover
-    $("#hint-popover").popover({
-      html : true,
-      content: function() {
-        return $("#hint-popover-content").html();
-      },
-    });
-  });
-</script>
 {% endblock %}
