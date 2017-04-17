@@ -34,22 +34,31 @@ def ask(id):
         # Retrieve the answer from the POST request data
         answer = form.answer.data
 
+        last_answer = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first()
+
+        attempt = request.cookies.get('attempt') or (last_answer.attempt + 1) if last_answer else 1
+
+
         # Save to the db via Answer model
-        answer = Answer(answer, question, user).save()
+        answer = Answer(answer, question, user, attempt).save()
 
         # Reload the page with a GET request
         response = make_response(
             redirect(url_for('quiz.validate', id=id))
         )
         response.set_cookie('answer_id', str(answer.id))
+        response.set_cookie('attempt', str(attempt))
+
         return response
+
+    attempt = request.cookies.get('attempt')
 
     # If it wasn't a POST request, must be a GET, so we arrive here
     current_quiz = Quiz.query.filter_by(id=id).first_or_404()
 
     # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
-        filter(Sentence.quiz_id == id, Answer.is_correct == True, User.id == user.id).all()
+        filter(Sentence.quiz_id == id, Answer.is_correct == True, User.id == user.id, Answer.attempt == attempt).all()
 
     # All sentences for the current quiz
     all_sentences = Sentence.query.filter(Sentence.quiz_id == id).order_by(func.random()).all()
@@ -60,7 +69,11 @@ def ask(id):
 
     # If there are no unanswered questions, bump level
     if len(questions) == 0:
-        return redirect(url_for('quiz.victory', id=id))
+        response = make_response(
+            redirect(url_for('quiz.victory', id=id))
+        )
+        response.set_cookie('attempt', '', expires=0)
+        return response
 
     question = list(questions)[0]
     progress, unknown = template_setup(question, id)
@@ -125,9 +138,11 @@ def validate(id):
 
 
 def correct_answers(id):
+    attempt = request.cookies.get('attempt')
+
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.join(Sentence).with_entities(Answer.text). \
-        filter(Answer.is_correct == True, Sentence.quiz_id == id, Answer.user == _get_user()).all()
+        filter(Answer.is_correct == True, Sentence.quiz_id == id, Answer.user == _get_user(), Answer.attempt == attempt).all()
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
     return correct
@@ -155,24 +170,28 @@ def template_setup(question, id):
 def victory(id):
     user = _get_user()
 
-    if user.quiz.id != id:
+    last_attempt = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first().attempt
+    last_score = Score.query.filter_by(user=user).order_by(Score.id.desc()).first()
+
+    attempt = (last_score.attempt) if last_score else 0
+
+    if last_attempt > attempt:
+        score = Sentence.query.filter_by(quiz_id=id).count() * 2
+        neg_score = Answer.query.join(Sentence) \
+            .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
+        final_score = score - neg_score
+
+        user.total_score += final_score
+        Score(score=final_score, user=user, quiz_id = id, attempt=last_attempt)
+        user.quiz_id = id + 1
+    else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))
 
-    score = Sentence.query.filter_by(quiz_id=id).count() * 2
-    neg_score = Answer.query.join(Sentence)\
-        .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
-    final_score = score - neg_score
-
-    if user.quiz.id == id:
-        user.total_score += final_score
-        Score(score=final_score, user=user, quiz_id = id)
-        user.quiz_id = id + 1
-
-    daily = Score.\
-        sum_by_day().\
-        filter_by(user=_get_user()).\
-        order_by(Score.created_at.desc()).\
-        limit(7).\
+    daily = Score. \
+        sum_by_day(). \
+        filter_by(user=_get_user()). \
+        order_by(Score.created_at.desc()). \
+        limit(7). \
         all()
 
     # remove the tuple wrappers

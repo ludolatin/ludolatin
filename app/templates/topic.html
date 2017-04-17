@@ -23,10 +23,10 @@
 
               {% if quiz.id < current_user.quiz.id %}
                 <a
-                  href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
-                  class="btn btn-success disabled"
+                  href="{{ url_for('quiz.ask', id=quiz.id) }}"
+                  class="btn btn-secondary"
                  >
-                  Complete
+                  Redo
                 </a>
               {% elif quiz.id == current_user.quiz.id %}
                 <a

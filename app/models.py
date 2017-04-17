@@ -153,8 +153,9 @@ class Answer(db.Model, BaseModel):
     is_correct = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
+    attempt = db.Column(db.Integer)
 
-    def __init__(self, text, sentence, user=None, created_at=None):
+    def __init__(self, text, sentence, user=None, attempt=0, created_at=None):
 
         # Is the submitted answer correct?
         is_correct = False
@@ -168,6 +169,7 @@ class Answer(db.Model, BaseModel):
         self.is_correct = is_correct
         self.user = user
         self.created_at = created_at or datetime.utcnow()
+        self.attempt = attempt
 
     def __repr__(self):
         return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.user or 'None')
@@ -244,6 +246,7 @@ class Score(db.Model, BaseModel):
     score = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
+    attempt = db.Column(db.Integer)
 
     @classmethod
     def sum_by_day(cls):
