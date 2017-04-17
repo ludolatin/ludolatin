@@ -1,5 +1,6 @@
 body {
-  background-color: rgb(233, 233, 233)
+  background-color: rgb(233, 233, 233);
+  font-family: 'Raleway', sans-serif;
 }
 
 .header {
@@ -34,12 +35,14 @@ h2.title {
           box-sizing: border-box;
   padding: 10px;
   font-size: 16px;
+  font-family: 'Raleway', sans-serif;
 }
 .form-signin .form-control:focus {
   z-index: 2;
 }
 .form-signin input {
   margin-bottom: 10px;
+  font-family: 'Raleway', sans-serif;
 }
 
 .form-quiz .form-control {
@@ -49,6 +52,7 @@ h2.title {
           box-sizing: border-box;
   padding: 10px;
   font-size: 23px;
+  font-family: 'Raleway', sans-serif;
 }
 
 .question {
@@ -57,6 +61,7 @@ h2.title {
 
 .answer {
   height:31px;
+  font-family: 'Raleway', sans-serif;
 }
 
 .underline {
@@ -243,4 +248,8 @@ div.error {
 
 .topicCardCheck {
   margin-top: 4px;
+}
+
+.btn {
+  font-family: 'Raleway', sans-serif;
 }

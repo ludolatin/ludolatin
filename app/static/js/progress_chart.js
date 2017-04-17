@@ -47,6 +47,8 @@ Chart.pluginService.register({
   }
 });
 
+Chart.defaults.global.defaultFontFamily = "'Raleway', sans-serif"
+
 function xpChart() {
   var myChart = new Chart(ctx, {
     type: 'line',
