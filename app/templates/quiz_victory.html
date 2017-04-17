@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('quiz.ask', id=id) }}')" autofocus>Continue</button>
+    <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')" autofocus>Continue</button>
   </div>
 </div>
 {% endblock %}

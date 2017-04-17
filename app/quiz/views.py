@@ -206,10 +206,14 @@ def victory(id):
     # Rotate the array so that today is last
     days = days[today:] + days[:today]
 
+    quiz = Quiz.query.filter_by(id=user.quiz_id).first()
+    current_topic = quiz.topic
+
     return render_template(
         'quiz_victory.html',
         id=user.quiz_id,
         score=final_score,
         days=days,
-        daily=daily
+        daily=daily,
+        current_topic=current_topic,
     )
