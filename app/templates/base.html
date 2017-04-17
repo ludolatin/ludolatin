@@ -54,12 +54,12 @@
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{{ url_for('quiz.ask', id=1) }}">Ingenuity</a>
+        <a class="navbar-brand" href="/dashboard">Ingenuity</a>
 
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
+            <li {% if request.endpoint == "dashboard.dashboard" %} class="nav-item active" {% else %} class = "nav-item" {% endif %}>
+              <a class="nav-link" href="/dashboard">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Link</a>

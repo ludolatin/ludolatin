@@ -155,6 +155,9 @@ def template_setup(question, id):
 def victory(id):
     user = _get_user()
 
+    if user.quiz.id != id:
+        return redirect(url_for('quiz.ask', id=user.quiz_id))
+
     score = Sentence.query.filter_by(quiz_id=id).count() * 2
     neg_score = Answer.query.join(Sentence)\
         .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
