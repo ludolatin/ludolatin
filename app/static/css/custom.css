@@ -183,30 +183,64 @@ div.error {
   background-color: white;
 }
 
-/* Doughnut chart */
-.doughnutChartContainer {
-  width: 200px;
-  height: 200px;
-  margin: 20px auto;
-  background-color: white;
-}
-
-.row.vdivide [class*='col']:not(:last-child):after {
-  background: #e7e7e7;
-  width: 2px;
-  content: "";
-  display:block;
-  position: absolute;
-  top:0;
-  bottom: 0;
-  right: 0;
-  min-height: 70px;
-}
-
+/* Quiz cards */
 .comma :not(:last-of-type):after {
   content: ", ";
 }
 
 .fullStop :last-of-type:after {
   content: ".";
+}
+
+/* Pie chart */
+.topicPieContainer {
+  width: 100px; height: 100px;
+  transform: rotate(-90deg);
+  background: #8ee000;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPie {
+  fill: #8ee000;
+  stroke: #7ac70c;
+  stroke-width: 32;
+}
+
+.topicPieLocked {
+  width: 100px; height: 100px;
+  background: #8b8b8b;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPieComplete {
+  width: 100px; height: 100px;
+  background: #7ac70c;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPie:hover {
+  fill: #9efa00;
+  stroke: #87de0d;
+ }
+
+.topicPieComplete:hover {
+  background: #87de0d
+ }
+
+.card-block a:hover {
+  text-decoration: none;
+}
+
+/* Topic card */
+.topicCardTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.topicCardCheck {
+  margin-top: 4px;
 }

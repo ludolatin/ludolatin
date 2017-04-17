@@ -2,52 +2,13 @@
 
 {% block body %}
 <style>
-  .topicPieContainer {
-    width: 100px; height: 100px;
-    transform: rotate(-90deg);
-    background: #8ee000;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .topicPieLocked {
-    width: 100px; height: 100px;
-    background: #8b8b8b;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .topicPieComplete {
-    width: 100px; height: 100px;
-    background: #7ac70c;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
   .topicPie {
-    fill: #8ee000;
-    stroke: #7ac70c;
-    stroke-width: 32;
     stroke-dasharray: {{ topic_progress }} 100;
-  }
-
-  .topicPie:hover {
-    fill: #9efa00;
-    stroke: #87de0d;
-   }
-
-  .topicPieComplete:hover {
-    background: #87de0d
-   }
-
-  a:hover, a:visited, a:link, a:active {
-    text-decoration: none;
   }
 </style>
 
 <div class="container">
   <h1>Dashboard</h1>
-  <p class="lead">An empty dashboard.</p>
 </div>
 
 <div class="container">
@@ -85,14 +46,12 @@
       {% endfor %}
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-4 offset-sm-1">
-      <div class="card">
-        <div class="card-block">
-          <h4 class="card-title">Progress</h4>
-          <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
-          <div class="dashboardXPChartContainer">
-            <canvas id="xpChart" width="300" height="225"></canvas>
-          </div>
+    <div class="col-sm-4 offset-sm-1 card">
+      <div class="card-block">
+        <h4 class="card-title">Progress</h4>
+        <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
+        <div class="dashboardXPChartContainer">
+          <canvas id="xpChart" width="300" height="225"></canvas>
         </div>
       </div>
     </div><!-- /.blog-sidebar -->

@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
 {% block body %}
+<style>
+  .topicPie {
+    stroke-dasharray: {{ topic_progress }} 100;
+  }
+</style>
+
 <div class="container">
-  <h1>Dashboard</h1>
-  <p class="lead">An empty dashboard.</p>
+  <h1>Topic</h1>
 </div>
 
 <div class="container">
@@ -16,7 +21,12 @@
           {% for quiz in topic.quizzes %}
           <div class="card">
             <div class="card-block">
+            <div class="topicCardTitle">
               <h4 class="card-title">{{ quiz.name }}</h4>
+              {% if quiz.id < current_user.quiz.id %}
+                <img src="/static/images/checkmark.png" class="topicCardCheck">
+              {% endif %}
+            </div>
               <p class="card-text comma fullStop">
                 {% for sentence in quiz.sentences %} <span>{{ sentence.text }}</span> {% endfor %}
               </p>
@@ -50,12 +60,15 @@
       </div>
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-4 offset-sm-1">
-      <div class="card">
-        <div class="card-block">
-          <h4 class="card-title">Progress</h4>
-          <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
-        </div>
+    <div class="col-sm-4 offset-sm-1 card">
+      <div class="card-block text-center">
+        <h4 class="card-title">Progress</h4>
+        <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
+        <svg class="topicPieContainer" viewBox="0 0 32 32">
+          <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
+        </svg>
+        <br />
+        {{ progress }} / {{ topic_size }} Quizzes completed
       </div>
     </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
