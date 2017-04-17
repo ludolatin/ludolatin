@@ -53,9 +53,6 @@ function xpChart() {
   var myChart = new Chart(ctx, {
     type: 'line',
     options: {
-      layout: {
-        padding: 50,
-      },
       legend: {
         display: false,
       },
