@@ -80,27 +80,29 @@ def load_sentences():
     for topic_name, quiz in data.items():
         topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
         print topic
+        topic.save()
 
         for quiz_name, sentences in quiz.items():
             language = Language.query.filter_by(name="English").first()
-            quiz = (Quiz.query.filter_by(name=quiz_name).first() or Quiz(
+            quiz = Quiz(
                 name=quiz_name,
                 topic=topic
-            ))
+            )
             print quiz
+            quiz.save()
 
             for english, translations in sentences.items():
-                e = (Sentence.query.filter_by(text=english).first() or Sentence(
+                e = Sentence(
                     text=english,
                     language=language,
                     quiz=quiz
-                ))
+                )
 
                 for latin in translations:
-                    l = (Sentence.query.filter_by(text=latin).first() or Sentence(
+                    l = Sentence(
                         text=latin,
                         language=Language.query.filter_by(name="Latin").first()
-                    ))
+                    )
                     e.translations.append(l)
                     l.translations.append(e)
 
@@ -119,9 +121,13 @@ def load_data():
 @manager.command
 def dump_data():
     """Output the content of the English / Latin tables as YAML"""
-    quiz = Quiz.query.all()
-    print quiz
-    for quiz in quiz:
+    topics = Topic.query.all()
+    quizzes = Quiz.query.all()
+
+    print topics
+    print quizzes
+
+    for quiz in quizzes:
         english_sentences = Sentence.query.join(Sentence.language, Sentence.quiz).\
             filter(Language.name == "English", Quiz.name == quiz.name).all()
         print quiz.name + ":"

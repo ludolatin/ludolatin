@@ -217,6 +217,15 @@ class Language(db.Model, BaseModel):
         return '<Language: {0}>'.format(self.name)
 
 
+class Topic(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    quizzes = db.relationship('Quiz', backref='topic')
+    name = db.Column(db.String(32))
+
+    def __repr__(self):
+        return '<Topic: {0}>'.format(self.name)
+
+
 class Quiz(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     sentences = db.relationship('Sentence', backref='quiz')
@@ -242,11 +251,3 @@ class Score(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Score: {0}>'.format(self.score)
-
-class Topic(db.Model, BaseModel):
-    id = db.Column(db.Integer, primary_key=True)
-    quiz = db.relationship('Quiz', backref='topic')
-    name = db.Column(db.String(32))
-
-    def __repr__(self):
-        return '<Topic: {0}>'.format(self.name)

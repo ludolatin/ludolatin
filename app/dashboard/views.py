@@ -4,7 +4,7 @@ from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from app.dashboard import dashboard
-from app.models import Quiz, Sentence, Answer, Score
+from app.models import Quiz, Sentence, Answer, Score, Topic
 
 
 def _get_user():
@@ -16,21 +16,14 @@ def _get_user():
 def dashboard():
     user = _get_user()
 
-    if user.quiz_id == 1:
-        quiz_id = 1
-    else:
-        quiz_id = user.quiz_id - 1
-    quiz = Quiz.query.filter_by(id=quiz_id).first()
+    quiz = Quiz.query.filter_by(id=user.quiz_id).first()
 
-    topic = quiz.topic
-    topic_size = len(topic.quiz)
+    current_topic = quiz.topic
+    topic_size = len(current_topic.quizzes)
 
-    if user.quiz_id == 1:
-        progress = 0
-    else:
-        progress = topic.quiz.index(quiz) + 1
-
-    data = "[%s, %s]" % (progress, topic_size - progress)
+    progress = current_topic.quizzes.index(quiz)
+    topic_progress = "%s" % (float(progress) / topic_size  * 100)
+    topics = Topic.query.filter_by().all()
 
     daily = Score.\
         sum_by_day().\
@@ -53,7 +46,11 @@ def dashboard():
 
     return render_template(
         'dashboard.html',
-        data=data,
+        topic_progress=topic_progress,
         days=days,
-        daily=daily
+        daily=daily,
+        topics=topics,
+        current_topic=current_topic,
+        topic_size=topic_size,
+        progress=progress,
     )

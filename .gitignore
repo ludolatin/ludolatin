@@ -97,3 +97,7 @@ ENV/
 
 .DS_Store
 .idea
+
+# Ignore database and migrations
+/migrations/
+*.db
