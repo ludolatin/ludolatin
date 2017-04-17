@@ -2,7 +2,7 @@
 
 {% block body %}
 <style>
-  .topicPie {
+  .topicPieContainer {
     width: 100px; height: 100px;
     transform: rotate(-90deg);
     background: #8ee000;
@@ -10,19 +10,38 @@
     display: inline-block;
   }
 
-.topicPieNew {
+  .topicPieLocked {
     width: 100px; height: 100px;
-    transform: rotate(-90deg);
     background: #8b8b8b;
     border-radius: 50%;
     display: inline-block;
   }
 
-  .topicPieCircle {
+  .topicPieComplete {
+    width: 100px; height: 100px;
+    background: #7ac70c;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .topicPie {
     fill: #8ee000;
     stroke: #7ac70c;
     stroke-width: 32;
     stroke-dasharray: {{ topic_progress }} 100;
+  }
+
+  .topicPie:hover {
+    fill: #9efa00;
+    stroke: #87de0d;
+   }
+
+  .topicPieComplete:hover {
+    background: #87de0d
+   }
+
+  a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
   }
 </style>
 
@@ -37,16 +56,18 @@
       {% for topic in topics %}
         {% if topic.id < current_topic.id %}
           <div class="card-block">
-            <div width="32" height="32" class="topicPie"></div>
-            <br />
-            {{ current_topic.name }}
+            <a href="{{ url_for('topic.topic', id=topic.id) }}">
+              <div width="32" height="32" class="topicPieComplete"></div>
+              <br />
+              {{ current_topic.name }}
+            </a>
           </div>
         {% elif topic == current_topic %}
           <div class="card-block">
-            <a href="/topic">
+            <a href="{{ url_for('topic.topic', id=topic.id) }}">
               <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
-              <svg class="topicPie" viewBox="0 0 32 32">
-                <circle class="topicPieCircle" r="15.915" cx="15.915" cy="15.915" />
+              <svg class="topicPieContainer" viewBox="0 0 32 32">
+                <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
               </svg>
               <br />
               {{ topic.name }}
@@ -55,7 +76,7 @@
           </div>
         {% elif topic.id > current_topic.id %}
           <div class="card-block">
-            <div width="32" height="32" class="topicPieNew"></div>
+            <div width="32" height="32" class="topicPieLocked"></div>
             <br />
             {{ topic.name }}
             0 / {{ topic.quizzes|length }}

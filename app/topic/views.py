@@ -4,27 +4,21 @@ from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from app.topic import topic
-from app.models import Quiz, Sentence, Answer, Score
+from app.models import Topic
 
 
 def _get_user():
     return current_user if current_user.is_authenticated else None
 
 
-@topic.route('/topic')
+@topic.route('/topic/<int:id>')
 @login_required
-def topic():
+def topic(id):
     user = _get_user()
 
-    if user.quiz_id == 1:
-        quiz_id = 1
-    else:
-        quiz_id = user.quiz_id - 1
-    quiz = Quiz.query.filter_by(id=quiz_id).first()
-
-    current_topic = quiz.topic
+    topic = Topic.query.filter_by(id=id).first_or_404()
 
     return render_template(
         'topic.html',
-        topic=current_topic
+        topic=topic
     )

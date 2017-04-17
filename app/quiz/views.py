@@ -45,8 +45,7 @@ def ask(id):
         return response
 
     # If it wasn't a POST request, must be a GET, so we arrive here
-
-    # Retrieve a random English phrase
+    current_quiz = Quiz.query.filter_by(id=id).first_or_404()
 
     # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
@@ -61,13 +60,10 @@ def ask(id):
 
     # If there are no unanswered questions, bump level
     if len(questions) == 0:
-
-        # TODO: Redirect to a victory page instead
         return redirect(url_for('quiz.victory', id=id))
 
     question = list(questions)[0]
-
-    progress, unknown, quiz = template_setup(question, id)
+    progress, unknown = template_setup(question, id)
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     response = make_response(
@@ -78,7 +74,7 @@ def ask(id):
             form=form,
             progress=progress,
             last_progress=progress,
-            quiz=quiz
+            quiz=current_quiz
         )
     )
 
@@ -105,7 +101,9 @@ def validate(id):
     # (passed to the model where used to determine correctness)
     answer = Answer.query.filter_by(id=answer_id).first()
 
-    progress, unknown, quiz = template_setup(question, id)
+    progress, unknown = template_setup(question, id)
+
+    quiz = Quiz.query.filter_by(id=id).first_or_404()
 
     # Get previous progress for progress bar animation
     if answer.is_correct:
@@ -149,9 +147,7 @@ def template_setup(question, id):
         Answer.is_correct == True
     ).count())
 
-    quiz = Quiz.query.filter_by(id=id).first()
-
-    return progress, unknown, quiz
+    return progress, unknown
 
 
 @quiz.route('/quiz/<int:id>/victory', methods=['GET'])

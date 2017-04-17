@@ -4,7 +4,7 @@ from flask import render_template, redirect, request, url_for
 from flask_login import current_user, login_required
 
 from app.dashboard import dashboard
-from app.models import Quiz, Sentence, Answer, Score, Topic
+from app.models import Quiz, Score, Topic
 
 
 def _get_user():
@@ -17,7 +17,6 @@ def dashboard():
     user = _get_user()
 
     quiz = Quiz.query.filter_by(id=user.quiz_id).first()
-
     current_topic = quiz.topic
     topic_size = len(current_topic.quizzes)
 
