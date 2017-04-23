@@ -1,10 +1,8 @@
-import datetime
-
-from flask import render_template, redirect, request, url_for
+from flask import render_template
 from flask_login import current_user, login_required
 
-from app.topic import topic
 from app.models import Topic, Quiz
+from app.topic import topic
 
 
 def _get_user():

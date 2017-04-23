@@ -13,7 +13,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-7 card text-center">
+    <div class="col-md card text-center">
       {% for topic in topics %}
         {% if topic.id < current_topic.id %}
           <div class="card-block">
@@ -46,7 +46,7 @@
       {% endfor %}
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-4 offset-sm-1 card">
+    <div class="offset-md-1 hidden-sm-down card" style="flex: 0 0 300px;">
       <div class="card-block">
         <h4 class="card-title">Progress</h4>
         <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>

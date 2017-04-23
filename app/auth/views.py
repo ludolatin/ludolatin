@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from flask import render_template, redirect, request, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 from app.auth import auth
 from app.auth.forms import LoginForm, RegistrationForm
@@ -38,12 +36,22 @@ def logout():
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
     if form.validate_on_submit():
-        user = User(
-            email=form.email.data,
-            username=form.username.data,
-            password=form.password.data
-        ).save()
-        login_user(user)
-        return redirect(url_for('quiz.ask', id=1))
+        if current_user.is_authenticated:
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            current_user.password = form.password.data
+            current_user.save()
+            return redirect(url_for('dashboard.dashboard'))
+
+        else:
+            user = User(
+                email=form.email.data,
+                username=form.username.data,
+                password=form.password.data,
+            ).save()
+            login_user(user)
+            return redirect(url_for('quiz.ask', id=1))
+
     return render_template('register.html', form=form)

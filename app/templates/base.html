@@ -13,7 +13,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
@@ -78,11 +79,24 @@
               <img src="/static/images/aureus.png" alt="Roman coin" style="width:20px;height:20px;">
             </a>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle float-right" href="#" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+                <a
+                  class="nav-link dropdown-toggle float-right"
+                  href="#"
+                  id="user-dropdown"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{ current_user.username if current_user.username != None else 'Guest' }}
+                </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
                   <a class="dropdown-item" href="{{ url_for('quiz.ask', id=1) }}">Go learn</a>
                   <a class="dropdown-item" href="/dashboard">Dashboard</a>
-                  <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                  {% if (current_user.is_authenticated and current_user.username != None) %}
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                  {% else %}
+                    <a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a>
+                  {% endif %}
                 </div>
               </li>
             {% endif %}

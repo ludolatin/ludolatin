@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 
 from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
-from sqlalchemy.sql import * # Inefficient
+from sqlalchemy.sql import *  # Inefficient
 
+from app.models import Answer, Sentence, Quiz, User, Score
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
-from app.models import Answer, Sentence, Quiz, User, Score
 
 
 def _get_user():

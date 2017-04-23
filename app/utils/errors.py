@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from flask import request, render_template
 
 from . import utils

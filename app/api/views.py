@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
-
 from flask import jsonify, request, abort, url_for
-from app.api import api
-from app.models import User, Answer
-from app.decorators import admin_required
 from flask_login import current_user
+
+from app.api import api
+from app.decorators import admin_required
+from app.models import User
 
 
 @api.route('/')
