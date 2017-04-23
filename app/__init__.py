@@ -24,9 +24,6 @@ def create_app(config_name):
     migrate.init_app(app, db=db)
     login_manager.init_app(app)
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
     from .quiz import quiz as quiz_blueprint
     app.register_blueprint(quiz_blueprint)
 
