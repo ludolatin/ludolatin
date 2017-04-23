@@ -19,11 +19,11 @@ def login():
         if user_by_email is not None and \
                 user_by_email.verify_password(form.password.data):
             login_user(user_by_email.seen())
-            return redirect(request.args.get('next') or url_for('quiz.ask', id=user_by_email.quiz_id))
+            return redirect(request.args.get('next') or url_for('dashboard.dashboard'))
         if user_by_name is not None and \
                 user_by_name.verify_password(form.password.data):
             login_user(user_by_name.seen())
-            return redirect(request.args.get('next') or url_for('quiz.ask', id=user_by_name.quiz_id))
+            return redirect(request.args.get('next') or url_for('dashboard.dashboard'))
     return render_template('login.html', form=form)
 
 

@@ -2,7 +2,7 @@ import datetime
 
 from flask import render_template, redirect, request, url_for, make_response
 from flask_login import current_user, login_required
-from sqlalchemy.sql import *  # Inefficient
+from sqlalchemy.sql.expression import func
 
 from app.models import Answer, Sentence, Quiz, User, Score
 from app.quiz import quiz
@@ -176,7 +176,8 @@ def victory(id):
     current_quiz = Quiz.query.filter_by(id=user.quiz_id).first()
     current_topic = current_quiz.topic
 
-    if last_attempt > attempt:
+    if True:
+    # if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2
         neg_score = Answer.query.join(Sentence) \
             .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()

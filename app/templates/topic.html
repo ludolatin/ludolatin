@@ -60,16 +60,26 @@
       </div>
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-4 offset-sm-1 card">
-      <div class="card-block text-center">
-        <h4 class="card-title">Progress</h4>
-        <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
-        <svg class="topicPieContainer" viewBox="0 0 32 32">
-          <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
-        </svg>
-        <br />
-        {{ progress }} / {{ topic_size }} Quizzes completed
+    <div class="col-sm-4 offset-sm-1">
+      <div class="card">
+        <div class="card-block text-center">
+          <h4 class="card-title">Progress</h4>
+          <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
+          <svg class="topicPieContainer" viewBox="0 0 32 32">
+            <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
+          </svg>
+          <br />
+          {{ progress }} / {{ topic_size }} Quizzes completed
+        </div>
       </div>
+      {% if current_user.username == None %}
+        <div class="card card-block mt-5">
+          <h4 class="card-title">Sign up</h4>
+          <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress.</h6>
+          <a class="btn btn-lg btn-info mb-2" href="{{ url_for('auth.register') }}" role="button">Sign up today</a>
+          <a class="btn btn-lg btn-success" href="{{ url_for('auth.login') }}" role="button">Log in</a>
+        </div>
+      {% endif %}
     </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
 </div><!-- /.container -->

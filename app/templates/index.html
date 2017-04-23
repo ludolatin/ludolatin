@@ -5,7 +5,7 @@
   <h1 class="display-3">Learn Latin</h1>
   <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
   {% if not current_user.is_authenticated %}
-    <p><a class="btn btn-lg btn-success" href="{{ url_for('auth.register') }}" role="button">Sign up today</a>
+    <p><a class="btn btn-lg btn-success" href="{{ url_for('quiz.ask', id=1) }}" role="button" autofocus>Get started</a>
     <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
   {% else %}
     <p><a class="btn btn-lg btn-success" href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}" role="button">Begin practise</a></p>

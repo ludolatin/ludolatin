@@ -10,13 +10,22 @@
         <div class="coin-container" style="padding: 20px auto;">
         </div>
       </div>
-      <div class="col">
+      <div class="col mb-3">
         <div class="xpChartContainer">
           <canvas id="xpChart" width="400" height="300"></canvas>
         </div>
       </div>
     </div>
-    <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')" autofocus>Continue</button>
+    <button
+        class="btn btn-lg btn-success float-right"
+        onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')"
+        autofocus
+    >
+      Continue
+    </button>
+    {% if current_user.username == None %}
+      <button class="btn btn-lg btn-info mr-3 float-right" href="{{ url_for('auth.register') }}">Sign up today</button>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
