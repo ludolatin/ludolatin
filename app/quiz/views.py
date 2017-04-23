@@ -171,7 +171,10 @@ def victory(id):
     last_attempt = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first().attempt
     last_score = Score.query.filter_by(user=user).order_by(Score.id.desc()).first()
 
-    attempt = (last_score.attempt) if last_score else 0
+    attempt = last_score.attempt if last_score else 0
+
+    current_quiz = Quiz.query.filter_by(id=user.quiz_id).first()
+    current_topic = current_quiz.topic
 
     if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2
@@ -203,9 +206,6 @@ def victory(id):
     today = datetime.date.today().weekday()
     # Rotate the array so that today is last
     days = days[today:] + days[:today]
-
-    quiz = Quiz.query.filter_by(id=user.quiz_id).first()
-    current_topic = quiz.topic
 
     return render_template(
         'quiz_victory.html',
