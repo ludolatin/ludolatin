@@ -176,6 +176,10 @@ def victory(id):
     current_quiz = Quiz.query.filter_by(id=user.quiz_id).first()
     current_topic = current_quiz.topic
 
+    if user.streak_start_date is None or user.last_score_age > 36:
+        user.streak_start_date = datetime.datetime.utcnow()
+
+    # TODO: uncomment, delete if True
     if True:
     # if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2
@@ -184,7 +188,7 @@ def victory(id):
         final_score = score - neg_score
 
         user.total_score += final_score
-        Score(score=final_score, user=user, quiz_id = id, attempt=last_attempt)
+        Score(score=final_score, user=user, quiz_id=id, attempt=last_attempt)
         user.quiz_id = id + 1
     else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))

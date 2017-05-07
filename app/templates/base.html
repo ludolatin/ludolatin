@@ -49,7 +49,7 @@
     <!-- Navigation
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <div class="header clearfix">
-      <nav class="navbar navbar-light bg-faded rounded navbar-toggleable-md" >
+      <nav class="navbar navbar-inverse rounded navbar-toggleable-md" style="background-color: #20a8e9;" >
         <button
           class="navbar-toggler navbar-toggler-right"
           type="button" data-toggle="collapse"
@@ -82,15 +82,19 @@
           </ul>
           <ul class="navbar-nav float-right">
             {% if not current_user.is_authenticated %}
-              <li class="nav-item">
+              <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
               </li>
             {% else %}
-            <a class="nav-link" href="/">
+            <a class="nav-link active" href="/">
+              {{ current_user.streak }}
+              <img src="/static/images/streak.png" alt="Streak flame" style="width:16px;height:20px;">
+            </a>
+            <a class="nav-link active" href="/">
               {{ current_user.total_score }}
               <img src="/static/images/aureus.png" alt="Roman coin" style="width:20px;height:20px;">
             </a>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown active">
                 <a
                   class="nav-link dropdown-toggle float-right"
                   href="#"

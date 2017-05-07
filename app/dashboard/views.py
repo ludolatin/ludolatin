@@ -4,7 +4,7 @@ from flask import render_template, session, redirect, url_for
 from flask_login import current_user
 
 from app.dashboard import dashboard
-from app.models import Quiz, Score, Topic
+from app.models import Quiz, Score, Topic, User
 
 
 def _get_user():
@@ -26,8 +26,8 @@ def dashboard():
 
         daily = Score.\
             sum_by_day().\
-            filter_by(user=_get_user()).\
-            order_by(Score.created_at.desc()).\
+            filter_by(user=user).\
+                    order_by(Score.created_at.desc()).\
             limit(7).\
             all()
 

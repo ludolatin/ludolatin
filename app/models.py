@@ -68,6 +68,7 @@ class User(UserMixin, db.Model, BaseModel):
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), default=1)
     total_score = db.Column(db.Integer, default=0)
     scores = db.relationship('Score', backref='user')
+    streak_start_date = db.Column(db.DateTime)
 
     answers = db.relationship('Answer', backref='user')
 
@@ -129,15 +130,29 @@ class User(UserMixin, db.Model, BaseModel):
         self.is_admin = True
         return self.save()
 
-    def to_dict(self):
-        return {
-            'username': self.username,
-            'user_url': url_for(
-                'api.get_user', username=self.username, _external=True
-            ),
-            'member_since': self.member_since,
-            'last_seen': self.last_seen,
-        }
+    # def to_dict(self):
+    #     return {
+    #         'username': self.username,
+    #         'user_url': url_for(
+    #             'api.get_user', username=self.username, _external=True
+    #         ),
+    #         'member_since': self.member_since,
+    #         'last_seen': self.last_seen,
+    #     }
+
+    @property
+    def last_score_age(self):
+        last_score = Score.query.filter_by(user=self).order_by(Score.created_at.desc()).first()
+        last_score_age = datetime.utcnow() - last_score.created_at
+        last_score_age = last_score_age.days * 24 + last_score_age.seconds / 3600
+        return last_score_age
+
+    @property
+    def streak(self):
+        if self.streak_start_date and self.last_score_age < 36:
+            return (datetime.utcnow() - self.streak_start_date).days
+        else:
+            return 0
 
 
 @login_manager.user_loader
