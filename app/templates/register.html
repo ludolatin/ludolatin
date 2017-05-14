@@ -9,7 +9,7 @@
 
   {{ form.hidden_tag() }}
 
-  <label for="inputUsername" class="sr-only">Username</label>
+  <label for="inputUsername" class="sr-only" style="">Username</label>
   {{ form.username(id="inputUsername", class="form-control", type="text", placeholder="Username", maxlength=64) }}
 
   <label for="inputEmail" class="sr-only">Email address</label>
@@ -18,10 +18,7 @@
   <label for="inputPassword" class="sr-only">Password</label>
   {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
 
-  <label for="inputPassword" class="sr-only">Password confirmation</label>
-  {{ form.password_confirmation(class_="form-control", type="password", placeholder="Confirm your Password") }}
-
-  {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+  {{ form.submit(class="btn btn-lg btn-primary btn-block")}}
   <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
 </form>
 {% endblock %}

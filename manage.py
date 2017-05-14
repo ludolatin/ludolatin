@@ -1,12 +1,11 @@
 # manage.py
 
-import json
 import ruamel.yaml
 from flask_script import Manager, Shell, prompt_bool
 from ingenuity import app
 from app import db
 from app import models
-from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic
+from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic, Product, Purchase
 
 # output = dump(data, Dumper=Dumper)
 
@@ -27,6 +26,8 @@ def _make_context():
         Answer=Answer,
         Score=Score,
         Topic=Topic,
+        Product=Product,
+        Purchase=Purchase
     )
 
 manager.add_command("shell", Shell(make_context=_make_context))
@@ -156,6 +157,24 @@ def db_meta():
         print "\n", table.name, ":"
         for column in table.columns:
             print column.name, ":", column.type
+
+
+@manager.command
+def load_products():
+    """Load the content of products.yml into the Product table"""
+    yaml = open('products.yml')
+    data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
+    print data
+
+    for product_name, attributes in data.items():
+        product = (Product.query.filter_by(name=product_name).first() or Product(name=product_name))
+        print product
+
+        product.description = attributes[0]
+        product.price = attributes[1]
+        product.unit = attributes[2]
+        product.save()
+
 
 if __name__ == "__main__":
     manager.run()

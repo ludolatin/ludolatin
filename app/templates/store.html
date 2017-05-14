@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+  <h1>Store</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md card">
+      <div class="card-block">
+        <h4 class="card-title">Buy things here</h4>
+        <h6 class="card-subtitle mb-4 text-muted">Spend your aurei at the store</h6>
+        <ul class="list-group">
+          {% for product in products %}
+            <li class="list-group-item d-flex w-100 mb-3"style="border-width:2px" >
+
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
+                <small>{{ product.price }}/{{ product.unit }}</small>
+              </div>
+              <div class="d-flex w-100 mb-1">{{ product.description }}</div>
+              <div class="d-flex w-100 justify-content-end mb-1">
+                <button type="button"
+                        class="btn btn-success btn-sm"
+                        style="background-color:#7eb530;border-color:#7eb530">
+                  Get for: 500
+                </button>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="offset-md-1 hidden-sm-down" style="flex: 0 0 300px;">
+      <div class="card card-block">
+        <h4 class="card-title">Progress</h4>
+        <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
+        <div class="dashboardXPChartContainer">
+          <canvas id="xpChart" width="300" height="225"></canvas>
+        </div>
+      </div>
+      {% if current_user.username == None %}
+        <div class="card card-block mt-5">
+          <h4 class="card-title">Sign up</h4>
+          <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress.</h6>
+          <a class="btn btn-lg btn-info mb-2" href="{{ url_for('auth.register') }}" role="button">Sign up today</a>
+          <a class="btn btn-lg btn-success" href="{{ url_for('auth.login') }}" role="button">Log in</a>
+        </div>
+      {% endif %}
+    </div><!-- /sidebar -->
+  </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+
+{% block js %}
+<script>
+var labels = {{ days|tojson }};
+var data = {{ daily }};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="/static/js/progress_chart.js"></script>
+<script>xpChart()</script>
+{% endblock %}

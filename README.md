@@ -4,6 +4,8 @@ An open-source tool for learning Latin.
 
 See what's next on my [kanban.](https://trello.com/b/NWzloF3z/ingenuity)
 
+Hosted on [pythonanywhere.](https://ingenuity.pythonanywhere.com)
+
 ## Install
 [virtualenv](https://virtualenv.pypa.io/en/stable/) provides a local install of python, pip, and any installed extensions.
 If virtualenv isn't already installed, you may need a user with admin privelidges to install it:
@@ -59,13 +61,10 @@ Finally, initialise the database with:
 flask db upgrade
 ```
 
-If the DB is not in sync for some reason, you can delete it and the migrations directory
-and run the following commands to create an empty database with the current schema:
+If the DB is not in sync for some reason, you can run the following script to delete it and the migrations directory, create an empty database, and load the data.
 
 ```
-flask db init # (if migrations & db not present)
-flask db migrate
-flask db upgrade
+./reset-db.sh
 ```
 
 ## Run

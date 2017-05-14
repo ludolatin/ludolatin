@@ -19,7 +19,7 @@
         <h6 class="card-subtitle mb-4 text-muted">Learning a language requires practice every day.</h6>
         <div class="card-deck">
           {% for quiz in topic.quizzes %}
-            <div class="card mb-4">
+            <div class="card mb-4" style="border-width:2px">
               <div class="card-block d-flex flex-column">
                 <div class="topicCardTitle">
                   <h4 class="card-title">{{ quiz.name }}</h4>
@@ -39,6 +39,7 @@
                   <a
                     href="{{ url_for('quiz.ask', id=quiz.id) }}"
                     class="btn btn-secondary align-self-center mt-auto"
+                    role="button"
                    >
                     Redo
                   </a>
@@ -46,6 +47,7 @@
                   <a
                     href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
                     class="btn btn-primary align-self-center mt-auto"
+                    role="button"
                   >
                     Begin
                   </a>
@@ -53,6 +55,7 @@
                   <a
                     href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}"
                     class="btn btn-secondary disabled align-self-center mt-auto"
+                    role="button"
                   >
                     Locked
                   </a>
@@ -79,11 +82,11 @@
         {{ progress }} / {{ topic_size }} Quizzes completed
       </div>
       {% if current_user.username == None %}
-        <div class="card card-block mt-5">
+        <div class="card card-block mt-5" style="border-width:2px">
           <h4 class="card-title">Sign up</h4>
-          <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress.</h6>
-          <a class="btn btn-lg btn-info mb-2" href="{{ url_for('auth.register') }}" role="button">Sign up today</a>
-          <a class="btn btn-lg btn-success" href="{{ url_for('auth.login') }}" role="button">Log in</a>
+          <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress!</h6>
+          <a class="btn btn-lg btn-success mb-2" href="{{ url_for('auth.register') }}" role="button">Create a profile</a>
+          <a class="btn btn-lg btn-primary" href="{{ url_for('auth.login') }}" role="button">Sign in</a>
         </div>
       {% endif %}
     </div><!-- /.blog-sidebar -->

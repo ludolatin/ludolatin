@@ -1,15 +1,18 @@
+import datetime
+
 from flask import jsonify, request, abort, url_for
 from flask_login import current_user
 
 from app.api import api
 from app.decorators import admin_required
-from app.models import User
+from app.models import User, Score
 
 
 @api.route('/')
 def get_routes():
     return jsonify({
         'users': url_for('api.get_users', _external=True),
+        'store': url_for('api.get_store_routes', _external=True),
     })
 
 
@@ -51,3 +54,24 @@ def delete_user(username):
             abort(400)
     except:
         abort(400)
+
+
+@api.route('/store/')
+def get_store_routes():
+    return jsonify({
+        'recover_streak': url_for('api.recover_streak', _external=True),
+    })
+
+
+@api.route('/store/recover_streak/', methods=['GET'])
+def recover_streak():
+    price = 40 + (current_user.last_score_age / 24 - 1)
+    try:
+        score = Score(
+            user_id=current_user.id,
+            created_at=datetime.datetime.utcnow(),
+            score=0
+        ).save()
+    except:
+        abort(400)
+    return jsonify(score.to_dict()), 201

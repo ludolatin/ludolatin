@@ -8,29 +8,29 @@
 
 {% block card_bottom %}
 {% if answer.is_correct == True %}
-<div class="card-block rounded-bottom alert-success">
+<div class="card-block rounded-bottom alert-success" style="background-color:#def0a5">
 {% else %}
-<div class="card-block rounded-bottom alert-danger">
+<div class="card-block rounded-bottom alert-danger" style="background-color:#ffd4cc">
 {% endif %}
   <div class="row">
     {% if answer.is_correct == True %}
     <div class="col-lg-1">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2">
-        <circle class="path circle" fill="#ffffff" stroke="#5cb85c" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
-        <polyline class="path check" fill="none" stroke="#5cb85c" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+        <circle class="path circle" fill="#ffffff" stroke="#7eb530" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
+        <polyline class="path check" fill="none" stroke="#7eb530" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
       </svg>
     </div> <!-- col -->
-    <div class="success col-lg-5">You are correct</div> <!-- col -->
+    <div class="success col-lg-5" style="color:#7eb530">You are correct</div> <!-- col -->
     <audio src="/static/audio/correct.mp3" autoplay></audio>
     {% else %}
     <div class="col-lg-1">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2">
-        <circle class="path circle" fill="#ffffff" stroke="#d9534f" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
-        <line class="path line" fill="none" stroke="#d9534f" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="40" y1="40" x2="98" y2="98"/>
-        <line class="path line" fill="none" stroke="#d9534f" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="98" y1="40" x2="40" y2="98"/>
+        <circle class="path circle" fill="#ffffff" stroke="#dd381d" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
+        <line class="path line" fill="none" stroke="#dd381d" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="40" y1="40" x2="98" y2="98"/>
+        <line class="path line" fill="none" stroke="#dd381d" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="98" y1="40" x2="40" y2="98"/>
       </svg>
     </div> <!-- col -->
-    <div class="error col-lg-5">
+    <div class="error col-lg-5" style="color:#dd381d">
       Correct solutions: <br />
       {% for translation in question.translations %}
         {{ translation.text }}<br />
@@ -40,7 +40,13 @@
     {% endif %}
 
     <div class="col-lg-6">
-      <button class="btn btn-lg btn-success float-right" role="button" onclick="nextQuestion('{{ url_for('quiz.ask', id=quiz.id) }}')" autofocus>Continue</button>
+      <button
+        class="btn btn-lg btn-success float-right"
+        role="button" onclick="nextQuestion('{{ url_for('quiz.ask', id=quiz.id) }}')"
+        autofocus
+      >
+        Continue
+      </button>
     </div> <!-- col -->
   </div> <!-- row -->
 </div>

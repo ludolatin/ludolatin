@@ -1,6 +1,7 @@
 body {
   background-color: rgb(233, 233, 233);
   font-family: 'Raleway', sans-serif;
+  color: #3c3c3c;
 }
 
 .header {
@@ -182,7 +183,7 @@ div.error {
 /* Victory vertical divider */
 .row.vdivide [class*='col']:not(:last-child):after {
   background: #e0e0e0;
-  width: 1px;
+  width: 2px;
   content: "";
   display:block;
   position: absolute;
@@ -213,38 +214,38 @@ div.error {
 .topicPieContainer {
   width: 100px; height: 100px;
   transform: rotate(-90deg);
-  background: #8ee000;
+  background: #1cb0f6;
   border-radius: 50%;
   display: inline-block;
 }
 
 .topicPie {
-  fill: #8ee000;
-  stroke: #7ac70c;
+  fill: #14d4f4;
+  stroke: #1cb0f6;
   stroke-width: 32;
 }
 
 .topicPieLocked {
   width: 100px; height: 100px;
-  background: #8b8b8b;
+  background: #f0f0f0;
   border-radius: 50%;
   display: inline-block;
 }
 
 .topicPieComplete {
   width: 100px; height: 100px;
-  background: #7ac70c;
+  background: #1cb0f6;
   border-radius: 50%;
   display: inline-block;
 }
 
 .topicPie:hover {
-  fill: #9efa00;
-  stroke: #87de0d;
+  fill: #1cdcfc;
+  stroke: #24b8fe;
  }
 
 .topicPieComplete:hover {
-  background: #87de0d
+  background: #24b8fe
  }
 
 .card-block a:hover {
@@ -262,6 +263,48 @@ div.error {
   margin-top: 4px;
 }
 
+/* Buttons */
 .btn {
   font-family: 'Raleway', sans-serif;
+  border-width: 2px;
+}
+
+.btn-primary {
+  background-color: #1caff6;
+  border-color: #1caff6;
+}
+
+.btn-primary:hover {
+  background-color: #0FA2E9;
+  border-color: #0FA2E9;
+}
+
+.btn-success {
+  background-color: #7eb530;
+  border-color: #7eb530
+}
+
+.btn-success:hover {
+  background-color: #71a823;
+  border-color: #71a823;
+}
+
+.disabled {
+  color: #999;
+  border-color: #dadada;
+}
+
+.btn-secondary {
+  color: #999;
+  border-color: #dadada;
+}
+
+.btn-secondary.disabled {
+  color: #999;
+  border-color: #dadada;
+}
+
+.btn-info {
+  background-color: #1caff6;
+  border-color: #1caff6
 }

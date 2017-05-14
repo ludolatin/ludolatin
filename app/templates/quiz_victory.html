@@ -17,14 +17,19 @@
       </div>
     </div>
     <button
-        class="btn btn-lg btn-success float-right"
-        onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')"
-        autofocus
+      class="btn btn-lg btn-success float-right"
+      onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')"
+      autofocus
     >
       Continue
     </button>
     {% if current_user.username == None %}
-      <button class="btn btn-lg btn-info mr-3 float-right" href="{{ url_for('auth.register') }}">Sign up today</button>
+      <button
+        class="btn btn-lg btn-primary mr-3 float-right"
+        href="{{ url_for('auth.register') }}"
+      >
+        Sign up today
+      </button>
     {% endif %}
   </div>
 </div>

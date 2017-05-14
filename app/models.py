@@ -1,3 +1,4 @@
+
 import re
 from datetime import datetime
 
@@ -130,15 +131,15 @@ class User(UserMixin, db.Model, BaseModel):
         self.is_admin = True
         return self.save()
 
-    # def to_dict(self):
-    #     return {
-    #         'username': self.username,
-    #         'user_url': url_for(
-    #             'api.get_user', username=self.username, _external=True
-    #         ),
-    #         'member_since': self.member_since,
-    #         'last_seen': self.last_seen,
-    #     }
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'user_url': url_for(
+                'api.get_user', username=self.username, _external=True
+            ),
+            'member_since': self.member_since,
+            'last_seen': self.last_seen,
+        }
 
     @property
     def last_score_age(self):
@@ -208,10 +209,10 @@ class Answer(db.Model, BaseModel):
 
 
 sentence_to_sentence = db.Table(
-    "sentence_to_sentence",
+    'sentence_to_sentence',
     db.Model.metadata,
-    db.Column("left_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True),
-    db.Column("right_sentence_id", db.Integer, db.ForeignKey("sentence.id"), primary_key=True)
+    db.Column('left_sentence_id', db.Integer, db.ForeignKey('sentence.id'), primary_key=True),
+    db.Column('right_sentence_id', db.Integer, db.ForeignKey('sentence.id'), primary_key=True)
 )
 
 
@@ -278,3 +279,41 @@ class Score(db.Model, BaseModel):
 
     def __repr__(self):
         return '<Score: {0}>'.format(self.score)
+
+    def to_dict(self):
+        return {
+            'created_at': self.created_at,
+            'score': self.score,
+            'user_id': self.user_id,
+        }
+
+
+user_item = db.Table(
+    'user_items',
+    db.Model.metadata,
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('purchase_id', db.Integer, db.ForeignKey('purchase.id'), primary_key=True)
+)
+
+
+class Product(db.Model, BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(16))
+    description = db.Column(db.String(128))
+    price = db.Column(db.Integer)
+    unit = db.Column(db.String(16))
+    purchases = db.relationship('Purchase', backref='product')
+
+    def __repr__(self):
+        return '<Product: {0}>'.format(self.name)
+
+
+class Purchase(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user = db.relationship(
+        'User',
+        secondary=user_item,
+        backref=db.backref('purchases', lazy='dynamic'),
+    )

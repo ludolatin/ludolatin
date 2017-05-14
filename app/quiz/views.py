@@ -186,6 +186,8 @@ def victory(id):
         neg_score = Answer.query.join(Sentence) \
             .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
         final_score = score - neg_score
+        if final_score < 3:
+            final_score = 3
 
         user.total_score += final_score
         Score(score=final_score, user=user, quiz_id=id, attempt=last_attempt)
