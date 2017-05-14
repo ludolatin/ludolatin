@@ -13,7 +13,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-7 card">
+    <div class="col-sm-8 card">
       <div class="card-block">
         <h4 class="card-title">{{topic.name}}</h4>
         <h6 class="card-subtitle mb-4 text-muted">Learning a language requires practice every day.</h6>
@@ -27,8 +27,12 @@
                     <img src="/static/images/checkmark.png" class="topicCardCheck">
                   {% endif %}
                 </div>
-                <p class="card-text comma fullStop">
-                  {% for sentence in quiz.sentences %} <span>{{ sentence.text }}</span> {% endfor %}
+                <p class="card-text comma ellipsis">
+                  {% for sentence in quiz.sentences %}
+                    {% if loop.index < 6 %}
+                      <span>{{ sentence.text }}</span>
+                    {% endif %}
+                  {% endfor %}
                 </p>
 
                 {% if quiz.id < current_user.quiz.id %}
@@ -64,17 +68,15 @@
       </div>
     </div><!-- /.blog-main -->
 
-    <div class="col-sm-4 offset-sm-1">
-      <div class="card">
-        <div class="card-block text-center">
-          <h4 class="card-title">Progress</h4>
-          <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
-          <svg class="topicPieContainer" viewBox="0 0 32 32">
-            <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
-          </svg>
-          <br />
-          {{ progress }} / {{ topic_size }} Quizzes completed
-        </div>
+    <div class="col-sm-3 card offset-sm-1">
+      <div class="card-block text-center">
+        <h4 class="card-title">Progress</h4>
+        <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
+        <svg class="topicPieContainer" viewBox="0 0 32 32">
+          <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
+        </svg>
+        <br />
+        {{ progress }} / {{ topic_size }} Quizzes completed
       </div>
       {% if current_user.username == None %}
         <div class="card card-block mt-5">

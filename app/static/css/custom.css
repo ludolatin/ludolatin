@@ -205,8 +205,8 @@ div.error {
   content: ", ";
 }
 
-.fullStop :last-of-type:after {
-  content: ".";
+.ellipsis :last-of-type:after {
+  content: "...";
 }
 
 /* Pie chart */
