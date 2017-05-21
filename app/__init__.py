@@ -47,7 +47,7 @@ def create_app(config_name):
 
     # Initialise flask-admin
     from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
-    admin = Admin(app, name='ingenuity', template_mode='bootstrap3')
+    admin = Admin(app, name='ludolatin', template_mode='bootstrap3')
 
     # Add administrative views here
     admin.add_view(ModelView(User, db.session))

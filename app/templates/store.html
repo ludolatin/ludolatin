@@ -68,10 +68,13 @@
 {% block js %}
 <script>
   $('#buyButton').click(function(){
-    $.get('/api/store/recover_streak/');
-    $('#buyButton').addClass("disabled btn-secondary");
-    $('#buyButton').removeClass("btn-success");
-    $('#buyButton').text("Bought");
+    $.get('/api/store/recover_streak/', function(data) {
+      $('#streak').children("span").text(data.streak);
+      $('#score').children("span").text(data.total_score);
+      $('#buyButton').removeClass("btn-success");
+      $('#buyButton').addClass("disabled btn-secondary");
+      $('#buyButton').text("Bought");
+    });
   });
 </script>
 

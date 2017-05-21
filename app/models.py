@@ -68,6 +68,7 @@ class User(UserMixin, db.Model, BaseModel):
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), default=1)
     total_score = db.Column(db.Integer, default=0)
     scores = db.relationship('Score', backref='user')
+    purchases = db.relationship('Purchase', backref='user')
     streak_start_date = db.Column(db.DateTime)
 
     answers = db.relationship('Answer', backref='user')
@@ -138,6 +139,8 @@ class User(UserMixin, db.Model, BaseModel):
             ),
             'member_since': self.member_since,
             'last_seen': self.last_seen,
+            'total_score': self.total_score,
+            'streak': self.streak,
         }
 
     @property
@@ -325,12 +328,9 @@ class Product(db.Model, BaseModel):
         return eval(self.availability_function)
 
 
-class Purchase(db.Model):
+class Purchase(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    price = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user = db.relationship(
-        'User',
-        secondary=user_item,
-        backref=db.backref('purchases', lazy='dynamic'),
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

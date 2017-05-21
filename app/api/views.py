@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from app.api import api
 from app.decorators import admin_required
-from app.models import User, Score, Product
+from app.models import User, Score, Product, Purchase
 
 
 @api.route('/')
@@ -70,13 +70,17 @@ def recover_streak():
         if product.available:
             current_user.total_score -= product.total_price
 
-        score = Score(
-            user_id=current_user.id,
-            created_at=datetime.datetime.utcnow(),
-            score=0
-        ).save()
+            score = Score(
+                user_id=current_user.id,
+                created_at=datetime.datetime.utcnow(),
+                score=0
+            ).save()
 
-
+            purchase = Purchase(
+                product=product,
+                price=product.total_price,
+                user_id=current_user.id,
+            ).save()
     except:
         abort(400)
-    return jsonify(score.to_dict()), 201
+    return jsonify(current_user.to_dict()), 201
