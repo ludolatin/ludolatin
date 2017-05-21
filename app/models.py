@@ -1,9 +1,8 @@
-
 import re
 from datetime import datetime
 
 from flask import url_for, session, redirect, request
-from flask_login import UserMixin, login_user
+from flask_login import UserMixin, login_user, current_user
 from sqlalchemy import func
 from sqlalchemy.orm import synonym
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -144,8 +143,8 @@ class User(UserMixin, db.Model, BaseModel):
     @property
     def last_score_age(self):
         last_score = Score.query.filter_by(user=self).order_by(Score.created_at.desc()).first()
-        last_score_age = datetime.utcnow() - last_score.created_at
-        last_score_age = last_score_age.days * 24 + last_score_age.seconds / 3600
+        last_score_age = (datetime.utcnow() - last_score.created_at) if last_score else None
+        last_score_age = last_score_age.days * 24 + last_score_age.seconds / 3600 if last_score_age else None
         return last_score_age
 
     @property
@@ -296,16 +295,34 @@ user_item = db.Table(
 )
 
 
+def streak_recovery_availability(product):
+    if product.total_price == 0 or current_user.total_score < product.total_price:
+        return False
+    else:
+        return True
+
+
 class Product(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16))
     description = db.Column(db.String(128))
-    price = db.Column(db.Integer)
-    unit = db.Column(db.String(16))
+    price = db.Column(db.String(16))
     purchases = db.relationship('Purchase', backref='product')
+    pricing_formula = db.Column(db.String(64))
+    availability_function = db.Column(db.String(64))
 
     def __repr__(self):
         return '<Product: {0}>'.format(self.name)
+
+    @property
+    def total_price(self):
+        print "CU: ", current_user
+        print "CULSA :", current_user.last_score_age
+        return eval(self.pricing_formula)
+
+    @property
+    def available(self):
+        return eval(self.availability_function)
 
 
 class Purchase(db.Model):

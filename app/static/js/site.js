@@ -19,6 +19,4 @@ $(document).ready(function() {
 
   init();
 
-  $.get( "/api/store/recover_streak/");
-
 });

@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from app.api import api
 from app.decorators import admin_required
-from app.models import User, Score
+from app.models import User, Score, Product
 
 
 @api.route('/')
@@ -65,13 +65,18 @@ def get_store_routes():
 
 @api.route('/store/recover_streak/', methods=['GET'])
 def recover_streak():
-    price = 40 + (current_user.last_score_age / 24 - 1)
     try:
+        product = Product.query.filter_by(name="Streak recovery").first()
+        if product.available:
+            current_user.total_score -= product.total_price
+
         score = Score(
             user_id=current_user.id,
             created_at=datetime.datetime.utcnow(),
             score=0
         ).save()
+
+
     except:
         abort(400)
     return jsonify(score.to_dict()), 201

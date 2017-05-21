@@ -172,7 +172,9 @@ def load_products():
 
         product.description = attributes[0]
         product.price = attributes[1]
-        product.unit = attributes[2]
+        product.pricing_formula = attributes[2]
+        product.availability_function = attributes[3]
+
         product.save()
 
 

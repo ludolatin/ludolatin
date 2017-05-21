@@ -17,15 +17,26 @@
 
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
-                <small>{{ product.price }}/{{ product.unit }}</small>
+                <small>{{ product.price }}</small>
               </div>
               <div class="d-flex w-100 mb-1">{{ product.description }}</div>
               <div class="d-flex w-100 justify-content-end mb-1">
-                <button type="button"
-                        class="btn btn-success btn-sm"
-                        style="background-color:#7eb530;border-color:#7eb530">
-                  Get for: 500
-                </button>
+                {% if product.available %}
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-success"
+                    id="buyButton"
+                  >
+                    Get for: {{ product.total_price }}
+                  </button>
+                {% else %}
+                  <a
+                    href="#"
+                    class="btn btn-sm btn-secondary disabled"
+                  >
+                    Get for: {{ product.total_price }}
+                  </a>
+                {% endif %}
               </div>
             </li>
           {% endfor %}
@@ -56,9 +67,19 @@
 
 {% block js %}
 <script>
+  $('#buyButton').click(function(){
+    $.get('/api/store/recover_streak/');
+    $('#buyButton').addClass("disabled btn-secondary");
+    $('#buyButton').removeClass("btn-success");
+    $('#buyButton').text("Bought");
+  });
+</script>
+
+<script>
 var labels = {{ days|tojson }};
 var data = {{ daily }};
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="/static/js/progress_chart.js"></script>
 <script>xpChart()</script>
