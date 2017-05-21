@@ -80,7 +80,7 @@ function xpChart() {
         }]
       },
       tooltips: {
-        backgroundColor: 'rgba(30,144,255,0.8)',
+        backgroundColor: 'rgba(32,168,233,0.8)',
         titleFontSize: 14,
         bodyFontSize: 14,
         xPadding: 12,
