@@ -8,10 +8,6 @@
 </style>
 
 <div class="container">
-  <h1>Topic</h1>
-</div>
-
-<div class="container">
   <div class="row">
     <div class="col-sm-8 card">
       <div class="card-block">
@@ -69,9 +65,9 @@
           {% endfor %}
         </div> <!-- Close last card-deck -->
       </div>
-    </div><!-- /.blog-main -->
+    </div><!-- /.main -->
 
-    <div class="col-sm-3 offset-sm-1">
+    <div class="col-sm-3 offset-sm-1" style="padding: 0px">
       <div class="card text-center">
         <div  class="card-block">
           <h4 class="card-title">Progress</h4>
@@ -91,7 +87,15 @@
           <a class="btn btn-lg btn-primary" href="{{ url_for('auth.login') }}" role="button">Sign in</a>
         </div>
       {% endif %}
-    </div><!-- /.blog-sidebar -->
+
+      {% if recovery.available %}
+        <div class="card card-block mt-5">
+          <h4 class="card-title">Recover streak</h4>
+          <h6 class="card-subtitle mb-3 text-muted">Visit the store to buy back your streak.</h6>
+          <a class="btn btn-success mb-2 align-self-center" href="/store" role="button">Visit store</a>
+        </div>
+      {% endif %}
+    </div><!-- /.sidebar -->
   </div><!-- /.row -->
 </div><!-- /.container -->
 {% endblock %}

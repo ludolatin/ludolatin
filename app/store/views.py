@@ -1,6 +1,6 @@
 import datetime
 
-from flask import render_template
+from flask import render_template, request
 from flask_login import current_user, login_required
 
 from app.models import Product, Purchase, Quiz, Score, Topic
@@ -38,9 +38,12 @@ def store():
         # Rotate the array so that today is last
         days = days[today:] + days[:today]
 
+        referrer = request.referrer
+
         return render_template(
             'store.html',
             products=products,
             days=days,
             daily=daily,
+            referrer=referrer,
         )

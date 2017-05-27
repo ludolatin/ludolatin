@@ -7,13 +7,20 @@
   }
 </style>
 
-<div class="container">
-  <h1>Dashboard</h1>
-</div>
 
 <div class="container">
   <div class="row">
-    <div class="col-md card text-center">
+    <div class="col-md card">
+      <div class="card-block">
+        <div class="d-flex flex-row">
+          <div>
+            <h4 class="card-title">Dashboard</h4>
+            <h6 class="card-subtitle text-muted">Something something dashboard</h6>
+          </div>
+          <div class="ml-auto"><a href="/store" class="btn btn-sm btn-success">Visit Store</a></div>
+        </div>
+      </div>
+      <div class="card-block text-center">
       {% for topic in topics %}
         {% if topic.id < current_topic.id %}
           <div class="card-block">
@@ -44,9 +51,10 @@
           </div>
         {% endif %}
       {% endfor %}
-    </div><!-- /.blog-main -->
+      </div>
+    </div><!-- /.main -->
 
-    <div class="offset-md-1 hidden-sm-down" style="flex: 0 0 300px;">
+    <div class="offset-md-1 hidden-sm-down">
       <div class="card card-block">
         <h4 class="card-title">Progress</h4>
         <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
@@ -72,7 +80,7 @@
           </a>
         </div>
       {% endif %}
-    </div><!-- /.blog-sidebar -->
+    </div><!-- /.sidebar -->
   </div><!-- /.row -->
 </div><!-- /.container -->
 {% endblock %}

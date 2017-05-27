@@ -1,7 +1,7 @@
 from flask import render_template
 from flask_login import current_user, login_required
 
-from app.models import Topic, Quiz
+from app.models import Topic, Quiz, Product
 from app.topic import topic
 
 
@@ -27,10 +27,13 @@ def topic(id):
 
     topic_progress = "%s" % (float(progress) / topic_size  * 100)
 
+    recovery = Product.query.filter_by(name="Streak recovery").first()
+
     return render_template(
         'topic.html',
         topic=topic,
         topic_progress=topic_progress,
         progress=progress,
         topic_size=topic_size,
+        recovery=recovery,
     )

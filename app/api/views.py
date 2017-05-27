@@ -21,6 +21,10 @@ def get_users():
     return jsonify({'users': [user.to_dict() for user in User.query.all()]})
 
 
+@api.route('/users/count')
+def user_number():
+    return jsonify({'user number': User.query.count()})
+
 
 @api.route('/user/<string:username>/')
 def get_user(username):
@@ -84,3 +88,5 @@ def recover_streak():
     except:
         abort(400)
     return jsonify(current_user.to_dict()), 201
+
+
