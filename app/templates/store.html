@@ -76,6 +76,8 @@
       $('#buyButton').removeClass("btn-success");
       $('#buyButton').addClass("disabled btn-secondary");
       $('#buyButton').text("Bought");
+      var audio = new Audio('/static/audio/item-bought.mp3');
+        audio.play();
     });
   });
 </script>
