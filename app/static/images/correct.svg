@@ -1,0 +1,69 @@
+<!-- Based on: https://codepen.io/elevaunt/pen/JYRBzJ -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2" style="width: 55px height: 55px">
+  <style>
+    .path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+    }
+    .path.circle {
+      -webkit-animation: dash 0.9s ease-in-out;
+      animation: dash 0.9s ease-in-out;
+    }
+    .path.check {
+      stroke-dashoffset: -100;
+      -webkit-animation: dash-check 0.9s 0.35s ease-in-out forwards;
+      animation: dash-check 0.9s 0.35s ease-in-out forwards;
+    }
+    @-webkit-keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+    @-webkit-keyframes dash-check {
+      0% {
+        stroke-dashoffset: -100;
+      }
+      100% {
+        stroke-dashoffset: 900;
+      }
+    }
+    @keyframes dash-check {
+      0% {
+        stroke-dashoffset: -100;
+      }
+      100% {
+        stroke-dashoffset: 900;
+      }
+    }
+  </style>
+  <circle
+    class="path circle"
+    fill="#ffffff"
+    stroke="#7eb530"
+    stroke-width="14"
+    stroke-miterlimit="10"
+    cx="69.1"
+    cy="69.1"
+    r="62.1"
+  />
+  <polyline
+    class="path check"
+    fill="none"
+    stroke="#7eb530"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-miterlimit="10"
+    points="100.2,46.2 51.5,94.8 29.8,73.5 "
+  />
+</svg>

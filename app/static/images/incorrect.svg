@@ -1,0 +1,63 @@
+<!-- Based on: https://codepen.io/elevaunt/pen/JYRBzJ -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2" style="width: 55px height: 55px">
+    <style>
+    .path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 0;
+    }
+    .path.circle {
+      -webkit-animation: dash 0.9s ease-in-out;
+      animation: dash 0.9s ease-in-out;
+    }
+    .path.line {
+      stroke-dashoffset: 1000;
+      -webkit-animation: dash 0.9s 0.35s ease-in-out forwards;
+      animation: dash 0.9s 0.35s ease-in-out forwards;
+    }
+    @-webkit-keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes dash {
+      0% {
+        stroke-dashoffset: 1000;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+  <circle
+    class="path circle"
+    fill="#ffffff" stroke="#dd381d"
+    stroke-width="14"
+    stroke-miterlimit="10"
+    cx="69.1"
+    cy="69.1"
+    r="62.1"
+  />
+  <line
+    class="path line"
+    fill="none"
+    stroke="#dd381d"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-miterlimit="10"
+    x1="40" y1="40"
+    x2="98" y2="98"
+  />
+  <line
+    class="path line"
+    fill="none"
+    stroke="#dd381d"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-miterlimit="10"
+    x1="98" y1="40"
+    x2="40" y2="98"
+  />
+</svg>
