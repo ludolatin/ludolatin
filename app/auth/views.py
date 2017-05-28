@@ -37,7 +37,9 @@ def logout():
 def register():
     form = RegistrationForm()
 
+    print "before form validated"
     if form.validate_on_submit():
+        print "form validated"
         if current_user.is_authenticated:
             current_user.username = form.username.data
             current_user.email = form.email.data
