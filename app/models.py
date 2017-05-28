@@ -187,7 +187,7 @@ class Answer(db.Model, BaseModel):
         # Is the submitted answer correct?
         is_correct = False
         for translation in sentence.translations:
-            if text == translation.text:
+            if text.lower() == translation.text.lower():
                 is_correct = True
                 break
 
