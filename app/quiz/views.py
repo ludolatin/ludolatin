@@ -56,7 +56,7 @@ def ask(id):
 
     # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
-        filter(Sentence.quiz_id == id, Answer.is_correct == True, User.id == user.id, Answer.attempt == attempt).all()
+        filter(Sentence.quiz_id == id, Answer.is_correct, User.id == user.id, Answer.attempt == attempt).all()
 
     # All sentences for the current quiz
     all_sentences = Sentence.query.filter(Sentence.quiz_id == id).order_by(func.random()).all()
@@ -139,8 +139,12 @@ def correct_answers(id):
     attempt = request.cookies.get('attempt')
 
     # Collection of correct answers previously given, returning just the `text` column
-    correct = Answer.query.join(Sentence).with_entities(Answer.text). \
-        filter(Answer.is_correct == True, Sentence.quiz_id == id, Answer.user == _get_user(), Answer.attempt == attempt).all()
+    correct = Answer.query.join(Sentence).with_entities(Answer.text).filter(
+        Answer.is_correct,
+        Sentence.quiz_id == id,
+        Answer.user == _get_user(),
+        Answer.attempt == attempt,
+    ).all()
     # Convert it to a list, and the list to a set
     correct = set([r for r, in correct])
     return correct
@@ -157,7 +161,7 @@ def template_setup(question, id):
         Sentence.quiz_id == id,
         Answer.sentence == question,
         Answer.user == _get_user(),
-        Answer.is_correct == True
+        Answer.is_correct
     ).count())
 
     return progress, unknown
@@ -179,9 +183,9 @@ def victory(id):
     if user.streak_start_date is None or user.last_score_age > 36:
         user.streak_start_date = datetime.datetime.utcnow()
 
-    # TODO: uncomment, delete if True
-    if True:
-    # if last_attempt > attempt:
+    # Make True to prevent reloading victory
+    # if True:
+    if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2
         neg_score = Answer.query.join(Sentence) \
             .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
