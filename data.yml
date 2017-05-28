@@ -33,7 +33,7 @@ First Conjugation Verbs:
       - I work
       - I do work
       - I am working
-  Putting it together:
+  Quiz 1:
     you (pl.) hurry:
       - festinatis
     we shout:
@@ -113,7 +113,7 @@ First Conjugation Verbs:
       - I call
       - I do call
       - I am calling
-  Quiz 1:
+  Quiz 2:
     oppugnant:
       - they attack
       - they do attack
@@ -162,7 +162,7 @@ First Conjugation Verbs:
       - we announce
       - we do announce
       - we are announcing
-  Quiz 2:
+  Quiz 3:
     it sails:
       - navigat
     we fight:
@@ -193,7 +193,7 @@ First Conjugation Verbs:
       - liberant
 Subject and Object:
   mensa:
-    nominitive singular:
+    nominative singular:
       - mensa
     accusative singular:
       - mensam
@@ -201,9 +201,9 @@ Subject and Object:
       - mensae
     accusative plural:
       - mensas
-  Five nouns like mensa:
+  Nouns like mensa:
     agricola:
-      - farmer
+      - queen
     ancilla:
       - slave-girl
     cena:
@@ -213,13 +213,158 @@ Subject and Object:
       - mistress
     nauta:
       - sailor
-
-
-
-
-
-
-
-
-
-
+  Quiz 1:
+    slave-girl (accusative s):
+      - ancillam
+    farmer (nominative pl):
+      - agricola
+    slave-girl (nominative s):
+      - ancilla
+    mistress (nominative pl):
+      - dominae
+    farmer (accusative pl):
+      - agricolas
+    sailor (accusative s):
+      - nautam
+    farmer (accusative s):
+      - agricolam
+    sailor (accusative pl):
+      - nautas
+    slave-girl (nominative pl):
+      - ancillae
+    dinner (nominative s):
+      - cena
+    meal (nominative pl):
+      - cenae
+    mistress (nominative s):
+      - domina
+    sailor (nominative pl):
+      - nautae
+    farmer (nominative s):
+      - agricola
+  More nouns like mensa:
+    femina:
+      - woman
+    filia:
+      - daughter
+    hasta:
+      - spear
+    insula:
+      - island
+    patria:
+      - homeland
+    pecunia:
+      - money
+    puella:
+      - girl
+    regina:
+      - queen
+    silva:
+      - wood
+      - forest
+    via:
+      - road
+      - street
+    victoria:
+      - victory
+    villa:
+      - villa
+      - country-house
+# TODO: Support sentences, avoid this mess
+#  Quiz 2:
+#    insulam oppugnamus.:
+#      - We attack the island.
+#      - We do attack the island.
+#      - We are attacking the island.
+#    agricola filiam amat.:
+#      - The farmer loves the daughter.
+#      - A farmer loves the daughter.
+#      - The farmer loves a daughter.
+#      - A farmer loves a daughter.
+#      - The farmer does love the daughter.
+#      - A farmer does love the daughter.
+#      - The farmer does love a daughter.
+#      - A farmer does love a daughter.
+#      - The farmer is loving the daughter.
+#      - A farmer is loving the daughter.
+#      - The farmer is loving a daughter.
+#      - A farmer is loving a daughter.
+#    regina villam aedificat.:
+#      - The queen loves the villa.
+#      - A queen loves the villa.
+#      - The queen loves a villa.
+#      - A queen loves a villa.
+#      - The queen does love the villa.
+#      - A queen does love the villa.
+#      - The queen does love a villa.
+#      - A queen does love a villa.
+#      - The queen is loving the villa.
+#      - A queen is loving the villa.
+#      - The queen is loving a villa.
+#      - A queen is loving a villa.
+#       - The queen loves the villa.
+#      - A queen loves the villa.
+#      - The queen loves a villa.
+#      - A queen loves a villa.
+#      - The queen does love the villa.
+#      - A queen does love the villa.
+#      - The queen does love a villa.
+#      - A queen does love a villa.
+#      - The queen is loving the villa.
+#      - A queen is loving the villa.
+#      - The queen is loving a villa.
+#      - A queen is loving a villa.
+First Declension Nouns:
+  Uses of cases:
+    used for the subject of the sentence:
+      - nominative
+    used for the person being spoken to:
+      - vocative
+    used for the object of the sentence:
+      - accusative
+    used to express possession:
+      - genitive
+    used to express to or for:
+      - dative
+    used to express by, with or from:
+      - ablative
+    used for the subject of the sentence:
+      - nominative
+    used for the person being spoken to:
+      - vocative
+    used for the object of the sentence:
+      - accusative
+    used to express possession:
+      - genitive
+    used to express to or for:
+      - dative
+    used to express by, with or from:
+      - ablative
+  mensa:
+    nominative singular:
+      - mensa
+    vocative singular:
+      - mensa
+    accusative singular:
+      - mensam
+    genitive singular:
+      - mensae
+    dative singular:
+      - mensae
+    ablative singular:
+      - mensa
+    nominative plural:
+      - mensae
+    vocative plural:
+      - mensae
+    accusative plural:
+      - mensas
+    genitive plural:
+      - mensarum
+    dative plural:
+      - mensis
+    ablative plural:
+      - mensis
+    
+  
+    
