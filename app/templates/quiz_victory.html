@@ -24,12 +24,12 @@
       Continue
     </button>
     {% if current_user.username == None %}
-      <button
+      <a
         class="btn btn-lg btn-primary mr-3 float-right"
         href="{{ url_for('auth.register') }}"
       >
         Sign up today
-      </button>
+      </a>
     {% endif %}
   </div>
 </div>
