@@ -1,7 +1,7 @@
-from flask import Flask
-from flask_admin import Admin
+from flask import Flask, redirect, url_for, request
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -47,17 +47,34 @@ def create_app(config_name):
 
     # Initialise flask-admin
     from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
-    admin = Admin(app, name='ludolatin', template_mode='bootstrap3')
+    admin = Admin(app, name='LudoLatin', template_mode='bootstrap3', base_template='admin_base.html')
+
+
+    # class MyAdminIndexView(AdminIndexView):
+    #     @expose('/')
+    #     def index(self):
+    #         if not current_user.is_admin:
+    #             return redirect(url_for('auth.login'))
+    #         return super(MyAdminIndexView, self).index()
+
+
+    class RestrictedModelView(ModelView):
+        def is_accessible(self):
+            return current_user.is_admin
+
+        def inaccessible_callback(self, name, **kwargs):
+            # redirect to login page if user doesn't have access
+            return redirect(url_for('auth.login', next=request.url))
 
     # Add administrative views here
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Language, db.session))
-    admin.add_view(ModelView(Topic, db.session, endpoint="admin_topic"))
-    admin.add_view(ModelView(Quiz, db.session, endpoint="admin_quiz"))
-    admin.add_view(ModelView(Sentence, db.session))
-    admin.add_view(ModelView(Answer, db.session))
-    admin.add_view(ModelView(Score, db.session))
-    admin.add_view(ModelView(Product, db.session))
-    admin.add_view(ModelView(Purchase, db.session))
+    admin.add_view(RestrictedModelView(User, db.session))
+    admin.add_view(RestrictedModelView(Language, db.session))
+    admin.add_view(RestrictedModelView(Topic, db.session, endpoint="admin_topic"))
+    admin.add_view(RestrictedModelView(Quiz, db.session, endpoint="admin_quiz"))
+    admin.add_view(RestrictedModelView(Sentence, db.session))
+    admin.add_view(RestrictedModelView(Answer, db.session))
+    admin.add_view(RestrictedModelView(Score, db.session))
+    admin.add_view(RestrictedModelView(Product, db.session))
+    admin.add_view(RestrictedModelView(Purchase, db.session))
 
     return app

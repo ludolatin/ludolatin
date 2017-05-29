@@ -1,0 +1,20 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+<div class="row-fluid">
+
+    <div>
+        {% if current_user.is_authenticated %}
+        <h1>Flask-Admin</h1>
+        <p class="lead">
+            Home page
+        </p>
+        <p>
+            Home page content goes here
+        </p>
+        {% endif %}
+    </div>
+
+    <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
+</div>
+{% endblock body %}
