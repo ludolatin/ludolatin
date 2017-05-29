@@ -55,7 +55,7 @@ def ask(id):
 
     # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
-        filter(Sentence.quiz_id == id, Answer.is_correct, User.id == user.id, Answer.attempt == attempt).all()
+        filter(Sentence.quiz_id == id, Answer.is_correct or Answer.is_correct is None, User.id == user.id, Answer.attempt == attempt).all()
 
     # All sentences for the current quiz
     all_sentences = Sentence.query.filter(Sentence.quiz_id == id).order_by(func.random()).all()
@@ -116,7 +116,7 @@ def validate(id):
     quiz = Quiz.query.filter_by(id=id).first_or_404()
 
     # Get previous progress for progress bar animation
-    if answer.is_correct:
+    if answer.is_correct or answer.is_correct is None:
         last_progress = float(len(correct_answers(id)) - 1) / Sentence.query.filter_by(quiz_id=id).count() * 100
     else:
         last_progress = progress
@@ -139,7 +139,7 @@ def correct_answers(id):
 
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.join(Sentence).with_entities(Answer.text).filter(
-        Answer.is_correct,
+        Answer.is_correct or Answer.is_correct is None,
         Sentence.quiz_id == id,
         Answer.user == _get_user(),
         Answer.attempt == attempt,
@@ -156,6 +156,7 @@ def template_setup(question, id):
     progress = float(len(correct)) / Sentence.query.filter_by(quiz_id=id).count() * 100
 
     # True if the set (list of unique) latin translations is not in the set of correct answers
+    # Used in quiz_base for hint
     unknown = not(Answer.query.join(Sentence).filter(
         Sentence.quiz_id == id,
         Answer.sentence == question,
@@ -182,7 +183,7 @@ def victory(id):
     if user.streak_start_date is None or user.last_score_age > 36:
         user.streak_start_date = datetime.datetime.utcnow()
 
-    # Make True to prevent reloading victory
+    # Make True to allow reloading victory
     # if True:
     if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2

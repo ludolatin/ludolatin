@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block card_bottom %}
-{% if answer.is_correct %}
+{% if answer.is_correct or answer.is_correct is none %}
   <div class="card-block rounded-bottom alert-success" style="background-color: #def0a5">
 {% else %}
   <div class="card-block rounded-bottom alert-danger" style="background-color: #ffd4cc">
@@ -15,16 +15,30 @@
   <div class="row">
     {% if answer.is_correct %}
       <div class="col-lg-1">
-      <img src="/static/images/correct.svg">
+        <img src="/static/images/correct.svg">
       </div> <!-- col -->
       <div class="success col-lg-5" style="color:#7eb530">You are correct</div> <!-- col -->
+      <audio src="/static/audio/correct.mp3" autoplay></audio>
+    {% elif answer.is_correct is none %}
+      <div class="col-lg-1">
+        <img src="/static/images/correct.svg">
+      </div> <!-- col -->
+      <div class="success col-lg-5" style="color:#7eb530">
+        <strong>
+          You have a typo.<br />
+          Correct solutions:
+        </strong><br />
+        {% for translation in question.translations %}
+          {{ translation.text }}<br />
+        {% endfor %}
+      </div> <!-- col -->
       <audio src="/static/audio/correct.mp3" autoplay></audio>
     {% else %}
       <div class="col-lg-1">
         <img src="/static/images/incorrect.svg">
       </div> <!-- col -->
       <div class="error col-lg-5" style="color:#dd381d">
-        Correct solutions:<br />
+        <strong>Correct solutions:</strong><br />
         {% for translation in question.translations %}
           {{ translation.text }}<br />
         {% endfor %}

@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 
+from jellyfish import levenshtein_distance
+
 from flask import url_for, session, redirect, request
 from flask_login import UserMixin, login_user, current_user
 from sqlalchemy import func
@@ -11,7 +13,6 @@ from app import db, login_manager
 
 EMAIL_REGEX = re.compile(r'^\S+@\S+\.\S+$')
 USERNAME_REGEX = re.compile(r'^\S+$')
-
 
 def check_length(attribute, length):
     # Checks the attribute's length.
@@ -177,7 +178,7 @@ class Answer(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    is_correct = db.Column(db.Boolean, default=False)
+    is_correct = db.Column(db.Boolean, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
     attempt = db.Column(db.Integer)
@@ -193,6 +194,12 @@ class Answer(db.Model, BaseModel):
                     is_correct = True
                     break
 
+        if sentence is not None and not is_correct:
+            for translation in sentence.translations:
+                if levenshtein_distance(unicode(translation.text.lower()), unicode(text.lower())) == 1:
+                    is_correct = None
+                    break
+
         self.text = text
         self.sentence_id = sentence.id if sentence else None
         self.is_correct = is_correct
@@ -205,7 +212,12 @@ class Answer(db.Model, BaseModel):
 
     @property
     def status(self):
-        return 'Correct' if self.is_correct else 'Incorrect'
+        if self.is_correct:
+            return 'Correct'
+        elif self.is_correct is None:
+            return 'Typo'
+        else:
+            return 'Incorrect'
 
     def correct(self):
         self.is_correct = True
