@@ -182,17 +182,19 @@ class Answer(db.Model, BaseModel):
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
     attempt = db.Column(db.Integer)
 
-    def __init__(self, text, sentence, user=None, attempt=0, created_at=None):
+    def __init__(self, text=None, sentence=None, user=None, attempt=0, created_at=None):
 
         # Is the submitted answer correct?
         is_correct = False
-        for translation in sentence.translations:
-            if text.lower() == translation.text.lower():
-                is_correct = True
-                break
+
+        if sentence is not None:
+            for translation in sentence.translations:
+                if text.lower() == translation.text.lower():
+                    is_correct = True
+                    break
 
         self.text = text
-        self.sentence_id = sentence.id
+        self.sentence_id = sentence.id if sentence else None
         self.is_correct = is_correct
         self.user = user
         self.created_at = created_at or datetime.utcnow()
