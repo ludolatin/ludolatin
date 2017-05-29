@@ -60,5 +60,4 @@ def create_app(config_name):
     admin.add_view(ModelView(Product, db.session))
     admin.add_view(ModelView(Purchase, db.session))
 
-
     return app

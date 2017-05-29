@@ -36,7 +36,6 @@ def ask(id):
 
         attempt = request.cookies.get('attempt') or (last_answer.attempt + 1) if last_answer else 1
 
-
         # Save to the db via Answer model
         answer = Answer(answer, question, user, attempt).save()
 
@@ -188,7 +187,7 @@ def victory(id):
     if last_attempt > attempt:
         score = Sentence.query.filter_by(quiz_id=id).count() * 2
         neg_score = Answer.query.join(Sentence) \
-            .filter(Answer.is_correct == False, Answer.user == user, Sentence.quiz_id == id).count()
+            .filter(Answer.is_correct is False, Answer.user == user, Sentence.quiz_id == id).count()
         final_score = score - neg_score
         if final_score < 3:
             final_score = 3

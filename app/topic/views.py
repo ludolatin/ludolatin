@@ -14,24 +14,24 @@ def _get_user():
 def topic(id):
     user = _get_user()
 
-    topic = Topic.query.filter_by(id=id).first_or_404()
+    current_topic = Topic.query.filter_by(id=id).first_or_404()
 
     quiz = Quiz.query.filter_by(id=user.quiz_id).first()
 
-    topic_size = len(topic.quizzes)
+    topic_size = len(current_topic.quizzes)
 
-    if quiz not in topic.quizzes:
+    if quiz not in current_topic.quizzes:
         progress = topic_size
     else:
-        progress = topic.quizzes.index(quiz)
+        progress = current_topic.quizzes.index(quiz)
 
-    topic_progress = "%s" % (float(progress) / topic_size  * 100)
+    topic_progress = "%s" % (float(progress) / topic_size * 100)
 
     recovery = Product.query.filter_by(name="Streak recovery").first()
 
     return render_template(
         'topic.html',
-        topic=topic,
+        topic=current_topic,
         topic_progress=topic_progress,
         progress=progress,
         topic_size=topic_size,

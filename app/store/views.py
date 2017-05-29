@@ -3,7 +3,7 @@ import datetime
 from flask import render_template, request
 from flask_login import current_user, login_required
 
-from app.models import Product, Purchase, Quiz, Score, Topic
+from app.models import Product, Score
 from app.store import store
 
 
@@ -22,7 +22,7 @@ def store():
         daily = Score.\
             sum_by_day().\
             filter_by(user=user).\
-                    order_by(Score.created_at.desc()).\
+            order_by(Score.created_at.desc()).\
             limit(7).\
             all()
 
