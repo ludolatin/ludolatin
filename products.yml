@@ -3,3 +3,10 @@ Streak recovery:
   - 10/day
   - (current_user.last_score_age / 24) * 10 if current_user.last_score_age else 0
   - streak_recovery_availability(self)
+
+Triple or nothing:
+  - Attempt to triple your wager.
+  - 1/4 your coins
+  - floor(current_user.total_score / 4)
+  - current_user.total_score > 4
+

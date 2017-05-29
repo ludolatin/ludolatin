@@ -1,5 +1,6 @@
 import datetime
-
+from random import randint
+from math import floor
 from flask import jsonify, request, abort, url_for
 from flask_login import current_user
 
@@ -67,6 +68,7 @@ def get_store_routes():
     })
 
 
+# TODO: Make POST
 @api.route('/store/recover_streak/', methods=['GET'])
 def recover_streak():
     try:
@@ -88,3 +90,22 @@ def recover_streak():
     except:
         abort(400)
     return jsonify(current_user.to_dict()), 201
+
+
+# TODO: Make POST
+@api.route('/store/triple_or_nothing/', methods=['GET'])
+def triple_or_nothing():
+    result = ""
+    try:
+        if randint(0, 2) == 0:
+            current_user.total_score += (floor(current_user.total_score / 4)) * 2
+            result = "success"
+        else:
+            current_user.total_score -= floor(current_user.total_score / 4)
+            result = "failure"
+    except:
+        abort(400)
+    return jsonify({
+        'user': current_user.to_dict(),
+        'result': result,
+    }), 201

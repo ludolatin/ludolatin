@@ -27,7 +27,7 @@
                   <button
                     type="button"
                     class="btn btn-sm btn-success"
-                    id="buyButton"
+                    id="{{ product.id }}"
                   >
                     Get for: {{ product.total_price }}
                   </button>
@@ -69,22 +69,41 @@
 
 {% block js %}
 <script>
-  $('#buyButton').click(function(){
+  $('#1').click(function(){
     $.get('/api/store/recover_streak/', function(data) {
       $('#streak').children("span").text(data.streak);
       $('#score').children("span").text(data.total_score);
-      $('#buyButton').removeClass("btn-success");
-      $('#buyButton').addClass("disabled btn-secondary");
-      $('#buyButton').text("Bought");
+      $('#1').removeClass("btn-success");
+      $('#1').addClass("disabled btn-secondary");
+      $('#1').text("Bought");
       var audio = new Audio('/static/audio/item-bought.mp3');
+      audio.play();
+    });
+  });
+
+  $('#2').click(function(){
+    $.get('/api/store/triple_or_nothing/', function(data) {
+      $('#streak').children("span").text(data.user.streak);
+      if (data.user.total_score < 4) {
+        $('#2').removeClass("btn-success");
+        $('#2').addClass("disabled btn-secondary");
+      };
+      $('#score').children("span").text(data.user.total_score);
+      $('#2').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
+      if (data.result == 'success') {
+        var audio = new Audio('/static/audio/item-bought.mp3');
         audio.play();
+      } else {
+        var audio = new Audio('/static/audio/item-lost.mp3');
+        audio.play();
+      }
     });
   });
 </script>
 
 <script>
-var labels = {{ days|tojson }};
-var data = {{ daily }};
+  var labels = {{ days|tojson }};
+  var data = {{ daily }};
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
