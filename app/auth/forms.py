@@ -30,7 +30,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(
         'Password',
         validators=[
-            DataRequired(), Length(10, 128),
+            DataRequired(), Length(8, 128),
         ]
     )
     submit = SubmitField('Register')
