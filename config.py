@@ -12,6 +12,7 @@ class Config(object):
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_POOL_RECYCLE = 299
 
     @staticmethod
     def init_app(app):
@@ -20,12 +21,22 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = create_sqlite_uri('ingenuity-dev.db')
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username="root",
+        password="",
+        hostname="localhost",
+        databasename="ingenuity_dev",
+    )
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = create_sqlite_uri('ingenuity-test.db')
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username="root",
+        password="",
+        hostname="localhost",
+        databasename="ingenuity_test",
+    )
     WTF_CSRF_ENABLED = False
     import logging
     logging.basicConfig(
@@ -34,13 +45,27 @@ class TestingConfig(Config):
     logging.getLogger().setLevel(logging.DEBUG)
 
 
-class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = create_sqlite_uri('ingenuity.db')
+class PreProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username="ingenuity",
+        password="LudoLatin",
+        hostname="ingenuity.mysql.pythonanywhere-services.com",
+        databasename="ingenuity$preproduction",
+    )
 
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username="ingenuity",
+        password="LudoLatin",
+        hostname="ingenuity.mysql.pythonanywhere-services.com",
+        databasename="ingenuity$production",
+    )
 
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
+    'preproduction': PreProductionConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'default': ProductionConfig
 }

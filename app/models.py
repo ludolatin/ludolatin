@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+# Used in Eval's Purchase function
 from math import floor
 
 from jellyfish import levenshtein_distance
@@ -14,6 +15,7 @@ from app import db, login_manager
 
 EMAIL_REGEX = re.compile(r'^\S+@\S+\.\S+$')
 USERNAME_REGEX = re.compile(r'^\S+$')
+
 
 def check_length(attribute, length):
     # Checks the attribute's length.
@@ -47,11 +49,11 @@ class BaseModel:
 
     @classmethod
     def count_by_hour(cls, column):
-        return db.session.query(func.count(column)).group_by(func.strftime("%Y-%m-%d %H", column))
+        return db.session.query(func.count(column)).group_by(func.date_format(column, "%Y-%m-%d %H"))
 
     @classmethod
     def count_by_day(cls, column):
-        return db.session.query(func.count(column)).group_by(func.strftime("%Y-%m-%d", column))
+        return db.session.query(func.count(column)).group_by(func.date_format(column, "%Y-%m-%d"))
 
     @classmethod
     def from_dict(cls, model_dict):
@@ -273,7 +275,7 @@ class Topic(db.Model, BaseModel):
 class Quiz(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     sentences = db.relationship('Sentence', backref='quiz')
-    name = db.Column(db.String(16))
+    name = db.Column(db.String(32))
     users = db.relationship('User', backref='quiz')
     scores = db.relationship('Score', backref='quiz')
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
@@ -292,7 +294,7 @@ class Score(db.Model, BaseModel):
 
     @classmethod
     def sum_by_day(cls):
-        return db.session.query(func.sum(cls.score)).group_by(func.strftime("%Y-%m-%d", cls.created_at))
+        return db.session.query(func.sum(cls.score)).group_by(func.date_format(cls.created_at, "%Y-%m-%d"))
 
     def __repr__(self):
         return '<Score: {0}>'.format(self.score)
@@ -322,12 +324,12 @@ def streak_recovery_availability(product):
 
 class Product(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(16))
+    name = db.Column(db.String(32))
     description = db.Column(db.String(128))
     price = db.Column(db.String(16))
     purchases = db.relationship('Purchase', backref='product')
-    pricing_formula = db.Column(db.String(64))
-    availability_function = db.Column(db.String(64))
+    pricing_formula = db.Column(db.String(256))
+    availability_function = db.Column(db.String(256))
 
     def __repr__(self):
         return '<Product: {0}>'.format(self.name)
