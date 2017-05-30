@@ -24,6 +24,7 @@ def dashboard():
         topic_progress = "%s" % (float(progress) / topic_size * 100)
         topics = Topic.query.filter_by().all()
 
+        # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
         daily = Score.\
             sum_by_day().\
             filter_by(user=user).\
@@ -32,7 +33,7 @@ def dashboard():
             all()
 
         # remove the tuple wrappers
-        daily = [i[0] for i in daily]
+        daily = [int(i[0]) for i in daily]
         # Pad to seven entries
         daily += [0] * (7 - len(daily))
         # most recent last

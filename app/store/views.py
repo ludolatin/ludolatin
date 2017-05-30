@@ -19,6 +19,7 @@ def store():
     products = Product.query.all()
 
     if user:
+        # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
         daily = Score.\
             sum_by_day().\
             filter_by(user=user).\
@@ -27,7 +28,7 @@ def store():
             all()
 
         # remove the tuple wrappers
-        daily = [i[0] for i in daily]
+        daily = [int(i[0]) for i in daily]
         # Pad to seven entries
         daily += [0] * (7 - len(daily))
         # most recent last

@@ -199,6 +199,7 @@ def victory(id):
     else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))
 
+    # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
     daily = Score. \
         sum_by_day(). \
         filter_by(user=_get_user()). \
@@ -207,7 +208,7 @@ def victory(id):
         all()
 
     # remove the tuple wrappers
-    daily = [i[0] for i in daily]
+    daily = [int(i[0]) for i in daily]
     # Pad to seven entries
     daily += [0] * (7 - len(daily))
     # most recent last
