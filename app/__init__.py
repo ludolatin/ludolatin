@@ -45,36 +45,44 @@ def create_app(config_name):
     from .store import store as store_blueprint
     app.register_blueprint(store_blueprint)
 
+    class AuthenticatedAdminIndex(AdminIndexView):
+        @expose('/')
+        def index(self):
+            if not current_user.is_authenticated:
+                return redirect(url_for('auth.login', next=request.url))
+            if not current_user.is_admin:
+                return redirect(url_for('dashboard.dashboard'))
+            return super(AuthenticatedAdminIndex, self).index()
+
     # Initialise flask-admin
     from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
-    admin = Admin(app, name='LudoLatin', template_mode='bootstrap3', base_template='admin_base.html')
+    admin = Admin(
+        app,
+        name='LudoLatin',
+        template_mode='bootstrap3',
+        base_template='admin_base.html',
+        index_view=AuthenticatedAdminIndex()
+    )
 
-
-    # class MyAdminIndexView(AdminIndexView):
-    #     @expose('/')
-    #     def index(self):
-    #         if not current_user.is_admin:
-    #             return redirect(url_for('auth.login'))
-    #         return super(MyAdminIndexView, self).index()
-
-
-    class RestrictedModelView(ModelView):
+    class AuthenticatedModelView(ModelView):
         def is_accessible(self):
-            return current_user.is_admin
+            return current_user.is_authenticated and current_user.is_admin
 
         def inaccessible_callback(self, name, **kwargs):
             # redirect to login page if user doesn't have access
             return redirect(url_for('auth.login', next=request.url))
 
+        column_exclude_list = ('password_hash')
+
     # Add administrative views here
-    admin.add_view(RestrictedModelView(User, db.session))
-    admin.add_view(RestrictedModelView(Language, db.session))
-    admin.add_view(RestrictedModelView(Topic, db.session, endpoint="admin_topic"))
-    admin.add_view(RestrictedModelView(Quiz, db.session, endpoint="admin_quiz"))
-    admin.add_view(RestrictedModelView(Sentence, db.session))
-    admin.add_view(RestrictedModelView(Answer, db.session))
-    admin.add_view(RestrictedModelView(Score, db.session))
-    admin.add_view(RestrictedModelView(Product, db.session))
-    admin.add_view(RestrictedModelView(Purchase, db.session))
+    admin.add_view(AuthenticatedModelView(User, db.session))
+    admin.add_view(AuthenticatedModelView(Language, db.session))
+    admin.add_view(AuthenticatedModelView(Topic, db.session, endpoint="admin_topic"))
+    admin.add_view(AuthenticatedModelView(Quiz, db.session, endpoint="admin_quiz"))
+    admin.add_view(AuthenticatedModelView(Sentence, db.session))
+    admin.add_view(AuthenticatedModelView(Answer, db.session))
+    admin.add_view(AuthenticatedModelView(Score, db.session))
+    admin.add_view(AuthenticatedModelView(Product, db.session))
+    admin.add_view(AuthenticatedModelView(Purchase, db.session))
 
     return app

@@ -81,6 +81,11 @@
             >
               <a class="nav-link" href="/store">Store</a>
             </li>
+            {% if current_user.is_admin %}
+              <li class = "nav-item" >
+                <a class="nav-link" href="/admin">Admin</a>
+              </li>
+            {% endif %}
           </ul>
           <ul class="navbar-nav float-right">
             {% if not current_user.is_authenticated %}
