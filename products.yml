@@ -7,6 +7,6 @@ Streak recovery:
 Triple or nothing:
   - Attempt to triple your wager.
   - 1/4 your coins
-  - floor(current_user.total_score / 4)
+  - int(current_user.total_score / 4)
   - current_user.total_score > 4
 

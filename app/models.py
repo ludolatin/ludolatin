@@ -1,7 +1,5 @@
 import re
 from datetime import datetime
-# Used in Eval's Purchase function
-from math import floor
 
 from jellyfish import levenshtein_distance
 

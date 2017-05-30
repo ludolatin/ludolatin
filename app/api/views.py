@@ -1,6 +1,5 @@
 import datetime
 from random import randint
-from math import floor
 from flask import jsonify, request, abort, url_for
 from flask_login import current_user
 
@@ -98,10 +97,10 @@ def triple_or_nothing():
     result = ""
     try:
         if randint(0, 2) == 0:
-            current_user.total_score += (floor(current_user.total_score / 4)) * 2
+            current_user.total_score += (int(current_user.total_score / 4)) * 2
             result = "success"
         else:
-            current_user.total_score -= floor(current_user.total_score / 4)
+            current_user.total_score -= int(current_user.total_score / 4)
             result = "failure"
     except:
         abort(400)
