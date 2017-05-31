@@ -334,8 +334,6 @@ class Product(db.Model, BaseModel):
 
     @property
     def total_price(self):
-        print "CU: ", current_user
-        print "CULSA :", current_user.last_score_age
         return eval(self.pricing_formula)
 
     @property

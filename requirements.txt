@@ -7,6 +7,7 @@ Flask-Login==0.4.0
 Flask-Migrate==2.0.3
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.2
+Flask-SSLify==0.1.5
 Flask-WTF==0.14.2
 itsdangerous==0.24
 jellyfish==0.5.6
