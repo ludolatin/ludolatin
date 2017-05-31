@@ -8,5 +8,4 @@ Triple or nothing:
   - Attempt to triple your wager.
   - 1/4 your coins
   - int(current_user.total_score / 4)
-  - current_user.total_score > 4
-
+  - current_user.total_score >= 4

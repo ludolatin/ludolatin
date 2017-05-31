@@ -18,12 +18,15 @@ def get_routes():
 
 @api.route('/users/')
 def get_users():
-    return jsonify({'users': [user.to_dict() for user in User.query.all()]})
+    return jsonify({
+        'users': [user.to_dict() for user in User.query.all()],
+        'user_count': url_for('api.count', _external=True),
+    })
 
 
 @api.route('/users/count')
-def user_number():
-    return jsonify({'user number': User.query.count()})
+def user_count():
+    return jsonify({'user_count': User.query.count()})
 
 
 @api.route('/user/<string:username>/')
@@ -64,6 +67,7 @@ def delete_user(username):
 def get_store_routes():
     return jsonify({
         'recover_streak': url_for('api.recover_streak', _external=True),
+        'triple_or_nothing': url_for('api.triple_or_nothing', _external=True),
     })
 
 
@@ -75,16 +79,16 @@ def recover_streak():
         if product.available:
             current_user.total_score -= product.total_price
 
-            Score(
-                user_id=current_user.id,
-                created_at=datetime.datetime.utcnow(),
-                score=0
-            ).save()
-
             Purchase(
                 product=product,
                 price=product.total_price,
                 user_id=current_user.id,
+            ).save()
+
+            Score(
+                user_id=current_user.id,
+                created_at=datetime.datetime.utcnow(),
+                score=0
             ).save()
     except:
         abort(400)
@@ -94,16 +98,24 @@ def recover_streak():
 # TODO: Make POST
 @api.route('/store/triple_or_nothing/', methods=['GET'])
 def triple_or_nothing():
+    product = Product.query.filter_by(name="Triple or nothing").first()
     result = ""
-    try:
-        if randint(0, 2) == 0:
-            current_user.total_score += (int(current_user.total_score / 4)) * 2
-            result = "success"
-        else:
-            current_user.total_score -= int(current_user.total_score / 4)
-            result = "failure"
-    except:
-        abort(400)
+    if product.available:
+        try:
+            Purchase(
+                product=product,
+                price=product.total_price,
+                user_id=current_user.id,
+            ).save()
+
+            if randint(0, 2) == 0:
+                current_user.total_score += (int(current_user.total_score / 4)) * 2
+                result = "success"
+            else:
+                current_user.total_score -= int(current_user.total_score / 4)
+                result = "failure"
+        except:
+            abort(400)
     return jsonify({
         'user': current_user.to_dict(),
         'result': result,

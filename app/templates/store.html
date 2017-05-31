@@ -71,25 +71,22 @@
 <script>
   $('#1').click(function(){
     $.get('/api/store/recover_streak/', function(data) {
+      $('#1').attr("disabled", true);
+
+      var audio = new Audio('/static/audio/item-bought.mp3');
+      audio.play();
+
       $('#streak').children("span").text(data.streak);
       $('#score').children("span").text(data.total_score);
       $('#1').removeClass("btn-success");
       $('#1').addClass("disabled btn-secondary");
       $('#1').text("Bought");
-      var audio = new Audio('/static/audio/item-bought.mp3');
-      audio.play();
     });
   });
 
   $('#2').click(function(){
     $.get('/api/store/triple_or_nothing/', function(data) {
-      $('#streak').children("span").text(data.user.streak);
-      if (data.user.total_score < 4) {
-        $('#2').removeClass("btn-success");
-        $('#2').addClass("disabled btn-secondary");
-      };
-      $('#score').children("span").text(data.user.total_score);
-      $('#2').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
+
       if (data.result == 'success') {
         var audio = new Audio('/static/audio/item-bought.mp3');
         audio.play();
@@ -97,6 +94,18 @@
         var audio = new Audio('/static/audio/item-lost.mp3');
         audio.play();
       }
+      $('#score').children("span").text(data.user.total_score);
+
+      // Disable the button if they've run out of cash.
+      if (data.user.total_score < 4) {
+        $('#2').attr("disabled", true);
+        $('#2').removeClass("btn-success");
+        $('#2').addClass("disabled btn-secondary");
+        $('#2').text("Unavailable");
+        $('#2').removeAttr("id");
+      } else {
+        $('#2').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
+      };
     });
   });
 </script>
