@@ -43,6 +43,7 @@ def store():
 
         return render_template(
             'store.html',
+            title="LudoLatin - Store",
             products=products,
             days=days,
             daily=daily,

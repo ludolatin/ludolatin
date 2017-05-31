@@ -46,6 +46,7 @@ def dashboard():
 
         return render_template(
             'dashboard.html',
+            title="LudoLatin - Dashboard",
             topic_progress=topic_progress,
             days=days,
             daily=daily,
@@ -57,4 +58,6 @@ def dashboard():
     elif session.get('_id'):
         return redirect(url_for('auth.login'))
     else:
-        return render_template('index.html')
+        return render_template(
+            'index.html',
+            title="LudoLatin: Learn Latin for free")

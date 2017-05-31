@@ -79,6 +79,7 @@ def ask(id):
     response = make_response(
         render_template(
             'quiz.html',
+            title="LudoLatin",
             question=question,
             unknown=unknown,
             form=form,
@@ -124,6 +125,7 @@ def validate(id):
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     return render_template(
         'quiz_validate.html',
+        title="LudoLatin",
         answer=answer,
         question=question,
         unknown=unknown,
@@ -221,6 +223,7 @@ def victory(id):
 
     return render_template(
         'quiz_victory.html',
+        title="LudoLatin - Quiz",
         id=user.quiz_id,
         score=final_score,
         days=days,

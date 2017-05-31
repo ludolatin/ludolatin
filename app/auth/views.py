@@ -56,4 +56,7 @@ def register():
             login_user(user)
             return redirect(url_for('quiz.ask', id=1))
 
-    return render_template('register.html', form=form)
+    return render_template(
+        'register.html',
+        title="LudoLatin: Learn Latin for free",
+        form=form)

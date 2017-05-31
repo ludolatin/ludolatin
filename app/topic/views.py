@@ -31,6 +31,7 @@ def topic(id):
 
     return render_template(
         'topic.html',
+        title="LudoLatin - Topic",
         topic=current_topic,
         topic_progress=topic_progress,
         progress=progress,
