@@ -24,10 +24,7 @@
         <img src="/static/images/correct.svg">
       </div> <!-- col -->
       <div class="success col-lg-5" style="color:#7eb530">
-        <strong>
-          You have a typo.<br />
-          Correct solutions:
-        </strong><br />
+        <strong>You have a typo.</strong> Correct solutions:<br />
         {% for translation in question.translations %}
           {{ translation.text }}<br />
         {% endfor %}
