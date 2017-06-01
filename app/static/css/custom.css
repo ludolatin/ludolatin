@@ -56,6 +56,8 @@ h2.title {
   font-family: 'Raleway', sans-serif;
 }
 
+/* Quiz */
+
 .question {
   height:31px;
 }
@@ -67,6 +69,11 @@ h2.title {
 
 .underline {
   background-image: url(/static/images/underline.png);
+}
+
+.quiz-checkmark {
+  width: 60px;
+  height: 60px
 }
 
  /* For hint-popup content */
