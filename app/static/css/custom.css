@@ -238,7 +238,7 @@ h2.title {
 }
 
 /* Topic card deck - Change breakpoint*/
-/* Set width to make card deck cards 100% width */
+/* https://codepen.io/JacobLett/pen/rWXJPV */
 @media (max-width: 768px) {
 	.card-deck {
 	    display: block;
