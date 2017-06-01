@@ -236,3 +236,25 @@ h2.title {
   background-color: #1caff6;
   border-color: #1caff6
 }
+
+/* Topic card deck - Change breakpoint*/
+/* Set width to make card deck cards 100% width */
+@media (max-width: 768px) {
+	.card-deck {
+	    display: block;
+	    width: 100%;
+	    margin-bottom: .75rem;
+	    table-layout: fixed;
+	    border-spacing: 1.25rem 0;
+	}
+	.card-deck .card {
+	    display: block;
+	    margin-bottom: .75rem;
+	    margin-right: 0!important;
+	    vertical-align: top;
+	}
+
+  .card-deck .card:not(:first-child) {
+    margin-left: 0px;
+  }
+}
