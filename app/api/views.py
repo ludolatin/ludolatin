@@ -17,6 +17,7 @@ def get_routes():
 
 
 @api.route('/users/')
+@admin_required
 def get_users():
     return jsonify({
         'users': [user.to_dict() for user in User.query.all()],
@@ -29,10 +30,11 @@ def user_count():
     return jsonify({'user_count': User.query.count()})
 
 
-@api.route('/user/<string:username>/')
-def get_user(username):
+@api.route('/user/<int:id>/')
+@admin_required
+def get_user(id):
     print current_user
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.get_or_404(id)
     return jsonify(user.to_dict())
 
 
@@ -49,7 +51,7 @@ def add_user():
     return jsonify(user.to_dict()), 201
 
 
-@api.route('/user/<string:username>/', methods=['DELETE'])
+@api.route('/user/<int:id>/', methods=['DELETE'])
 @admin_required
 def delete_user(username):
     user = User.query.get_or_404(username=username)

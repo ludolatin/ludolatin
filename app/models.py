@@ -137,13 +137,13 @@ class User(UserMixin, db.Model, BaseModel):
     def to_dict(self):
         return {
             'username': self.username,
-            'user_url': url_for(
-                'api.get_user', username=self.username, _external=True
-            ),
             'member_since': self.member_since,
             'last_seen': self.last_seen,
             'total_score': self.total_score,
             'streak': self.streak,
+            'user_url': url_for(
+                'api.get_user', id=self.id, _external=True
+            ),
         }
 
     @property
