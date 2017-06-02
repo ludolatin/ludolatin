@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from string import punctuation
 
 from jellyfish import levenshtein_distance
 
@@ -187,18 +188,23 @@ class Answer(db.Model, BaseModel):
     def __init__(self, text=None, sentence=None, user=None, attempt=0, created_at=None):
 
         # Is the submitted answer correct?
-        is_correct = False
+        is_correct = False  # Incorrect
+        punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
+        answer = punctuation_regex.sub('', unicode(text.lower()))
 
         if sentence is not None:
             for translation in sentence.translations:
-                if text.lower() == translation.text.lower():
-                    is_correct = True
+                if answer == punctuation_regex.sub('', unicode(translation.text.lower())):
+                    is_correct = True  # Correct
                     break
 
         if sentence is not None and not is_correct:
             for translation in sentence.translations:
-                if levenshtein_distance(unicode(translation.text.lower()), unicode(text.lower())) == 1:
-                    is_correct = None
+                if levenshtein_distance(
+                        answer,
+                        punctuation_regex.sub('', unicode(translation.text.lower()))
+                ) == 1:
+                    is_correct = None  # Typo
                     break
 
         self.text = text
