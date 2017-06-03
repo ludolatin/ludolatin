@@ -48,6 +48,9 @@ def create_app(config_name):
     from .store import store as store_blueprint
     app.register_blueprint(store_blueprint)
 
+    from .misc import misc as misc_blueprint
+    app.register_blueprint(misc_blueprint)
+
     class AuthenticatedAdminIndex(AdminIndexView):
         @expose('/')
         def index(self):
