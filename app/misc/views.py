@@ -27,3 +27,15 @@ def contact():
     )
 
 
+@misc.route('/robots.txt')
+def robots():
+    return render_template(
+        'misc/robots.txt',
+    )
+
+
+@misc.route('/googleb362926a2c87791b.html')
+def google_site_verification():
+    return render_template(
+        'misc/googleb362926a2c87791b.html',
+    )
