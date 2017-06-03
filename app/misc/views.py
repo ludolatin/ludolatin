@@ -3,6 +3,14 @@ from flask import render_template
 from app.misc import misc
 
 
+@misc.route('/beta')
+def beta():
+    return render_template(
+        'misc/beta.html',
+        title="LudoLatin  - We're building!",
+    )
+
+
 @misc.route('/terms')
 def terms():
     return render_template(
