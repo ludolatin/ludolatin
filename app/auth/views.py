@@ -24,7 +24,12 @@ def login():
                 user_by_name.verify_password(form.password.data):
             login_user(user_by_name.seen())
             return redirect(request.args.get('next') or url_for('dashboard.dashboard'))
-    return render_template('login.html', form=form)
+
+    return render_template(
+        'auth/login.html',
+        title="LudoLatin - Sign in",
+        form=form
+    )
 
 
 @auth.route('/logout')
@@ -57,6 +62,6 @@ def register():
             return redirect(url_for('quiz.ask', id=1))
 
     return render_template(
-        'register.html',
-        title="LudoLatin: Learn Latin for free",
+        'auth/register.html',
+        title="LudoLatin - Register",
         form=form)
