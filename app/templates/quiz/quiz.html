@@ -7,9 +7,12 @@
   <label class="sr-only" for="answer">Answer</label>
   {{ form.answer(
     class="form-control",
-    id="answer", type="text",
+    id="answer",
+    type="text",
     autocomplete="off",
     spellcheck="false",
+    autocapitalize="off",
+    autocorrect="off",
     placeholder="Enter your translation",
     value="",
     maxlength=128

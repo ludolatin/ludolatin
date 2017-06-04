@@ -9,7 +9,15 @@
 
   {{ form.hidden_tag() }}
   <label for="inputEmail" class="sr-only">Email address</label>
-  {{ form.email_or_username(id="inputEmail", class="form-control", type="text", placeholder="Email or Username", maxlength=128) }}
+  {{ form.email_or_username(
+  id="inputEmail",
+  class="form-control",
+  type="text",
+  placeholder="Email or Username",
+  maxlength=128,
+  autocapitalize="off",
+  autocorrect="off",
+  ) }}
 
   <label for="inputPassword" class="sr-only">Password</label>
   {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
