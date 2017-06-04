@@ -78,7 +78,7 @@ def ask(id):
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     response = make_response(
         render_template(
-            'quiz.html',
+            'quiz/quiz.html',
             title="LudoLatin",
             question=question,
             unknown=unknown,
@@ -124,7 +124,7 @@ def validate(id):
 
     # Rather than returning `render_template`, build a response so that we can attach a cookie to it
     return render_template(
-        'quiz_validate.html',
+        'quiz/quiz_validate.html',
         title="LudoLatin",
         answer=answer,
         question=question,
@@ -171,7 +171,7 @@ def template_setup(question, id):
 
 @quiz.route('/quiz/<int:id>/victory', methods=['GET'])
 @login_required
-def victory(id):
+def victory(quiz_id):
     user = _get_user()
 
     last_attempt = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first().attempt
@@ -188,16 +188,12 @@ def victory(id):
     # Make True to allow reloading victory
     # if True:
     if last_attempt > attempt:
-        score = Sentence.query.filter_by(quiz_id=id).count() * 2
-        neg_score = Answer.query.join(Sentence) \
-            .filter(Answer.is_correct is False, Answer.user == user, Sentence.quiz_id == id).count()
-        final_score = score - neg_score
-        if final_score < 3:
-            final_score = 3
+        final_score = calculate_score(quiz_id, user)
 
         user.total_score += final_score
-        Score(score=final_score, user=user, quiz_id=id, attempt=last_attempt)
-        user.quiz_id = id + 1
+        Score(score=final_score, user=user, quiz_id=quiz_id, attempt=last_attempt)
+        # FIXME: Does this lower the users progress on redo?
+        user.quiz_id = quiz_id + 1
     else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))
 
@@ -222,7 +218,7 @@ def victory(id):
     days = days[today:] + days[:today]
 
     return render_template(
-        'quiz_victory.html',
+        'quiz/quiz_victory.html',
         title="LudoLatin - Quiz",
         id=user.quiz_id,
         score=final_score,
@@ -230,3 +226,13 @@ def victory(id):
         daily=daily,
         current_topic=current_topic,
     )
+
+
+def calculate_score(quiz_id, user):
+    score = Sentence.query.filter_by(quiz_id=quiz_id).count() * 2
+    neg_score = Answer.query.join(Sentence) \
+        .filter(Answer.is_correct is False, Answer.user == user, Sentence.quiz_id == quiz_id).count()
+    final_score = score - neg_score
+    if final_score < 3:
+        final_score = 3
+    return final_score
