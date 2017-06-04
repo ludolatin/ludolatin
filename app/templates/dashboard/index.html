@@ -13,7 +13,7 @@
   <p class="lead mt-4">LudoLatin makes it fun to practice your Latin grammar and vocabulary.</p>
   <p>Earn coins while you practise to spend in the store.</p>
   {% if not current_user.is_authenticated %}
-    <p><a class="btn btn-lg btn-success" href="{{ url_for('quiz.ask', id=1) }}" role="button" autofocus>Get started</a>
+    <p><a class="btn btn-lg btn-success" href="{{ url_for('topic.topic', topic_id=1) }}" role="button" autofocus>Get started</a>
     <p><a href="{{ url_for('auth.login') }}">Have an account?</a></p>
   {% else %}
     <p><a class="btn btn-lg btn-success" href="{{ url_for('quiz.ask', id=current_user.quiz.id) }}" role="button">Begin practise</a></p>

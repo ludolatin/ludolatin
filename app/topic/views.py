@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from app.models import Topic, Quiz, Product
 from app.topic import topic
 
+
 @topic.route('/topic/<int:topic_id>')
 @login_required
 def topic(topic_id):
