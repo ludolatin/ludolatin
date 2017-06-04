@@ -25,7 +25,9 @@
     <div class="col-lg-8 card mb-5">
       <div class="card-block">
         <h4 class="card-title">{{topic.name}}</h4>
-        <h6 class="card-subtitle mb-4 text-muted">Learning a language requires practice every day.</h6>
+        <h6 class="card-subtitle mb-4 text-muted">
+          Select a quiz to check your progress. Further quizzes unlock as you complete them.
+        </h6>
         <div class="card-deck">
           {% for quiz in topic.quizzes %}
             <div class="card mb-4" style="border-width:2px">

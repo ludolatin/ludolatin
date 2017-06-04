@@ -55,8 +55,6 @@ def dashboard():
             topic_size=topic_size,
             progress=progress,
         )
-    elif session.get('_id'):
-        return redirect(url_for('auth.login'))
     else:
         return render_template(
             'dashboard/index.html',
