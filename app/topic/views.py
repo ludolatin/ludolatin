@@ -4,20 +4,11 @@ from flask_login import current_user, login_required
 from app.models import Topic, Quiz, Product
 from app.topic import topic
 
-
-def _get_user():
-    return current_user if current_user.is_authenticated else None
-
-
-@topic.route('/topic/<int:id>')
+@topic.route('/topic/<int:topic_id>')
 @login_required
-def topic(id):
-    user = _get_user()
-
-    current_topic = Topic.query.filter_by(id=id).first_or_404()
-
-    quiz = Quiz.query.filter_by(id=user.quiz_id).first()
-
+def topic(topic_id):
+    current_topic = Topic.query.filter_by(id=topic_id).first_or_404()
+    quiz = Quiz.query.filter_by(id=current_user.quiz_id).first()
     topic_size = len(current_topic.quizzes)
 
     if quiz not in current_topic.quizzes:

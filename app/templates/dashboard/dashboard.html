@@ -23,20 +23,20 @@
       {% for topic in topics %}
         {% if topic.id < current_topic.id %}
           <div class="card-block">
-            <a href="{{ url_for('topic.topic', id=topic.id) }}">
+            <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
               <div width="32" height="32" class="topicPieComplete"></div>
-              <br />
+              <br>
               {{ current_topic.name }}
             </a>
           </div>
         {% elif topic == current_topic %}
           <div class="card-block">
-            <a href="{{ url_for('topic.topic', id=topic.id) }}">
+            <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
               <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
               <svg class="topicPieContainer" viewBox="0 0 32 32">
                 <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
               </svg>
-              <br />
+              <br>
               {{ topic.name }}
               {{ progress }} / {{ topic_size }}
             </a>
@@ -44,7 +44,7 @@
         {% elif topic.id > current_topic.id %}
           <div class="card-block">
             <div width="32" height="32" class="topicPieLocked"></div>
-            <br />
+            <br>
             {{ topic.name }}
             0 / {{ topic.quizzes|length }}
           </div>

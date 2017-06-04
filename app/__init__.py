@@ -5,6 +5,7 @@ from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_sslify import SSLify
+from flask_misaka import Misaka # Markdown support
 
 from config import config
 
@@ -15,17 +16,20 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
+misaka = Misaka(app=None, renderer=None, strikethrough=True, tables=True, wrap=True)
+
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    SSLify(app)
-
     db.init_app(app)
     migrate.init_app(app, db=db)
     login_manager.init_app(app)
+    misaka.init_app(app)
+
+    SSLify(app)
 
     from .quiz import quiz as quiz_blueprint
     app.register_blueprint(quiz_blueprint)

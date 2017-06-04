@@ -1,9 +1,9 @@
-import os
+from os import environ
 
 from flask import session
 from app import create_app
 
-app = create_app(os.environ.get('FLASK_ENV') or 'development')
+app = create_app(environ.get('FLASK_ENV') or 'development')
 
 
 @app.before_request

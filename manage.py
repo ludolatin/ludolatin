@@ -13,12 +13,12 @@ manager = Manager(app)
 
 
 def _make_context():
-
     return dict(
         app=app,
         db=db,
         models=models,
         user=User.query.first(),
+        current_user=User.query.first(),
         User=User,
         Sentence=Sentence,
         Language=Language,
@@ -57,7 +57,7 @@ def add_admin():
 
 
 def initialise_languages():
-    """ Initialise languages"""
+    """Initialise languages"""
 
     languages = ["English", "Latin"]
 
@@ -74,7 +74,7 @@ def initialise_languages():
 @manager.command
 def load_sentences():
     """Load the content of data.yml into the English / Latin tables"""
-    yaml = open('data.yml')
+    yaml = open('data/quiz_data.yml')
     data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
     print data
 
@@ -162,7 +162,7 @@ def db_meta():
 @manager.command
 def load_products():
     """Load the content of products.yml into the Product table"""
-    yaml = open('products.yml')
+    yaml = open('data/products.yml')
     data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
     print data
 
@@ -177,6 +177,19 @@ def load_products():
 
         product.save()
 
+@manager.command
+def load_lessons():
+    """Load the content of products.yml into the Product table"""
+    yaml = open('data/lessons.yml')
+    data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
+    print data
+
+    for topic_name, text in data.items():
+        topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
+        print topic
+
+        topic.text = unicode(text)
+        topic.save()
 
 if __name__ == "__main__":
     manager.run()

@@ -23,7 +23,7 @@
       <div class="success col d-flex" style="color:#7eb530">
         <img class="quiz-checkmark" src="/static/images/correct.svg">
         <div class="ml-3">
-          <strong>You have a typo.</strong> Correct solutions:<br />
+          <strong>You have a typo.</strong> Correct solutions:<br>
           <ul>
           {% for translation in question.translations %}
             <li>{{ translation.text }}</li>
@@ -36,7 +36,7 @@
       <div class="error col- d-flex" style="color:#dd381d">
         <img class="quiz-checkmark" src="/static/images/incorrect.svg">
         <div class="ml-3">
-          <strong>Correct solutions:</strong><br />
+          <strong>Correct solutions:</strong><br>
           <ul>
           {% for translation in question.translations %}
             <li>{{ translation.text }}</li>

@@ -5,6 +5,19 @@
   .topicPie {
     stroke-dasharray: {{ topic_progress }} 100;
   }
+  table {
+    margin-bottom: 20px;
+  }
+  td {
+    padding-right: 10px;
+}
+  hr {
+    border: 0;
+    width: 95%;
+    background-color:#DDDDDD;
+    height: 2px;
+    margin-top: 0px;
+  }
 </style>
 
 <div class="container">
@@ -65,6 +78,10 @@
           {% endfor %}
         </div> <!-- Close last card-deck -->
       </div>
+      {% if topic.text is not none %}
+        <hr>
+        <div class="card-block">{{ topic.text | markdown }}</div>
+      {% endif %}
     </div><!-- /.main -->
 
     <div class="col-lg-3 offset-lg-1" style="padding: 0px">
@@ -75,7 +92,7 @@
           <svg class="topicPieContainer text-center" viewBox="0 0 32 32">
             <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
           </svg>
-          <br />
+          <br>
           {{ progress }} / {{ topic_size }} Quizzes completed
         </div>
       </div>
