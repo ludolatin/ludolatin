@@ -45,7 +45,7 @@ def dashboard():
         days = days[today:] + days[:today]
 
         return render_template(
-            'dashboard.html',
+            'dashboard/dashboard.html',
             title="LudoLatin - Dashboard",
             topic_progress=topic_progress,
             days=days,
@@ -59,5 +59,5 @@ def dashboard():
         return redirect(url_for('auth.login'))
     else:
         return render_template(
-            'index.html',
+            'dashboard/index.html',
             title="LudoLatin: Learn Latin for free")
