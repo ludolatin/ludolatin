@@ -16,7 +16,14 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
-misaka = Misaka(app=None, renderer=None, strikethrough=True, tables=True, wrap=True)
+misaka = Misaka(
+    app=None,
+    renderer=None,
+    strikethrough=True,
+    underline=True,
+    tables=True,
+    wrap=True
+)
 
 
 def create_app(config_name):
