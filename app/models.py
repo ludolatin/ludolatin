@@ -32,7 +32,8 @@ class BaseModel:
         from sqlalchemy.exc import IntegrityError
         try:
             db.session.commit()
-        except IntegrityError:
+        except IntegrityError, e:
+            print "DATABASE INTEGRITY ERROR:", e, "rolling back."
             db.session.rollback()
 
     def delete(self):
