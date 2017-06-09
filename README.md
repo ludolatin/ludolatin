@@ -1,10 +1,10 @@
-# Ingenuity
+# LudoLatin
 
 An open-source tool for learning Latin.
 
-See what's next on my [kanban.](https://trello.com/b/NWzloF3z/ingenuity)
+See what's next on my [kanban.](https://trello.com/b/NWzloF3z/ludolatin)
 
-Hosted on [pythonanywhere.](https://ingenuity.pythonanywhere.com)
+Test it out on [ludolatin.com](https://www.ludolatin.com/)
 
 ## Install
 [virtualenv](https://virtualenv.pypa.io/en/stable/) provides a local install of python, pip, and any installed extensions.
@@ -17,8 +17,8 @@ If virtualenv isn't already installed, you may need a user with admin privelidge
 Now clone this project:
 
 ```
-git clone https://github.com/merelinguist/ingenuity.git
-cd ingenuity
+git clone https://github.com/merelinguist/ludolatin.git
+cd ludolatin
 ```
 
 To create & use a virtual environment in the project directory:
@@ -38,7 +38,7 @@ Flask requires that an enviroment variable is set to identify the file to run,
 and optionally another to enable debugging output:
 
 ```
-export FLASK_APP=ingenuity.py
+export FLASK_APP=ludolatin.py
 export FLASK_DEBUG=1
 ```
 
