@@ -6,15 +6,24 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_sslify import SSLify
 from flask_misaka import Misaka # Markdown support
+from sqlalchemy import create_engine, MetaData
+from flask_blogging import SQLAStorage, BloggingEngine
 
 from config import config
+
 
 db = SQLAlchemy()
 migrate = Migrate()
 
+engine = create_engine('sqlite:////tmp/blog.db')
+meta = MetaData()
+sql_storage = SQLAStorage(engine, metadata=meta)
+
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
+
+meta.create_all(bind=engine)
 
 misaka = Misaka(
     app=None,
@@ -31,12 +40,20 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
+    blog_engine = BloggingEngine(app, sql_storage)
+
     db.init_app(app)
     migrate.init_app(app, db=db)
     login_manager.init_app(app)
     misaka.init_app(app)
 
     SSLify(app)
+
+    from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
+
+    @blog_engine.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     from .quiz import quiz as quiz_blueprint
     app.register_blueprint(quiz_blueprint)
@@ -72,7 +89,6 @@ def create_app(config_name):
             return super(AuthenticatedAdminIndex, self).index()
 
     # Initialise flask-admin
-    from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
     admin = Admin(
         app,
         name='LudoLatin',

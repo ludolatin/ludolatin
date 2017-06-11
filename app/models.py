@@ -98,6 +98,10 @@ class User(UserMixin, db.Model, BaseModel):
 
     username = synonym('_username', descriptor=username)
 
+    # Flask-Blogging
+    def get_name(self):
+        return self.username
+
     @property
     def email(self):
         return self._email

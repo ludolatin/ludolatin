@@ -16,6 +16,15 @@ class Config(object):
     MAIL_PORT = int(os.getenv('MAIL_PORT', '465'))
     MAIL_USE_SSL = int(os.getenv('MAIL_USE_SSL', True))
 
+    # Flask-Blogging sessiongs
+    BLOGGING_URL_PREFIX = "/articles"
+    BLOGGING_SITEURL = "https://www.ludolatin.com"
+    BLOGGING_SITENAME = "LudoLatin"
+    BLOGGING_PERMISSIONS = True
+    BLOGGING_PLUGINS = ["blogging_plugins.tag_cloud", "blogging_plugins.summary"]
+    FILEUPLOAD_IMG_FOLDER = "fileupload"
+    FILEUPLOAD_PREFIX = "/fileupload"
+    FILEUPLOAD_ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 
     @staticmethod
     def init_app(app):

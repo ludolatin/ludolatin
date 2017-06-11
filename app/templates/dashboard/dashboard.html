@@ -88,8 +88,8 @@
 
 {% block js %}
 <script>
-var labels = {{ days|tojson }};
-var data = {{ daily }};
+  var labels = {{ days|tojson }};
+  var data = {{ daily }};
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="/static/js/progress_chart.js"></script>

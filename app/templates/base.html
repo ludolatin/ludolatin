@@ -4,6 +4,10 @@
 <head>
   <!-- Page head
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block title %}
+  <title>{{ title }}</title>
+  {% endblock %}
+
   {% include 'base/head.html' %}
 
   <!-- Analytics
