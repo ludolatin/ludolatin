@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block content %}
 
 <div class="container">
   <div class="row">
@@ -15,7 +15,7 @@
         </div>
         <ul class="list-group">
           {% for product in products %}
-            <li class="list-group-item d-flex w-100 mb-3"style="border-width:2px" >
+            <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
 
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
