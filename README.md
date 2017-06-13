@@ -2,9 +2,10 @@
 
 An open-source tool for learning Latin.
 
-See what's next on my [kanban.](https://trello.com/b/NWzloF3z/ludolatin)
+See what's next on my [kanban](https://trello.com/b/NWzloF3z/ludolatin).
 
 Test it out on [ludolatin.com](https://www.ludolatin.com/)
+
 
 ## Install
 [virtualenv](https://virtualenv.pypa.io/en/stable/) provides a local install of python, pip, and any installed extensions.
@@ -21,7 +22,7 @@ git clone https://github.com/merelinguist/ludolatin.git
 cd ludolatin
 ```
 
-To create & use a virtual environment in the project directory:
+To create and use a virtual environment in the project directory:
 
 ```
 virtualenv venv
@@ -34,7 +35,7 @@ Then install the project requirements in the created `venv` directory:
 pip install -r requirements.txt
 ```
 
-Flask requires that an enviroment variable is set to identify the file to run,
+Flask requires that an environment variable is set to identify the file to run,
 and optionally another to enable debugging output:
 
 ```
@@ -55,17 +56,69 @@ As a shortcut you can run the following:
 source setup
 ```
 
-Finally, initialise the database with:
+In production you also need to crease the following environment variables: 
+```
+FLASK_ENV=production
+DATABASE_USERNAME='someone',
+DATABASE_PASSWORD='something'
 
 ```
+
+
+## Database
+
+You'll need a MySQL database. (Other databases will work with some minor code changes 
+(specifically the GROUP BY date SQL queries), but sqlite is not so good with migrations.)
+
+### Database configuration
+If you are using mysql 5.7.5 or above, you will need to add a line to your `my.cnf` config file to remove
+`ONLY_FULL_GROUP_BY`:
+
+```
+sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+```
+
+If you don't know where that file is, run: 
+```
+/usr/sbin/mysqld --verbose --help | grep -A 1 "Default options"
+```
+
+then check each location in turn.
+
+The error that you'll see without this is:
+```
+sqlalchemy.exc.ProgrammingError
+ProgrammingError: (mysql.connector.errors.ProgrammingError) 1055 (42000): Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'ingenuity_dev.score.created_at' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by [SQL: u'SELECT sum(score.score) AS sum_1 \nFROM score \nWHERE %(param_1)s = score.user_id GROUP BY date_format(score.created_at, %(date_format_1)s) ORDER BY score.created_at DESC \n LIMIT %(param_2)s'] [parameters: {u'date_format_1': '%Y-%m-%d', u'param_1': 18, u'param_2': 7}]
+```
+
+Full details on [SitePoint](https://www.sitepoint.com/quick-tip-how-to-permanently-change-sql-mode-in-mysql/).
+
+### Database creation
+
+Now that the database is installed and configured, create a database:
+
+```
+mysql -u root -e "CREATE DATABASE ludolatin_dev"
+```
+
+Finally, create the migrations and initialise the database with:
+
+```
+flask db init
+```
+
+Edit `migrations/alembic.ini` and add the following lines::
+```
+# Exclude flask-blogging tables from migrations
+[alembic:exclude]
+tables = tag, post, tag_posts, user_posts
+```
+Then:
+```
+flask db migrate
 flask db upgrade
 ```
 
-If the DB is not in sync for some reason, you can run the following script to delete it and the migrations directory, create an empty database, and load the data.
-
-```
-./reset-db.sh
-```
 
 ## Run
 
@@ -81,17 +134,17 @@ Or, to make the server available to other devices:
 flask run --host=0.0.0.0
 ```
 
-You will now find the server running on: http://localhost:5000, or for other devices, http://<your_local_ip>:5000
+You will now find the server running on: `http://localhost:5000`, or for other devices, http://<your_local_ip>:5000
 
-You can also browse the API at: http://localhost:5000/api/ (Note, most of the API is unused.)
+You can also browse the API at: `http://localhost:5000/api/` (Note, most of the API is unused.)
 
-To add an admin user, load data etc, use:
+To add an admin user, load data, etc. use:
 
 ```
 python manage.py <command>
 ```
 
-For a list of commands type:
+For a full list of commands type:
 
 ```
 python manage.py
@@ -101,11 +154,17 @@ python manage.py
 
 Function            | Flask-Extension
 ------------------- | -----------------------
-Model & ORM         | [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/latest/)
-Migration           | [Flaks-Migrate](http://flask-migrate.readthedocs.io/en/latest/)
-Forms               | [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/)
-Login               | [Flask-Login](https://flask-login.readthedocs.org/en/latest/)
-Admin               | [Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)
+Model & ORM         | [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/)
+Database migration  | [Flaks-Migrate](http://flask-migrate.readthedocs.io/)
+Forms               | [Flask-WTF](https://flask-wtf.readthedocs.io/)
+Form validation     | [WTForms](https://wtforms.readthedocs.io/)
+Authentication      | [Flask-Login](https://flask-login.readthedocs.org/)
+Authorisation       | [Flask-Principal](https://flask-principal.readthedocs.io/)
+Admin               | [Flask-Admin](https://flask-admin.readthedocs.io/)
+Markdown            | [Flask-Misaka](https://flask-misaka.readthedocs.io/)
+Articles            | [Flask-Blogging](https://flask-blogging.readthedocs.io/)
+SSL redirection     | [Flask-SSLify](https://github.com/kennethreitz/flask-sslify)
+CLI                 | [Flask-Script](https://flask-script.readthedocs.io/)
 
 ## Other libraries used
 CSS | [Bootstrap 4 Alpha](https://v4-alpha.getbootstrap.com/)
