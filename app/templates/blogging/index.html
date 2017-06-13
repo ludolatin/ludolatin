@@ -10,9 +10,15 @@
   </div>
 {% endif %}
 
+  {% if request.path == '/articles/' %}
+    {% include 'blogging/_index_root_breadcrumbs.html' %}
+  {% else %}
+    {% include 'blogging/_index_breadcrumbs.html' %}
+  {% endif %}
+
 <div class="container">
   <div class="row">
-    <div class="col-lg-8 card mb-4">
+    <div class="col-lg-8 px-0 card mb-4">
       <div class="card-block">
 
         {% if meta.is_user_blogger %}
@@ -36,12 +42,6 @@
             on {{post.post_date.strftime('%d %b, %Y')}}
           </p>
 
-          <p>
-            {% if post.summary %}
-              {{ post.summary }}
-            {% endif %}
-          </p>
-
           <!-- post tags-->
           {% if post.tags %}
             <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
@@ -53,6 +53,12 @@
             {% endfor %}
             <br>
           {% endif %}
+
+          <p>
+            {% if post.summary %}
+              {{ post.summary }}
+            {% endif %}
+          </p>
           <hr>
         {% endfor %}
 

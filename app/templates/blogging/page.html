@@ -24,6 +24,7 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 {% endif %}
+{% include 'blogging/_page_breadcrumbs.html' %}
 
 <div class="card card-block">
   {% if meta.is_user_blogger %}
@@ -42,6 +43,7 @@
       </a>
     </div>
   {% endif %}
+
 
   <div class="row mt-4">
     <h1 class="text-center offset-md-1 col-md-10">{{ post.title }}</h1>
