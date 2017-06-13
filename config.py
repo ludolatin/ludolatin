@@ -1,8 +1,12 @@
 import os
 
+database_username = os.environ.get('DATABASE_USERNAME') or 'root'
+database_password = os.environ.get('DATABASE_PASSWORD') or ''
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret key, just for testing'
+
+    # SQLAlchemy settings
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -37,7 +41,7 @@ class DevelopmentConfig(Config):
         username="root",
         password="",
         hostname="localhost",
-        databasename="ingenuity_dev",
+        databasename="ludolatin_dev",
     )
 
 
@@ -47,7 +51,7 @@ class TestingConfig(Config):
         username="root",
         password="",
         hostname="localhost",
-        databasename="ingenuity_test",
+        databasename="ludolatin_test",
     )
     WTF_CSRF_ENABLED = False
     import logging
@@ -59,8 +63,8 @@ class TestingConfig(Config):
 
 class PreProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-        username="ingenuity",
-        password="LudoLatin",
+        username=database_username,
+        password=database_password,
         hostname="ingenuity.mysql.pythonanywhere-services.com",
         databasename="ingenuity$preproduction",
     )
@@ -68,8 +72,8 @@ class PreProductionConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-        username="ingenuity",
-        password="LudoLatin",
+        username=database_username,
+        password=database_password,
         hostname="ingenuity.mysql.pythonanywhere-services.com",
         databasename="ingenuity$production",
     )
