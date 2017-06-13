@@ -2,7 +2,7 @@
 
 import ruamel.yaml
 from flask_script import Manager, Shell, prompt_bool
-from ingenuity import app
+from ludolatin import app
 from app import db
 from app import models
 from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic, Product, Purchase

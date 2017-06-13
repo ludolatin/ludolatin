@@ -1,4 +1,3 @@
 source venv/bin/activate
-export FLASK_APP=ingenuity.py
+export FLASK_APP=ludolatin.py
 export FLASK_DEBUG=1
-
