@@ -8,14 +8,8 @@ from flask_misaka import Misaka  # Markdown support
 from flask_principal import Principal, UserNeed, RoleNeed, identity_loaded
 from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, MetaData
 
 from config import config
-
-engine = create_engine('sqlite:////tmp/blog.db')
-meta = MetaData()
-meta.create_all(bind=engine)
-sql_storage = SQLAStorage(engine, metadata=meta)
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -39,7 +33,14 @@ def create_app(config_name):
     principal = Principal()
     principal.init_app(app)
 
-    blog_engine = BloggingEngine(app, sql_storage)
+    from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
+
+    # Flask-Blogging database config
+    with app.app_context():
+        storage = SQLAStorage(db=db)
+        db.create_all()
+        blog_engine = BloggingEngine()
+        blog_engine.init_app(app, storage)
 
     misaka = Misaka(
         app=None,
@@ -50,8 +51,6 @@ def create_app(config_name):
         wrap=True
     )
     misaka.init_app(app)
-
-    from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
 
     # TODO: Move these auth handlers out of __init__.py
     @login_manager.user_loader
