@@ -23,6 +23,9 @@
           </div>
         {% endif %}
 
+        <h1 class="card-title">Articles</h1>
+        <hr>
+
         {% for post in posts %}
           <a href="{{ post.url }}">
             <h2>{{ post.title }}</h2>
@@ -77,9 +80,7 @@
     <div class="col-lg-3 offset-lg-1" style="padding: 0px">
       <div class="card text-center">
         <div class="card-block">
-
           Check back regularly for new and interesting articles.
-
         </div>
       </div>
     </div><!-- /.sidebar -->
