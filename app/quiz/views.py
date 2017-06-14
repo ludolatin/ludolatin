@@ -192,12 +192,15 @@ def victory(quiz_id):
 
         user.total_score += final_score
         Score(score=final_score, user=user, quiz_id=quiz_id, attempt=last_attempt)
-        # FIXME: Does this lower the users progress on redo?
-        user.quiz_id = quiz_id + 1
+
+        # Don't update user.quiz _id if this is a redo
+        if user.quiz_id <= quiz_id:
+            user.quiz_id += 1
     else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))
 
     # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
+    # FIXME: Doesn't account for days with no score.
     daily = Score. \
         sum_by_day(). \
         filter_by(user=_get_user()). \
