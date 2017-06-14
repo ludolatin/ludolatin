@@ -14,14 +14,20 @@
 {% endif %}
   <div class="row">
     {% if answer.is_correct %}
-      <div class="success col-auto d-flex" style="color:#7eb530">
-        <img class="quiz-checkmark" src="/static/images/correct.svg">
+      <div class="success col-auto d-flex ml-3" style="color:#7eb530">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2" style="width: 55px; height: 55px">
+          <circle class="path circle" fill="#ffffff" stroke="#7eb530" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
+          <polyline class="path check" fill="none" stroke="#7eb530" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,46.2 51.5,94.8 29.8,73.5 "/>
+        </svg>
         <span class="ml-3">You are correct</span>
       </div> <!-- col -->
       <audio src="/static/audio/correct.mp3" autoplay></audio>
     {% elif answer.is_correct is none %}
-      <div class="success col d-flex" style="color:#7eb530">
-        <img class="quiz-checkmark" src="/static/images/correct.svg">
+      <div class="success col d-flex ml-3" style="color:#7eb530">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2" style="width: 55px; height: 55px">
+          <circle class="path circle" fill="#ffffff" stroke="#7eb530" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
+          <polyline class="path check" fill="none" stroke="#7eb530" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,46.2 51.5,94.8 29.8,73.5 "/>
+        </svg>
         <div class="ml-3">
           <strong>You have a typo.</strong> Correct solutions:<br>
           <ul>
@@ -33,11 +39,15 @@
       </div> <!-- col -->
       <audio src="/static/audio/correct.mp3" autoplay></audio>
     {% else %}
-      <div class="error col- d-flex" style="color:#dd381d">
-        <img class="quiz-checkmark" src="/static/images/incorrect.svg">
+      <div class="error col- d-flex ml-3" style="color:#dd381d">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.2 138.2" style="width: 55px; height: 55px">
+          <circle class="path circle" fill="#ffffff" stroke="#dd381d" stroke-width="14" stroke-miterlimit="10" cx="69.1" cy="69.1" r="62.1"/>
+          <line class="path line" fill="none" stroke="#dd381d" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="40" y1="40" x2="98" y2="98"/>
+          <line class="path line" fill="none" stroke="#dd381d" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="98" y1="40" x2="40" y2="98"/>
+        </svg>
         <div class="ml-3">
           <strong>Correct solutions:</strong><br>
-          <ul>
+          <ul style="margin-bottom: 0;">
           {% for translation in question.translations %}
             <li>{{ translation.text }}</li>
           {% endfor %}
