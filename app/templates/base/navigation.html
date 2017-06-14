@@ -86,7 +86,7 @@
               {{ current_user.username if current_user.username != None else 'Guest' }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
-              <a class="dropdown-item" href="{{ url_for('quiz.ask', id=1) }}">Practise</a>
+              <a class="dropdown-item" href="{{ url_for('quiz.ask', id=current_user.quiz_id) }}">Practise</a>
               <a class="dropdown-item" href="/">Dashboard</a>
               {% if (current_user.is_authenticated and current_user.username != None) %}
                 <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
