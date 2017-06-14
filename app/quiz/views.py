@@ -169,7 +169,7 @@ def template_setup(question, id):
     return progress, unknown
 
 
-@quiz.route('/quiz/<int:id>/victory', methods=['GET'])
+@quiz.route('/quiz/<int:quiz_id>/victory', methods=['GET'])
 @login_required
 def victory(quiz_id):
     user = _get_user()

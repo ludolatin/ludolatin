@@ -1,4 +1,4 @@
-{% extends "quiz/base.html" %}}
+{% extends "quiz/quiz_base.html" %}}
 
 {% block content %}
 <div class="card quiz">
@@ -18,7 +18,7 @@
     </div>
     <button
       class="btn btn-lg btn-success float-right"
-      onclick="nextQuestion('{{ url_for('topic.topic', id=current_topic.id) }}')"
+      onclick="nextQuestion('{{ url_for('topic.topic', topic_id=current_topic.id) }}')"
       autofocus
     >
       Continue
