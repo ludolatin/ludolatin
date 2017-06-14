@@ -1,10 +1,9 @@
-import datetime
-
-from flask import render_template, session, redirect, url_for
+from flask import render_template
 from flask_login import current_user
 
 from app.dashboard import dashboard
-from app.models import Quiz, Score, Topic
+from app.models import Quiz, Topic
+from app.view_helpers import daily_scores, day_names
 
 
 def _get_user():
@@ -24,32 +23,12 @@ def dashboard():
         topic_progress = "%s" % (float(progress) / topic_size * 100)
         topics = Topic.query.filter_by().all()
 
-        # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
-        daily = Score.\
-            sum_by_day().\
-            filter_by(user=user).\
-            order_by(Score.created_at.desc()).\
-            limit(7).\
-            all()
-
-        # remove the tuple wrappers
-        daily = [int(i[0]) for i in daily]
-        # Pad to seven entries
-        daily += [0] * (7 - len(daily))
-        # most recent last
-        daily.reverse()
-
-        days = ['Tu',  'W', 'Th', 'F', 'Sa', 'Su', 'M']
-        today = datetime.date.today().weekday()
-        # Rotate the array so that today is last
-        days = days[today:] + days[:today]
-
         return render_template(
             'dashboard/dashboard.html',
             title="LudoLatin - Dashboard",
             topic_progress=topic_progress,
-            days=days,
-            daily=daily,
+            day_names=day_names(),
+            daily_scores=daily_scores(),
             topics=topics,
             current_topic=current_topic,
             topic_size=topic_size,

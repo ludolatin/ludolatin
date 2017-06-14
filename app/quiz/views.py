@@ -7,6 +7,7 @@ from sqlalchemy.sql.expression import func
 from app.models import Answer, Sentence, Quiz, User, Score
 from app.quiz import quiz
 from app.quiz.forms import QuizForm
+from app.view_helpers import daily_scores, day_names
 
 
 def _get_user():
@@ -199,34 +200,13 @@ def victory(quiz_id):
     else:
         return redirect(url_for('quiz.ask', id=user.quiz_id))
 
-    # TODO: DRY this x 3 (dashboard/views, store/views, quiz/views)
-    # FIXME: Doesn't account for days with no score.
-    daily = Score. \
-        sum_by_day(). \
-        filter_by(user=_get_user()). \
-        order_by(Score.created_at.desc()). \
-        limit(7). \
-        all()
-
-    # remove the tuple wrappers
-    daily = [int(i[0]) for i in daily]
-    # Pad to seven entries
-    daily += [0] * (7 - len(daily))
-    # most recent last
-    daily.reverse()
-
-    days = ['Tu',  'W', 'Th', 'F', 'Sa', 'Su', 'M']
-    today = datetime.date.today().weekday()
-    # Rotate the array so that today is last
-    days = days[today:] + days[:today]
-
     return render_template(
         'quiz/quiz_victory.html',
         title="LudoLatin - Quiz",
         id=user.quiz_id,
         score=final_score,
-        days=days,
-        daily=daily,
+        day_names=day_names(),
+        daily_scores=daily_scores(),
         current_topic=current_topic,
     )
 

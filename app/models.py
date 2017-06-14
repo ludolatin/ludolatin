@@ -5,7 +5,7 @@ from string import punctuation
 from flask import url_for
 from flask_login import UserMixin, current_user
 from jellyfish import levenshtein_distance
-from sqlalchemy import func
+from sqlalchemy import func, extract
 from sqlalchemy.orm import synonym
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -290,7 +290,11 @@ class Score(db.Model, BaseModel):
 
     @classmethod
     def sum_by_day(cls):
-        return db.session.query(func.sum(cls.score)).group_by(func.date_format(cls.created_at, "%Y-%m-%d"))
+        return db.session.query(cls.created_at, func.sum(cls.score)).group_by(func.date_format(cls.created_at, "%Y-%m-%d"))
+
+    # @classmethod
+    # def sum_by_day(cls):
+    #     return db.session.query(extract('day', Score.created_at).label('d'), func.sum(cls.score)).group_by('d')
 
     def __repr__(self):
         return '<Score: {0}>'.format(self.score)

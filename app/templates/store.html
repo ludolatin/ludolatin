@@ -111,8 +111,8 @@
 </script>
 
 <script>
-  var labels = {{ days|tojson }};
-  var data = {{ daily }};
+  var labels = {{ day_names | tojson }};
+  var data = {{ daily_scores }};
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
