@@ -56,7 +56,7 @@
 
           <p>
             {% if post.summary %}
-              {{ post.summary }}
+              {{ post.summary | markdown }}
             {% endif %}
           </p>
           <hr>
