@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ludolatin import app
 from app import db
 from app import models
-from app.models import User, Sentence, Language, Quiz, Answer, Score, Topic, Product, Purchase
+from app.models import User, Sentence, Quiz, Answer, Score, Topic, Product, Purchase
 
 # output = dump(data, Dumper=Dumper)
 
@@ -21,7 +21,6 @@ def _make_context():
         current_user=User.query.first(),
         User=User,
         Sentence=Sentence,
-        Language=Language,
         Quiz=Quiz,
         Answer=Answer,
         Score=Score,
@@ -84,7 +83,6 @@ def load_sentences():
         topic.save()
 
         for quiz_name, sentences in quiz.items():
-            language = Language.query.filter_by(name="English").first()
             quiz = Quiz(
                 name=quiz_name,
                 topic=topic
@@ -102,7 +100,6 @@ def load_sentences():
                 for latin in translations:
                     l = Sentence(
                         text=latin,
-                        language=Language.query.filter_by(name="Latin").first()
                     )
                     e.translations.append(l)
                     l.translations.append(e)

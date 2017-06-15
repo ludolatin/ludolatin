@@ -33,7 +33,7 @@ def create_app(config_name):
     principal = Principal()
     principal.init_app(app)
 
-    from app.models import User, Answer, Sentence, Language, Quiz, Score, Topic, Product, Purchase
+    from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase
 
     # Flask-Blogging database config
     with app.app_context():
@@ -139,7 +139,6 @@ def create_app(config_name):
 
     # Add administrative views here
     admin.add_view(AuthenticatedModelView(User, db.session))
-    admin.add_view(AuthenticatedModelView(Language, db.session))
     admin.add_view(AuthenticatedModelView(Topic, db.session, endpoint="admin_topic"))
     admin.add_view(AuthenticatedModelView(Quiz, db.session, endpoint="admin_quiz"))
     admin.add_view(AuthenticatedModelView(Sentence, db.session))

@@ -13,7 +13,6 @@ sentence_to_sentence = db.Table(
 class Sentence(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(128))
-    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     answers = db.relationship('Answer', backref='sentence')
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
 
