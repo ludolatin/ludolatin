@@ -68,7 +68,7 @@ def ask(id):
     # If there are no unanswered questions, bump level
     if len(questions) == 0:
         response = make_response(
-            redirect(url_for('quiz.victory', id=id))
+            redirect(url_for('quiz.victory', quiz_id=id))
         )
         response.set_cookie('attempt', '', expires=0)
         return response
