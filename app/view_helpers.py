@@ -3,7 +3,7 @@ import collections
 
 from flask_login import current_user
 
-from app.models import Score
+from app.models import Score, User
 
 
 def day_names():
@@ -33,3 +33,10 @@ def daily_scores():
     daily.reverse()
 
     return daily
+
+
+def leaderboard():
+    winners = User.query.filter(User.total_score > current_user.total_score).order_by(User.total_score).limit(2).all()
+    winners.reverse()
+    losers = User.query.filter(User.total_score < current_user.total_score).order_by(User.total_score.desc()).limit(2).all()
+    return winners + [current_user] + losers

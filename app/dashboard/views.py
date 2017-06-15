@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from app.dashboard import dashboard
 from app.models import Quiz, Topic
-from app.view_helpers import daily_scores, day_names
+from app.view_helpers import daily_scores, day_names, leaderboard
 
 
 def _get_user():
@@ -33,6 +33,7 @@ def dashboard():
             current_topic=current_topic,
             topic_size=topic_size,
             progress=progress,
+            leaderboard=leaderboard(),
         )
     else:
         return render_template(
