@@ -4,10 +4,12 @@ from flask_admin.contrib.sqla import ModelView
 from flask_blogging import SQLAStorage, BloggingEngine
 from flask_login import LoginManager, current_user, login_user
 from flask_migrate import Migrate
-from flask_misaka import Misaka  # Markdown support
+from flask_misaka import Misaka
 from flask_principal import Principal, UserNeed, RoleNeed, identity_loaded
 from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.automap import automap_base
 
 from config import config
 
@@ -51,6 +53,17 @@ def create_app(config_name):
         wrap=True
     )
     misaka.init_app(app)
+
+    # produce our own MetaData object
+    metadata = MetaData()
+
+    # print "CONFIG", app.config['SQLALCHEMY_DATABASE_URI']
+    # automap models for Flask-Blogging tables.
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    metadata.reflect(engine, only=['post'])
+    Base = automap_base(metadata=metadata)
+    Base.prepare()
+    Post = Base.classes.post
 
     # TODO: Move these auth handlers out of __init__.py
     @login_manager.user_loader
@@ -146,5 +159,6 @@ def create_app(config_name):
     admin.add_view(AuthenticatedModelView(Score, db.session))
     admin.add_view(AuthenticatedModelView(Product, db.session))
     admin.add_view(AuthenticatedModelView(Purchase, db.session))
+    admin.add_view(AuthenticatedModelView(Post, db.session, name='Post'))
 
     return app
