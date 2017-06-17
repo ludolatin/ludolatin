@@ -332,3 +332,8 @@ div.error {
     margin-left: 0px;
   }
 }
+
+/* Fix bloackquote font size for article markdown */
+.blockquote {
+    font-size: 0.9rem;
+}
