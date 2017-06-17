@@ -49,7 +49,6 @@
           {% endif %}
           <!-- post tags-->
           {% if post.tags %}
-            <span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
             {% for tag in post.tags %}
               <a class="badge badge-success"
                  href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">

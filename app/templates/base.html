@@ -5,7 +5,9 @@
   <!-- Page head
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   {% block title %}
-  <title>{{ title }}</title>
+  {% if title %}
+    <title>{{ title }}</title>
+  {% endif %}
   {% endblock %}
 
   {% include 'base/head.html' %}

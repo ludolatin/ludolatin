@@ -2,11 +2,16 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <meta charset="utf-8">
 <meta name="description" content="Latin learning app.">
-<meta name="author" content="Dylan Brookes">
 
 <!-- Mobile Specific Metas
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-title" content="LudoLatin">
+<meta name="application-name" content="LudoLatin">
+
+<!-- Custom Metas
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block meta %}{% endblock %}
 
 <!-- Favicon
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -28,6 +33,8 @@
 <!-- LudoLatin CSS stylesheet -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
+<!-- Custom CSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 {% block css %}{% endblock %}
 
 <!-- Scripts
