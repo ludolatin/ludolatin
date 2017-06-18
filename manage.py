@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ludolatin import app
 from app import db
 from app import models
-from app.models import User, Sentence, Quiz, Answer, Score, Topic, Product, Purchase
+from app.models import User, Sentence, Quiz, Answer, Score, Topic, Product, Purchase, Comment
 
 # output = dump(data, Dumper=Dumper)
 
@@ -26,7 +26,8 @@ def _make_context():
         Score=Score,
         Topic=Topic,
         Product=Product,
-        Purchase=Purchase
+        Purchase=Purchase,
+        Comment=Comment,
     )
 
 manager.add_command("shell", Shell(make_context=_make_context))

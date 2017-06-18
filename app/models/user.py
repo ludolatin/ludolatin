@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .base_model import BaseModel
 from .score import Score
+from .comment import Comment
 from app import db
 
 
@@ -47,6 +48,8 @@ class User(UserMixin, db.Model, BaseModel):
     streak_start_date = db.Column(db.DateTime)
 
     answers = db.relationship('Answer', backref='user')
+
+    comments = db.relationship('Comment', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

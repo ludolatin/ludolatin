@@ -35,7 +35,7 @@ def create_app(config_name):
     principal = Principal()
     principal.init_app(app)
 
-    from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase
+    from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment
 
     # Flask-Blogging database config
     with app.app_context():
@@ -55,10 +55,11 @@ def create_app(config_name):
     misaka.init_app(app)
 
     # produce our own MetaData object
-    metadata = MetaData()
+
 
     # print "CONFIG", app.config['SQLALCHEMY_DATABASE_URI']
     # automap models for Flask-Blogging tables.
+    metadata = MetaData()
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     metadata.reflect(engine, only=['post'])
     Base = automap_base(metadata=metadata)
@@ -160,5 +161,6 @@ def create_app(config_name):
     admin.add_view(AuthenticatedModelView(Product, db.session))
     admin.add_view(AuthenticatedModelView(Purchase, db.session))
     admin.add_view(AuthenticatedModelView(Post, db.session, name='Post'))
+    admin.add_view(AuthenticatedModelView(Comment, db.session))
 
     return app

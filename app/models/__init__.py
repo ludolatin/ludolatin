@@ -6,3 +6,4 @@ from .quiz import Quiz
 from .score import Score
 from .product import Product
 from .purchase import Purchase
+from .comment import Comment
