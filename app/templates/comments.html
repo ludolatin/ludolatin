@@ -7,9 +7,15 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
       integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
       crossorigin="anonymous">
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-<form class="form-comment" method=post>
+<form id="commentform" class="form-comment" method=post>
   {{ form.hidden_tag() }}
 
   {% if comments | count == 0 %}
@@ -18,27 +24,34 @@
     {% set placeholder = "Enter your comment" %}
   {% endif %}
 
-<div class="d-flex">
-  {{ form.body(
-    class="form-control",
-    style="width: 100%",
-    id="comment",
-    type="text",
-    autocomplete="off",
-    placeholder=placeholder,
-    value="",
-    maxlength=1024,
-  ) }}
-  {% if form.errors %}
-    {% for field, errors in form.errors.items(): %}
-      {% for error in errors: %}
-        <div class="has-error"><strong>{{ error }}</strong></div>
+  <div class="d-flex">
+    {{ form.body(
+      class="form-control",
+      style="width: 100%",
+      id="comment",
+      type="text",
+      autocomplete="off",
+      placeholder=placeholder,
+      value="",
+      maxlength=1024,
+    ) }}
+    {% if form.errors %}
+      {% for field, errors in form.errors.items(): %}
+        {% for error in errors: %}
+          <div class="has-error"><strong>{{ error }}</strong></div>
+        {% endfor %}
       {% endfor %}
-    {% endfor %}
-  {% endif %}
-  {{ form.submit(class="btn btn-success ml-1", role="button") }}
-</div>
+    {% endif %}
+
+    <input class="btn btn-success ml-1 g-recaptcha"
+           role="button"
+           type="submit"
+           value="Submit"
+           data-sitekey="6Lcx8yUUAAAAAHSCrdkIZAS8XABZ-d9wT7KSFJTJ"
+           data-callback="submitForm">
+  </div>
 </form>
+
   {% for comment in comments %}
     <hr>
     <div class="media">
@@ -52,4 +65,14 @@
 
 </body>
 
+<script>
+$(document).ready(function() {
+  $('input[type=text]:first').focus();
+});
+
+function submitForm()
+{
+  document.getElementById("commentform").submit();
+}
+</script>
 </html>

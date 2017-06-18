@@ -30,6 +30,15 @@ class Config(object):
     FILEUPLOAD_PREFIX = "/fileupload"
     FILEUPLOAD_ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 
+    # Recaptcha
+    RECAPTCHA_ENABLED = True
+    RECAPTCHA_SITE_KEY = "6Lcx8yUUAAAAAHSCrdkIZAS8XABZ-d9wT7KSFJTJ"
+    RECAPTCHA_SECRET_KEY = os.environ.get('RECAPTCHA_SECRET')
+    RECAPTCHA_THEME = "dark"
+    RECAPTCHA_TYPE = "invisible"
+    RECAPTCHA_SIZE = "compact"
+    RECAPTCHA_RTABINDEX = 10
+
     @staticmethod
     def init_app(app):
         pass
