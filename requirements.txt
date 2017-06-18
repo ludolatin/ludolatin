@@ -19,3 +19,4 @@ jellyfish==0.5.6
 ruamel.ordereddict==0.4.9
 ruamel.yaml==0.14.6
 bleach==2.0.0
+markdown-nofollow==0.2.0

@@ -2,6 +2,7 @@ from datetime import datetime
 
 import bleach
 from markdown import markdown
+from markdown_nofollow import NofollowExtension
 
 from app import db
 from ._base_model import BaseModel
@@ -23,7 +24,7 @@ class Comment(db.Model, BaseModel):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i',
                         'strong']
         target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
+            markdown(value, output_format='html', extensions=[NofollowExtension()]),
             tags=allowed_tags, strip=True))
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
