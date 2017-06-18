@@ -1,5 +1,5 @@
 from flask_login import current_user
-from .base_model import BaseModel
+from ._base_model import BaseModel
 from app import db
 
 

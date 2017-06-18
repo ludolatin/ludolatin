@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import func
 
-from .base_model import BaseModel
+from ._base_model import BaseModel
 from app import db
 
 

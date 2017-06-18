@@ -4,7 +4,7 @@ import bleach
 from markdown import markdown
 
 from app import db
-from .base_model import BaseModel
+from ._base_model import BaseModel
 
 
 class Comment(db.Model, BaseModel):

@@ -54,22 +54,28 @@ def create_app(config_name):
     )
     misaka.init_app(app)
 
-    # produce our own MetaData object
-
-
-    # print "CONFIG", app.config['SQLALCHEMY_DATABASE_URI']
-    # automap models for Flask-Blogging tables.
+    # automap Post model for Flask-Blogging tables.
     metadata = MetaData()
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     metadata.reflect(engine, only=['post'])
     Base = automap_base(metadata=metadata)
     Base.prepare()
     Post = Base.classes.post
+    app.Post = Base.classes.post
+
+    from wtforms.fields import HiddenField
+
+    def is_hidden_field_filter(field):
+        return isinstance(field, HiddenField)
+
+    app.jinja_env.globals['bootstrap_is_hidden_field'] = \
+        is_hidden_field_filter
 
     # TODO: Move these auth handlers out of __init__.py
     @login_manager.user_loader
     @blog_engine.user_loader
     def load_user(user_id):
+        print "ID: ", user_id
         return User.query.get(int(user_id))
 
     @login_manager.unauthorized_handler
@@ -122,6 +128,9 @@ def create_app(config_name):
 
     from .misc import misc as misc_blueprint
     app.register_blueprint(misc_blueprint)
+
+    from .comments import comments as comments_blueprint
+    app.register_blueprint(comments_blueprint)
 
     class AuthenticatedAdminIndex(AdminIndexView):
         @expose('/')

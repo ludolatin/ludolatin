@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from .base_model import BaseModel
+from ._base_model import BaseModel
 from app import db
 
 # user_item = db.Table(

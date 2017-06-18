@@ -1,0 +1,55 @@
+<html>
+<head>
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- Bootstrap 4 alpha -->
+  <link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+      integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+      crossorigin="anonymous">
+</head>
+<body>
+<form class="form-comment" method=post>
+  {{ form.hidden_tag() }}
+
+  {% if comments | count == 0 %}
+    {% set placeholder = "Be the first to comment!" %}
+  {% else %}
+    {% set placeholder = "Enter your comment" %}
+  {% endif %}
+
+<div class="d-flex">
+  {{ form.body(
+    class="form-control",
+    style="width: 100%",
+    id="comment",
+    type="text",
+    autocomplete="off",
+    placeholder=placeholder,
+    value="",
+    maxlength=1024,
+  ) }}
+  {% if form.errors %}
+    {% for field, errors in form.errors.items(): %}
+      {% for error in errors: %}
+        <div class="has-error"><strong>{{ error }}</strong></div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+  {{ form.submit(class="btn btn-success ml-1", role="button") }}
+</div>
+</form>
+  {% for comment in comments %}
+    <hr>
+    <div class="media">
+      <img class="d-flex mr-3" src="/static/images/profile-default.png" width="60" height="60" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0">{{ comment.user.username }}</h5>
+        {{ comment.body_html }}
+      </div>
+    </div>
+  {% endfor %}
+
+</body>
+
+</html>

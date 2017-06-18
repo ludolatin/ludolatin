@@ -50,7 +50,7 @@
   <div class="row">
     <div class="text-center offset-md-1 col-md-10">
       Posted by
-      <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}">
+      <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id) }}">
         <em>{{ post.user_name }}</em>
       </a>
       on {{ post.post_date.strftime('%d %b, %Y') }}
@@ -68,10 +68,13 @@
   <div class="row">
     <div class="offset-md-2 col-md-8">
       {{ post.rendered_text | safe }}
+      <hr>
+      <iframe src="/comments/{{ post.post_id }}" style="width: 100%; height: 100%" frameborder="0"></iframe>
       {% include 'blogging/social.html' %}
     </div>
   </div>
 </div>
+
 {% endblock content %}
 
 {% block js %}

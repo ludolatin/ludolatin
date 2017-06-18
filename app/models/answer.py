@@ -4,7 +4,7 @@ from string import punctuation
 
 from jellyfish import levenshtein_distance
 
-from .base_model import BaseModel
+from ._base_model import BaseModel
 from app import db
 
 
