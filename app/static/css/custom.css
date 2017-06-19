@@ -333,7 +333,15 @@ div.error {
   }
 }
 
-/* Fix bloackquote font size for article markdown */
+/* Fix blockquote font size for article markdown */
 .blockquote {
     font-size: 0.9rem;
+}
+
+.orange {
+  color: #ffbe46
+}
+
+.gray {
+  color: #999
 }

@@ -23,6 +23,11 @@ def dashboard():
         topic_progress = "%s" % (float(progress) / topic_size * 100)
         topics = Topic.query.filter_by().all()
 
+        if current_user.last_score_age and current_user.streak:
+            streak_time_left = 36 - current_user.last_score_age
+        else:
+            streak_time_left = 36
+
         return render_template(
             'dashboard/dashboard.html',
             title="LudoLatin - Dashboard",
@@ -34,6 +39,7 @@ def dashboard():
             topic_size=topic_size,
             progress=progress,
             leaderboard=leaderboard(),
+            streak_time_left=streak_time_left,
         )
     else:
         return render_template(
