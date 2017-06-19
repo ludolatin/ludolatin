@@ -9,7 +9,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md card mb-5 px-0">
+    <div class="col-md card px-0">
       <div class="card-block">
         <div class="d-flex flex-row">
           <div>
@@ -55,6 +55,8 @@
       </div>
     </div><!-- /.main -->
 
+    <div>&nbsp;</div> <!-- separate the columns when stacked -->
+
     <div class="offset-md-1 col-md" style="padding: 0">
       <div class="card card-block">
         <h4 class="card-title">Progress</h4>
@@ -90,7 +92,7 @@
       </div>
 
       {% if current_user.username == None %}
-        <div class="card card-block mt-5">
+        <div class="card card-block mt-4">
           <h4 class="card-title">Sign up</h4>
           <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress.</h6>
           <a class="btn btn-lg btn-success mb-2"
@@ -115,20 +117,20 @@
              class="btn btn-info"
              role="button"
              aria-pressed="true"
-             style="background-color: #4099ff; border-color: #4099ff;">
+             style="background-color: #4099ff; border-color: #4099ff; width: 60px">
               <i class="fa fa-twitter" aria-hidden="true"></i>
           </a>
           <a href="https://www.facebook.com/LudoLatin-470881296588449"
              class="btn btn-info"
              role="button"
              aria-pressed="true"
-             style="background-color: #3b5998; border-color: #3b5998;">
+             style="background-color: #3b5998; border-color: #3b5998; width: 60px">
               <i class="fa fa-facebook" aria-hidden="true"></i>
           </a>
           <a href="https://github.com/merelinguist/ludolatin"
              class="btn btn-info"
              role="button" aria-pressed="true"
-             style="background-color: #24292e; border-color: #24292e;">
+             style="background-color: #24292e; border-color: #24292e; width: 60px">
             <i class="fa fa-github" aria-hidden="true"></i>
           </a>
         </div>
