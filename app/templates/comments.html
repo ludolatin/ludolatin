@@ -7,6 +7,9 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
       integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
       crossorigin="anonymous">
+  <style>
+    .hidden { display: none; }
+  </style>
   <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -14,43 +17,59 @@
         crossorigin="anonymous"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
-<body>
-<form id="commentform" class="form-comment" method=post>
-  {{ form.hidden_tag() }}
-
-  {% if comments | count == 0 %}
+<div>
+{% if comments | count == 0 %}
     {% set placeholder = "Be the first to comment!" %}
   {% else %}
     {% set placeholder = "Enter your comment" %}
   {% endif %}
+{% if current_user.username != None %}
+  <form id="commentform" class="form-comment" method=post>
+    {{ form.hidden_tag() }}
 
-  <div class="d-flex">
-    {{ form.body(
-      class="form-control",
-      style="width: 100%",
-      id="comment",
-      type="text",
-      autocomplete="off",
-      placeholder=placeholder,
-      value="",
-      maxlength=1024,
-    ) }}
-    {% if form.errors %}
-      {% for field, errors in form.errors.items(): %}
-        {% for error in errors: %}
-          <div class="has-error"><strong>{{ error }}</strong></div>
-        {% endfor %}
-      {% endfor %}
+    {% if comments | count == 0 %}
+      {% set placeholder = "Be the first to comment!" %}
+    {% else %}
+      {% set placeholder = "Enter your comment" %}
     {% endif %}
 
-    <input class="btn btn-success ml-1 g-recaptcha"
-           role="button"
-           type="submit"
-           value="Submit"
-           data-sitekey="6Lcx8yUUAAAAAHSCrdkIZAS8XABZ-d9wT7KSFJTJ"
-           data-callback="submitForm">
+    <div class="d-flex">
+      {{ form.body(
+        class="form-control",
+        style="width: 100%",
+        id="comment",
+        type="text",
+        autocomplete="off",
+        placeholder=placeholder,
+        value="",
+        maxlength=1024,
+      ) }}
+      {% if form.errors %}
+        {% for field, errors in form.errors.items(): %}
+          {% for error in errors: %}
+            <div class="has-error"><strong>{{ error }}</strong></div>
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
+
+      <input class="btn btn-success ml-1 g-recaptcha"
+             role="button"
+             type="submit"
+             value="Submit"
+             data-sitekey="6Lcx8yUUAAAAAHSCrdkIZAS8XABZ-d9wT7KSFJTJ"
+             data-callback="submitForm">
+    </div>
+  </form>
+{% else %}
+  <div class="alert alert-danger hidden" role="alert" id="loginError">
+    <strong>Oh snap!</strong> <a href="/auth/login" class="alert-link">Login</a> or <a href="/auth/login" class="alert-link">register</a> and try submitting again.
   </div>
-</form>
+
+  <div class="d-flex">
+    <input type="text" id="disabledTextInput" style="width: 100%" class="form-control" placeholder="Enter your comment">
+    <button type="button" class="btn btn-success ml-1" id ="noSubmit">Submit</button>
+  </div>
+{% endif %}
 
   {% for comment in comments %}
     <hr>
@@ -74,5 +93,19 @@ function submitForm()
 {
   document.getElementById("commentform").submit();
 }
+
+$( "#noSubmit" ).click(function() {
+  $('#loginError').removeClass('hidden');
+});
 </script>
+
+{% if current_user.username == None %}
+  <script>
+    $(document).keypress(function(e) {
+      if(e.which == 13) {
+        p$('#loginError').removeClass('hidden');
+      }
+    });
+  </script>
+{% endif %}
 </html>
