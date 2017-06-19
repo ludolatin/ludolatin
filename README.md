@@ -56,11 +56,11 @@ As a shortcut you can run the following:
 source setup
 ```
 
-In production you also need to crease the following environment variables: 
+In production you also need to create the following environment variables: 
 ```
 FLASK_ENV=production
-DATABASE_USERNAME='someone',
-DATABASE_PASSWORD='something'
+DATABASE_USERNAME='<someone>',
+DATABASE_PASSWORD='<something>'
 
 ```
 
@@ -80,7 +80,7 @@ sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
 
 If you don't know where that file is, run: 
 ```
-/usr/sbin/mysqld --verbose --help | grep -A 1 "Default options"
+mysqld --verbose --help | grep -A 1 "Default options"
 ```
 
 then check each location in turn.
@@ -89,6 +89,11 @@ The error that you'll see without this is:
 ```
 sqlalchemy.exc.ProgrammingError
 ProgrammingError: (mysql.connector.errors.ProgrammingError) 1055 (42000): Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'ingenuity_dev.score.created_at' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by [SQL: u'SELECT sum(score.score) AS sum_1 \nFROM score \nWHERE %(param_1)s = score.user_id GROUP BY date_format(score.created_at, %(date_format_1)s) ORDER BY score.created_at DESC \n LIMIT %(param_2)s'] [parameters: {u'date_format_1': '%Y-%m-%d', u'param_1': 18, u'param_2': 7}]
+```
+
+To run mysql without starting it at boot, run:
+```
+mysql.server start
 ```
 
 Full details on [SitePoint](https://www.sitepoint.com/quick-tip-how-to-permanently-change-sql-mode-in-mysql/).
@@ -105,16 +110,6 @@ Finally, create the migrations and initialise the database with:
 
 ```
 flask db init
-```
-
-Edit `migrations/alembic.ini` and add the following lines::
-```
-# Exclude flask-blogging tables from migrations
-[alembic:exclude]
-tables = tag, post, tag_posts, user_posts
-```
-Then:
-```
 flask db migrate
 flask db upgrade
 ```
