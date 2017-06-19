@@ -34,9 +34,13 @@ manager.add_command("shell", Shell(make_context=_make_context))
 
 
 @manager.command
-def users():
-    """List all users"""
-    print User.query.all()
+def db_meta():
+    """Show database tables metadata"""
+    print db
+    for table in db.metadata.sorted_tables:
+        print "\n", table.name, ":"
+        for column in table.columns:
+            print column.name, ":", column.type
 
 
 @manager.command
@@ -56,19 +60,10 @@ def add_admin():
     print  "promote an existing user to admin, then delete this temporary admin user.\n"
 
 
-def initialise_languages():
-    """Initialise languages"""
-
-    languages = ["English", "Latin"]
-
-    for language in languages:
-        l = (Language.query.filter_by(name=language).first() or Language(
-                name=language,
-            )
-        )
-
-        db.session.add(l)
-        db.session.commit()
+@manager.command
+def show_users():
+    """List all users"""
+    print User.query.all()
 
 
 @manager.command
@@ -94,7 +89,6 @@ def load_sentences():
             for english, translations in sentences.items():
                 e = Sentence(
                     text=english,
-                    language=language,
                     quiz=quiz
                 )
 
@@ -108,53 +102,26 @@ def load_sentences():
                 db.session.add(e)
                 db.session.commit()
 
-
 @manager.command
-def load_data():
-    """ Initialise languages, Load sentence data"""
-    initialise_languages()
-    load_sentences()
-    dump_data()
-
-
-@manager.command
-def dump_data():
-    """Output the content of the English / Latin tables as YAML"""
-    topics = Topic.query.all()
-    quizzes = Quiz.query.all()
-
-    print topics
-    print quizzes
-
-    for quiz in quizzes:
-        english_sentences = Sentence.query.join(Sentence.language, Sentence.quiz).\
-            filter(Language.name == "English", Quiz.name == quiz.name).all()
-        print quiz.name + ":"
-        for sentence in english_sentences:
-            print "  " + sentence.text + ":"
-            for latin in sentence.translations:
-                print "    - " + latin.text
-
-
-@manager.command
-def delete_data():
-    """Delete the content of the English / Latin tables"""
-    if prompt_bool("Are you sure you want to delete all English and Latin phrases?"):
+def delete_sentences():
+    """Delete the content of Sentence table"""
+    if prompt_bool("Are you sure you want to delete all Sentences?"):
         Sentence.query.delete()
 
-        # Delete contents of the (Model-less) association table
-       # db.session.query(sentence_to_sentence).delete()
-       # db.session.commit()
-    dump_data()
-
 
 @manager.command
-def db_meta():
-    print db
-    for table in db.metadata.sorted_tables:
-        print "\n", table.name, ":"
-        for column in table.columns:
-            print column.name, ":", column.type
+def load_lessons():
+    """Load the content of products.yml into the Product table"""
+    yaml = open('data/lessons.yml')
+    data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
+    print data
+
+    for topic_name, text in data.items():
+        topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
+        print topic
+
+        topic.text = unicode(text)
+        topic.save()
 
 
 @manager.command
@@ -175,19 +142,29 @@ def load_products():
 
         product.save()
 
+
 @manager.command
-def load_lessons():
-    """Load the content of products.yml into the Product table"""
-    yaml = open('data/lessons.yml')
-    data = ruamel.yaml.load(yaml, ruamel.yaml.RoundTripLoader)
-    print data
+def delete_data():
+    """Delete the content of the Product table"""
+    if prompt_bool("Are you sure you want to delete all Products?"):
+        Product.query.delete()
 
-    for topic_name, text in data.items():
-        topic = (Topic.query.filter_by(name=topic_name).first() or Topic(name=topic_name))
-        print topic
 
-        topic.text = unicode(text)
-        topic.save()
+@manager.command
+def load_data():
+    """Load sentence data"""
+    load_sentences()
+    load_lessons()
+    load_products()
+
+
+@manager.command
+def delete_data():
+    """Delete the content of Sentence and Product tables"""
+    if prompt_bool("Are you sure you want to delete all Sentences and Products?"):
+        Sentence.query.delete()
+        Product.query.delete()
+
 
 if __name__ == "__main__":
     manager.run()
