@@ -1,10 +1,10 @@
 <p class="small text-center" id="post-share-links">
   &nbsp;Share on:
-  <a href="http://twitter.com/home?status={{post.title | urlencode}}%20{{request.url | urlencode}}%20%23LudoLatin%20%40ludolatin" target="_blank" title="Share on Twitter">Twitter</a>
+  <a href="http://twitter.com/home?status={{post.title | urlencode}}%20{{request.url | urlencode}}%3Futm_source=twitter%20%23LudoLatin%20%40ludolatin" target="_blank" title="Share on Twitter">Twitter</a>
   /
-  <a href="http://www.facebook.com/sharer/sharer.php?u={{request.url | urlencode}}" target="_blank" title="Share on Facebook">Facebook</a>
+  <a href="http://www.facebook.com/sharer/sharer.php?u={{request.url | urlencode}}%3Futm_source=facebook" target="_blank" title="Share on Facebook">Facebook</a>
   /
-  <a href="https://plus.google.com/share?url={{request.url | urlencode}}" target="_blank" title="Share on Google Plus">Google+</a>
+  <a href="https://plus.google.com/share?url={{request.url | urlencode}}%3Futm_source=google%2B" target="_blank" title="Share on Google Plus">Google+</a>
   /
-  <a href="mailto:?subject={{post.title}}&amp;body={{request.url}}" target="_blank" title="Share via Email">Email</a>
+  <a href="mailto:?subject={{post.title}}&amp;body={{request.url}}?utm_source=email-share" target="_blank" title="Share via Email">Email</a>
 </p>
