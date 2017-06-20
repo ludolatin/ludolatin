@@ -9,144 +9,20 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md card px-0">
-      <div class="card-block" style="flex: initial;">
-        <div class="d-flex flex-row">
-          <div>
-            <h4 class="card-title">Latin skills</h4>
-            <h6 class="card-subtitle text-muted">
-              Select a topic to improve your Latin skills. Further topics unlock as you complete them.
-            </h6>
-          </div>
-          <div class="ml-auto"><a href="/store" class="btn btn-sm btn-success">Visit Store</a></div>
-        </div>
-      </div>
-      <div class="card-block text-center">
-      {% for topic in topics %}
-        {% if topic.id < current_topic.id %}
-          <div class="mb-3">
-            <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
-              <div width="32" height="32" class="topicPieComplete"></div>
-              <br>
-              {{ current_topic.name }}
-            </a>
-          </div>
-        {% elif topic == current_topic %}
-          <div class="mb-3">
-            <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
-              <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
-              <svg class="topicPieContainer" viewBox="0 0 32 32">
-                <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />
-              </svg>
-              <br>
-              {{ topic.name }}
-              <br>
-              ({{ progress }} / {{ topic_size }})
-            </a>
-          </div>
-        {% elif topic.id > current_topic.id %}
-          <div class="mb-3">
-            <div width="32" height="32" class="topicPieLocked"></div>
-            <br>
-            {{ topic.name }}
-            <br>
-            (0 / {{ topic.quizzes | length }})
-          </div>
-        {% endif %}
-      {% endfor %}
-      </div>
+    <div class="col-md card px-0"><!-- /.main -->
+      {% include 'dashboard/_topics.html' %}
     </div><!-- /.main -->
 
     <div>&nbsp;</div> <!-- separate the columns when stacked -->
 
-    <div class="offset-md-1 col-md" style="padding: 0">
-      <div class="card card-block">
-        <h4 class="card-title">Progress</h4>
-        <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
-        <div class="d-flex justify-content-around mt-2">
-          <div class="d-flex flex-column">
-            <h1 class="orange">{{ current_user.streak }}</h1>
-            <h6 class="gray">day streak</h6>
-          </div>
-           <div class="d-flex flex-column">
-            <h1 class="orange">{{ streak_time_left }}</h1>
-            <h6 class="gray">hours left</h6>
-          </div>
-        </div>
-        <div class="dashboardXPChartContainer">
-          <canvas id="xpChart" width="300" height="225"></canvas>
-        </div>
-      </div>
+    <div class="offset-md-1 col-md" style="padding: 0"> <!-- .sidebar -->
+      {% include 'dashboard/_progress_chart.html' %}
 
-      <div class="card card-block mt-4">
-        <h4 class="card-title">Leaderboard</h4>
-        <h6 class="card-subtitle mb-3 text-muted">Check your progress against your nearest competitors.</h6>
-        <ul class="list-group">
-          {% for user in leaderboard %}
-            <li class="list-group-item"
-              {% if user == current_user %}
-                style="background-color: rgba(32,168,233,0.8); color: white"
-              {% endif %}
-            >
-              <span class="ml-5">
-                {% if user == current_user %}
-                  <strong>{{ user.username or "Guest"}}</strong>
-                {% else %}
-                  {{ user.username or "Guest"}}
-                {% endif %}
-              </span>
-              <span class="ml-auto mr">{{ user.total_score }}</span>
-              <img src="/static/images/aureus_small.png" alt="Roman coin"
-                   class="ml-1 mr-5" style="width:20px; height:20px;">
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
+      {% include 'dashboard/_leaderboard.html' %}
 
-      {% if current_user.username == None %}
-        <div class="card card-block mt-4">
-          <h4 class="card-title">Sign up</h4>
-          <h6 class="card-subtitle mb-3 text-muted">Create a profile to save your progress.</h6>
-          <a class="btn btn-lg btn-success mb-2"
-             href="{{ url_for('auth.register') }}"
-             role="button"
-          >
-            Create a profile
-          </a>
-          <a class="btn btn-lg btn-primary"
-             href="{{ url_for('auth.login') }}"
-             role="button"
-          >
-            Sign in
-          </a>
-        </div>
-      {% endif %}
-      <div class="card card-block mt-4">
-        <h4 class="card-title">Follow LudoLatin</h4>
-        <h6 class="card-subtitle mb-3 text-muted">Stay up to date with our latest posts.</h6>
-        <div class="d-flex flex-row justify-content-around">
-          <a href="https://twitter.com/intent/user?screen_name=LudoLatin"
-             class="btn btn-info"
-             role="button"
-             aria-pressed="true"
-             style="background-color: #4099ff; border-color: #4099ff; width: 60px">
-              <i class="fa fa-twitter" aria-hidden="true"></i>
-          </a>
-          <a href="https://www.facebook.com/LudoLatin-470881296588449"
-             class="btn btn-info"
-             role="button"
-             aria-pressed="true"
-             style="background-color: #3b5998; border-color: #3b5998; width: 60px">
-              <i class="fa fa-facebook" aria-hidden="true"></i>
-          </a>
-          <a href="https://github.com/merelinguist/ludolatin"
-             class="btn btn-info"
-             role="button" aria-pressed="true"
-             style="background-color: #24292e; border-color: #24292e; width: 60px">
-            <i class="fa fa-github" aria-hidden="true"></i>
-          </a>
-        </div>
-      </div>
+      {% include 'dashboard/_account.html' %}
+
+      {% include 'dashboard/_social.html' %}
     </div><!-- /.sidebar -->
   </div><!-- /.row -->
 </div><!-- /.container -->

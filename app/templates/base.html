@@ -10,11 +10,11 @@
   {% endif %}
   {% endblock %}
 
-  {% include 'base/head.html' %}
+  {% include 'base/_head.html' %}
 
   <!-- Analytics
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  {% include 'base/analytics.html'%}
+  {% include 'base/_analytics.html'%}
 
 </head>
 
@@ -23,40 +23,20 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
 
-    <!-- Navigation
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    {% include 'base/navigation.html' %}
 
-    <!-- Flash Messages
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    {% include 'base/flash.html' %}
+    {% include 'base/_navigation.html' %}
 
-     <!-- Main content
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    {% include 'base/_flash.html' %}
+
     {% block content %}{% endblock %}
 
-    <footer class="footer text-center mt-4 mb-4">
-      <small>
-        &copy; LudoLatin 2017 |
-        <a href="/terms" title="Terms of Use">Terms of Use</a> |
-        <a href="/privacy" title="Privacy Policy">Privacy Policy</a> |
-        <a href="/contact" title="Contact">Contact</a> |
-        <a href="https://twitter.com/intent/user?screen_name=LudoLatin">
-            <i class="fa fa-twitter" aria-hidden="true"></i>
-        </a> |
-        <a href="https://www.facebook.com/LudoLatin-470881296588449">
-            <i class="fa fa-facebook" aria-hidden="true"></i>
-        </a> |
-        <a href="https://github.com/merelinguist/ludolatin">
-          <i class="fa fa-github" aria-hidden="true"></i>
-        </a>
-      </small>
-    </footer>
+    {% include 'base/_footer.html' %}
+
   </div> <!-- /container -->
 
   <!-- Custom JS to load after page
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  {% include 'base/js.html' %}
+  {% include 'base/_js.html' %}
   {% block js %}{% endblock %}
 
 </body>

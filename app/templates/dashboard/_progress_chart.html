@@ -1,0 +1,17 @@
+<div class="card card-block">
+  <h4 class="card-title">Progress</h4>
+  <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
+  <div class="d-flex justify-content-around mt-2">
+    <div class="d-flex flex-column">
+      <h1 class="orange">{{ current_user.streak }}</h1>
+      <h6 class="gray">day streak</h6>
+    </div>
+     <div class="d-flex flex-column">
+      <h1 class="orange">{{ streak_time_left }}</h1>
+      <h6 class="gray">hours left</h6>
+    </div>
+  </div>
+  <div class="dashboardXPChartContainer">
+    <canvas id="xpChart" width="300" height="225"></canvas>
+  </div>
+</div>

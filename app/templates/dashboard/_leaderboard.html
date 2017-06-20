@@ -1,0 +1,24 @@
+<div class="card card-block mt-4">
+  <h4 class="card-title">Leaderboard</h4>
+  <h6 class="card-subtitle mb-3 text-muted">Check your progress against your nearest competitors.</h6>
+  <ul class="list-group">
+    {% for user in leaderboard %}
+      <li class="list-group-item"
+        {% if user == current_user %}
+          style="background-color: rgba(32,168,233,0.8); color: white"
+        {% endif %}
+      >
+        <span class="ml-5">
+          {% if user == current_user %}
+            <strong>{{ user.username or "Guest"}}</strong>
+          {% else %}
+            {{ user.username or "Guest"}}
+          {% endif %}
+        </span>
+        <span class="ml-auto mr">{{ user.total_score }}</span>
+        <img src="/static/images/aureus_small.png" alt="Roman coin"
+             class="ml-1 mr-5" style="width:20px; height:20px;">
+      </li>
+    {% endfor %}
+  </ul>
+</div>
