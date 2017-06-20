@@ -8,16 +8,16 @@
           style="background-color: rgba(32,168,233,0.8); color: white"
         {% endif %}
       >
-        <span class="ml-5">
+        <span class="ml-4 mr-auto">
           {% if user == current_user %}
             <strong>{{ user.username or "Guest"}}</strong>
           {% else %}
             {{ user.username or "Guest"}}
           {% endif %}
         </span>
-        <span class="ml-auto mr">{{ user.total_score }}</span>
+        <span class=" ">{{ user.total_score }}</span>
         <img src="/static/images/aureus_small.png" alt="Roman coin"
-             class="ml-1 mr-5" style="width:20px; height:20px;">
+             class="ml-1 mr-4" style="width:20px; height:20px;">
       </li>
     {% endfor %}
   </ul>
