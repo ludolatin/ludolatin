@@ -10,7 +10,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md card px-0">
-      <div class="card-block">
+      <div class="card-block" style="flex: initial;">
         <div class="d-flex flex-row">
           <div>
             <h4 class="card-title">Latin skills</h4>
@@ -24,7 +24,7 @@
       <div class="card-block text-center">
       {% for topic in topics %}
         {% if topic.id < current_topic.id %}
-          <div class="card-block">
+          <div class="mb-3">
             <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
               <div width="32" height="32" class="topicPieComplete"></div>
               <br>
@@ -32,7 +32,7 @@
             </a>
           </div>
         {% elif topic == current_topic %}
-          <div class="card-block">
+          <div class="mb-3">
             <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
               <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
               <svg class="topicPieContainer" viewBox="0 0 32 32">
@@ -40,15 +40,17 @@
               </svg>
               <br>
               {{ topic.name }}
-              {{ progress }} / {{ topic_size }}
+              <br>
+              ({{ progress }} / {{ topic_size }})
             </a>
           </div>
         {% elif topic.id > current_topic.id %}
-          <div class="card-block">
+          <div class="mb-3">
             <div width="32" height="32" class="topicPieLocked"></div>
             <br>
             {{ topic.name }}
-            0 / {{ topic.quizzes|length }}
+            <br>
+            (0 / {{ topic.quizzes | length }})
           </div>
         {% endif %}
       {% endfor %}
@@ -61,7 +63,7 @@
       <div class="card card-block">
         <h4 class="card-title">Progress</h4>
         <h6 class="card-subtitle mb-2 text-muted">Learning a language requires practice every day.</h6>
-        <div class="d-flex justify-content-sm-around mt-2">
+        <div class="d-flex justify-content-around mt-2">
           <div class="d-flex flex-column">
             <h1 class="orange">{{ current_user.streak }}</h1>
             <h6 class="gray">day streak</h6>
