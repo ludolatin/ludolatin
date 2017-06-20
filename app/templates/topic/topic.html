@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .topicPie {
+    stroke-dasharray: {{ topic_progress }} 100;
+  }
+  table {
+    margin-bottom: 20px;
+  }
+  td {
+    padding-right: 10px;
+}
+  hr {
+    border: 0;
+    width: 95%;
+    background-color:#DDDDDD;
+    height: 2px;
+    margin-top: 0px;
+  }
+</style>
+
+<div class="row">
+
+  <div class="col-lg-8 card mx-3 px-0"><!-- .main -->
+    {% include 'topic/_quizzes.html' %}
+    {% if topic.text is not none %}
+      <hr>
+      <div class="card-block">{{ topic.text | markdown }}</div>
+    {% endif %}
+  </div><!-- /.main -->
+
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+
+  <div class="col mx-3 px-0"><!-- .sidebar -->
+    {% include 'topic/_topic_progress.html' %}
+    {% include 'common/_account.html' %}
+    {% include 'topic/_recover_streak.html' %}
+  </div><!-- /.sidebar -->
+</div><!-- /.row -->
+{% endblock %}

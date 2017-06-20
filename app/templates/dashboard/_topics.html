@@ -9,7 +9,7 @@
     <div class="ml-auto"><a href="/store" class="btn btn-sm btn-success">Visit Store</a></div>
   </div>
 </div>
-<div class="card-block text-center">
+<div class="card-block d-flex flex-row flex-wrap justify-content-around text-center">
 {% for topic in topics %}
   {% if topic.id < current_topic.id %}
     <div class="mb-3">
@@ -29,7 +29,7 @@
         <br>
         {{ topic.name }}
         <br>
-        ({{ progress }} / {{ topic_size }})
+        <span class="gray">({{ progress }} / {{ topic_size }})</span>
       </a>
     </div>
   {% elif topic.id > current_topic.id %}
@@ -38,7 +38,7 @@
       <br>
       {{ topic.name }}
       <br>
-      (0 / {{ topic.quizzes | length }})
+      <span class="gray">(0 / {{ topic.quizzes | length }})</span>
     </div>
   {% endif %}
 {% endfor %}

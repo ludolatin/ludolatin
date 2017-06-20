@@ -22,7 +22,7 @@ def topic(topic_id):
     recovery = Product.query.filter_by(name="Streak recovery").first()
 
     return render_template(
-        'topic.html',
+        'topic/topic.html',
         title="LudoLatin - Topic",
         topic=current_topic,
         topic_progress=topic_progress,

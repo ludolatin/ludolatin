@@ -7,25 +7,20 @@
   }
 </style>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md card px-0"><!-- /.main -->
-      {% include 'dashboard/_topics.html' %}
-    </div><!-- /.main -->
+<div class="row">
+  <div class="card col-md mx-3 px-0"><!-- /.main -->
+    {% include 'dashboard/_topics.html' %}
+  </div><!-- /.main -->
 
-    <div>&nbsp;</div> <!-- separate the columns when stacked -->
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
 
-    <div class="offset-md-1 col-md" style="padding: 0"> <!-- .sidebar -->
-      {% include 'dashboard/_progress_chart.html' %}
-
-      {% include 'dashboard/_leaderboard.html' %}
-
-      {% include 'dashboard/_account.html' %}
-
-      {% include 'dashboard/_social.html' %}
-    </div><!-- /.sidebar -->
-  </div><!-- /.row -->
-</div><!-- /.container -->
+  <div class="col col-md-5 col-lg-4"> <!-- .sidebar -->
+    {% include 'common/_progress_chart.html' %}
+    {% include 'dashboard/_leaderboard.html' %}
+    {% include 'common/_account.html' %}
+    {% include 'dashboard/_social.html' %}
+  </div><!-- /.sidebar -->
+</div><!-- /.row -->
 {% endblock %}
 
 {% block js %}

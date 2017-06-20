@@ -17,22 +17,16 @@
         crossorigin="anonymous"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
-<div>
+
 {% if comments | count == 0 %}
-    {% set placeholder = "Be the first to comment!" %}
-  {% else %}
-    {% set placeholder = "Enter your comment" %}
-  {% endif %}
+  {% set placeholder = "Be the first to comment!" %}
+{% else %}
+  {% set placeholder = "Leave a comment!" %}
+{% endif %}
+
 {% if current_user.username != None %}
   <form id="commentform" class="form-comment" method=post>
     {{ form.hidden_tag() }}
-
-    {% if comments | count == 0 %}
-      {% set placeholder = "Be the first to comment!" %}
-    {% else %}
-      {% set placeholder = "Enter your comment" %}
-    {% endif %}
-
     <div class="d-flex">
       {{ form.body(
         class="form-control",
@@ -62,7 +56,9 @@
   </form>
 {% else %}
   <div class="alert alert-danger hidden" role="alert" id="loginError">
-    <strong>Oh snap!</strong> <a href="/auth/login" class="alert-link">Login</a> or <a href="/auth/login" class="alert-link">register</a> and try submitting again.
+    <strong>Oh snap!</strong>
+    <a href="/auth/login" class="alert-link">Login</a> or
+    <a href="/auth/register" class="alert-link">sign up</a> and try submitting again.
   </div>
 
   <div class="d-flex">

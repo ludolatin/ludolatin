@@ -13,6 +13,10 @@ def _get_user():
 @store.route('/store')
 @login_required
 def store():
+    if current_user.last_score_age and current_user.streak:
+        streak_time_left = 36 - current_user.last_score_age
+    else:
+        streak_time_left = 36
 
     return render_template(
         'store.html',
@@ -21,4 +25,5 @@ def store():
         day_names=day_names(),
         daily_scores=daily_scores(),
         referrer=request.referrer,
+        streak_time_left=streak_time_left,
     )

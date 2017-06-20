@@ -16,77 +16,80 @@
     {% include 'blogging/_index_breadcrumbs.html' %}
   {% endif %}
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 px-0 card mb-4">
-      <div class="card-block">
 
-        {% if meta.is_user_blogger %}
-          <div class="small ml-auto">
-            <a href="{{ url_for('blogging.editor') }}" id="new">
-              <span class="glyphicon glyphicon-plus"></span>&nbsp;New
-            </a>
-          </div>
-        {% endif %}
+<div class="row">
+  <div class="card col-md-8 mx-3 px-0 mb-3">
+    <div class="card-block">
 
-        <h1 class="card-title">Articles</h1>
-
-        {% for post in posts %}
-          <hr>
-          <a href="{{ post.url }}">
-            <h2>{{ post.title }}</h2>
+      {% if meta.is_user_blogger %}
+        <div class="small ml-auto">
+          <a href="{{ url_for('blogging.editor') }}" id="new">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;New
           </a>
+        </div>
+      {% endif %}
+
+      <h1 class="card-title">Articles</h1>
+
+      {% for post in posts %}
+        <hr>
+        <a href="{{ post.url }}">
+          <h2>{{ post.title }}</h2>
+        </a>
+        <p>
+          Posted by
+          <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}"><em>{{post.user_name}}</em></a>
+          on {{post.post_date.strftime('%d %b, %Y')}}
+        </p>
+
+        {% if post.meta.summary %}
           <p>
-            Posted by
-            <a href="{{ url_for('blogging.posts_by_author', user_id=post.user_id)}}"><em>{{post.user_name}}</em></a>
-            on {{post.post_date.strftime('%d %b, %Y')}}
+            {{ post.meta.summary[0] }}
           </p>
-
-          {% if post.meta.summary %}
-            <p>
-              {{ post.meta.summary[0] }}
-            </p>
-          {% endif %}
-          <!-- post tags-->
-          {% if post.tags %}
-            {% for tag in post.tags %}
-              <a class="badge badge-success"
-                 href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">
-                {{ tag | title }}
-              </a>
-            {% endfor %}
-            <br>
-          {% endif %}
-        {% endfor %}
-
-        {% if ((meta) and (meta.max_pages>1)) %}
-          <div class="row">
-            <div class="col-md-12">
-              <ul class="pager">
-                {% if meta.pagination.prev_page %}
-                  <li><a href="{{meta.pagination.prev_page}}">&laquo; Prev</a></li>
-                {% else %}
-                  <li class="disabled"><a href="">&laquo; Prev</a></li>
-                {% endif %}
-
-                {% if meta.pagination.next_page %}
-                  <li><a href="{{meta.pagination.next_page}}">Next &raquo;</a></li>
-                {% else %}
-                  <li class="disabled"><a href="">Next &raquo;</a></li>
-                {% endif %}
-              </ul>
-            </div>
-          </div>
         {% endif %}
+        <!-- post tags-->
+        {% if post.tags %}
+          {% for tag in post.tags %}
+            <a class="badge badge-success"
+               href="{{ url_for('blogging.posts_by_tag', tag=tag.lower(), count=10, offset=0) }}">
+              {{ tag | title }}
+            </a>
+          {% endfor %}
+          <br>
+        {% endif %}
+      {% endfor %}
+
+      {% if ((meta) and (meta.max_pages>1)) %}
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="pager">
+              {% if meta.pagination.prev_page %}
+                <li><a href="{{meta.pagination.prev_page}}">&laquo; Prev</a></li>
+              {% else %}
+                <li class="disabled"><a href="">&laquo; Prev</a></li>
+              {% endif %}
+
+              {% if meta.pagination.next_page %}
+                <li><a href="{{meta.pagination.next_page}}">Next &raquo;</a></li>
+              {% else %}
+                <li class="disabled"><a href="">Next &raquo;</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+
+  <div class="col mx-3 px-0">
+    <div class="card text-center">
+      <div class="card-block">
+        Check back regularly for new and interesting articles.
       </div>
     </div>
-    <div class="col-lg-3 offset-lg-1" style="padding: 0px">
-      <div class="card text-center">
-        <div class="card-block">
-          Check back regularly for new and interesting articles.
-        </div>
-      </div>
-    </div><!-- /.sidebar -->
-  </div><!-- /.row -->
-</div>
+  </div><!-- /.sidebar -->
+</div><!-- /.row -->
+
 {% endblock content %}

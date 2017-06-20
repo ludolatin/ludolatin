@@ -195,14 +195,6 @@ div.error {
   min-height: 70px;
 }
 
-/* Dashboard XP chart */
-.dashboardXPChartContainer {
-  width: 300px;
-  height: 225px;
-  margin: 20px auto;
-  background-color: white;
-}
-
 /* Quiz cards */
 .comma :not(:last-of-type):after {
   content: ", ";

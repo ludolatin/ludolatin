@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Page head
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <head>
-  <!-- Page head
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   {% block title %}
   {% if title %}
     <title>{{ title }}</title>
@@ -11,34 +11,23 @@
   {% endblock %}
 
   {% include 'base/_head.html' %}
-
-  <!-- Analytics
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   {% include 'base/_analytics.html'%}
-
 </head>
 
 <body>
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-
-
     {% include 'base/_navigation.html' %}
-
     {% include 'base/_flash.html' %}
-
     {% block content %}{% endblock %}
-
     {% include 'base/_footer.html' %}
-
   </div> <!-- /container -->
 
   <!-- Custom JS to load after page
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   {% include 'base/_js.html' %}
   {% block js %}{% endblock %}
-
 </body>
 
 <!-- End Document
