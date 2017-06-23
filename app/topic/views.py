@@ -23,7 +23,7 @@ def topic(topic_id):
 
     return render_template(
         'topic/topic.html',
-        title="LudoLatin - Topic",
+        title="Topic",
         topic=current_topic,
         topic_progress=topic_progress,
         progress=progress,

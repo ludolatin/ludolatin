@@ -32,7 +32,7 @@ def login():
 
     return render_template(
         'auth/login.html',
-        title="LudoLatin - Sign in",
+        title="Sign in",
         form=form
     )
 
@@ -79,5 +79,5 @@ def register():
 
     return render_template(
         'auth/register.html',
-        title="LudoLatin - Register",
+        title="Register",
         form=form)

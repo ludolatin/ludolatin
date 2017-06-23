@@ -202,7 +202,7 @@ def victory(quiz_id):
 
     return render_template(
         'quiz/quiz_victory.html',
-        title="LudoLatin - Quiz",
+        title="Quiz",
         id=user.quiz_id,
         score=final_score,
         day_names=day_names(),

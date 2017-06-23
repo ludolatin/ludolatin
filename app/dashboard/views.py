@@ -30,7 +30,7 @@ def dashboard():
 
         return render_template(
             'dashboard/dashboard.html',
-            title="LudoLatin - Dashboard",
+            title="Dashboard",
             topic_progress=topic_progress,
             day_names=day_names(),
             daily_scores=daily_scores(),

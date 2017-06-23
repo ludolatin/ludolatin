@@ -20,7 +20,7 @@ def store():
 
     return render_template(
         'store.html',
-        title="LudoLatin - Store",
+        title="Store",
         products=Product.query.all(),
         day_names=day_names(),
         daily_scores=daily_scores(),
