@@ -20,9 +20,9 @@ def comments(post_id):
                 post_id=post_id,
                 user_id=current_user.id,
             ).save()
-            flash('Your comment has been published.')
+            flash('Your comment has been published.', 'success')
         else:
-            flash('Are you human? Try again.')
+            flash('Are you human? Try again.', 'warning')
         return redirect(url_for('comments.comments', post_id=post_id))
 
     comments = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at.desc()).all()

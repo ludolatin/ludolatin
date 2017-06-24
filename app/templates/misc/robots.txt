@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /auth
 Disallow: /quiz
 Disallow: /store
 Disallow: /api

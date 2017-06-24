@@ -1,17 +1,16 @@
 {% extends "base.html" %}
+{% from 'auth/_form_fields.html' import email, password, submit %}
 
 {% block content %}
-<form class="form-signin" method=post>
-  <h2 class="form-signin-heading">Please sign up</h2>
+<form class="form-auth" method=post>
+  <h2 class="form-auth-heading">Please sign up</h2>
 
   {{ form.hidden_tag() }}
 
-  <label for="inputUsername" class="sr-only" style="">Username</label>
+  {{ form.username.label(class="sr-only") }}
   {{ form.username(
-    id="inputUsername",
     class="form-control",
-    type="text",
-    placeholder="Username",
+    placeholder=form.username.label.text,
     maxlength=64,
     autocapitalize="off",
     autocorrect="off",
@@ -20,28 +19,10 @@
     <div class="form-control-feedback">{{ form.errors.username[0] }}</div>
   {% endif %}
 
-  <label for="inputEmail" class="sr-only">Email address</label>
-  {{ form.email(
-    id="inputEmail",
-    class="form-control",
-    type="email",
-    placeholder="Email",
-    maxlength=128,
-    autocapitalize="off",
-    autocorrect="off",
-  ) }}
-  {% if form.errors.email %}
-    <div class="form-control-feedback">{{ form.errors.email[0] }}</div>
-  {% endif %}
+  {{ email(form) }}
+  {{ password(form) }}
+  {{ submit(form) }}
 
-  <label for="inputPassword" class="sr-only">Password</label>
-  {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
-  {% if form.errors.password %}
-    <div class="form-control-feedback">{{ form.errors.password[0] }}</div>
-  {% endif %}
-
-  <p></p>
-  {{ form.submit(class="btn btn-lg btn-primary btn-block")}}
   <p>Already registered? <a href="{{ url_for('auth.login') }}">Click here to login</a>.</p>
 </form>
 {% endblock %}

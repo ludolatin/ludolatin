@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% from 'auth/_form_fields.html' import email, password, submit %}
 
 {% block content %}
 <form class="form-auth" method=post>
-  <h2 class="form-auth-heading">Change your email address</h2>
+  <h2 class="form-auth-heading">{{ title }}</h2>
 
   {{ form.hidden_tag() }}
-  {% include 'auth/_email.html' %}
-  {% include 'auth/_password.html' %}
-  {{ form.submit(class="btn btn-lg btn-primary btn-block mt-3")}}
+  {{ email(form) }}
+  {{ password(form) }}
+  {{ submit(form) }}
 
   <p>Not needed? <a href="{{ url_for('dashboard.dashboard') }}">Go home</a>.</p>
 </form>

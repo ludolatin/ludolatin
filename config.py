@@ -3,7 +3,9 @@ import os
 database_username = os.environ.get('DATABASE_USERNAME') or 'root'
 database_password = os.environ.get('DATABASE_PASSWORD') or ''
 
+
 class Config(object):
+    SITE_NAME = "LudoLatin"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret key, just for testing'
 
     # SQLAlchemy settings
@@ -16,14 +18,14 @@ class Config(object):
     MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'email@example.com')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'password')
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', '"LudoLatin" <noreply@ludolatin.com>')
-    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
-    MAIL_PORT = int(os.getenv('MAIL_PORT', '465'))
-    MAIL_USE_SSL = int(os.getenv('MAIL_USE_SSL', True))
+    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.elasticemail.com')
+    MAIL_PORT = int(os.getenv('MAIL_PORT', '587'))
+    MAIL_USE_TLS = int(os.getenv('MAIL_USE_TLS', True))
 
     # Flask-Blogging sessiongs
     BLOGGING_URL_PREFIX = "/articles"
     BLOGGING_SITEURL = "https://www.ludolatin.com"
-    BLOGGING_SITENAME = "LudoLatin"
+    BLOGGING_SITENAME = SITE_NAME
     BLOGGING_PERMISSIONS = True
     BLOGGING_PLUGINS = ["blogging_plugins.tag_cloud", "blogging_plugins.summary"]
     FILEUPLOAD_IMG_FOLDER = "fileupload"
@@ -46,6 +48,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    MAIL_DEBUG = True
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
         username="root",
         password="",
@@ -92,5 +95,5 @@ config = {
     'testing': TestingConfig,
     'preproduction': PreProductionConfig,
     'production': ProductionConfig,
-    'default': ProductionConfig
+    'default': DevelopmentConfig
 }

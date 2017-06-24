@@ -10,30 +10,45 @@ from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.automap import automap_base
+from flask_mail import Mail
 
 from config import config
 
 db = SQLAlchemy()
+migrate = Migrate()
 login_manager = LoginManager()
+principal = Principal()
+mail = Mail()
+blog_engine = BloggingEngine()
+misaka = Misaka(
+    app=None,
+    renderer=None,
+    strikethrough=True,
+    underline=True,
+    tables=True,
+    wrap=True
+)
+metadata = MetaData()
 
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
+
     SSLify(app)
 
     db.init_app(app)
 
-    migrate = Migrate()
-    migrate.init_app(app, db=db)
+    migrate.init_app(app, db)
 
     login_manager.session_protection = 'strong'
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    principal = Principal()
     principal.init_app(app)
+
+    mail.init_app(app)
 
     from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment
 
@@ -41,21 +56,11 @@ def create_app(config_name):
     with app.app_context():
         storage = SQLAStorage(db=db)
         db.create_all()
-        blog_engine = BloggingEngine()
         blog_engine.init_app(app, storage)
 
-    misaka = Misaka(
-        app=None,
-        renderer=None,
-        strikethrough=True,
-        underline=True,
-        tables=True,
-        wrap=True
-    )
     misaka.init_app(app)
 
     # automap Post model for Flask-Blogging tables.
-    metadata = MetaData()
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     metadata.reflect(engine, only=['post'])
     Base = automap_base(metadata=metadata)
@@ -75,7 +80,6 @@ def create_app(config_name):
     @login_manager.user_loader
     @blog_engine.user_loader
     def load_user(user_id):
-        print "ID: ", user_id
         return User.query.get(int(user_id))
 
     @login_manager.unauthorized_handler

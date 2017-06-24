@@ -88,8 +88,14 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
               <a class="dropdown-item" href="{{ url_for('quiz.ask', id=current_user.quiz_id) }}">Practise</a>
               <a class="dropdown-item" href="/">Dashboard</a>
+              <hr>
               {% if (current_user.is_authenticated and current_user.username != None) %}
-                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                {% if not current_user.confirmed %}
+                  <a class="dropdown-item" href="{{ url_for('auth.resend_confirmation') }}">Confirm account</a>
+                {% endif %}
+                <a class="dropdown-item" href="{{ url_for('auth.change_password') }}">Change password</a>
+                <a class="dropdown-item" href="{{ url_for('auth.change_email_request') }}">Change email address</a>
+                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out</a>
               {% else %}
                 <a class="dropdown-item" href="{{ url_for('auth.register') }}">Register</a>
               {% endif %}

@@ -1,28 +1,19 @@
 {% extends "base.html" %}
+{% from 'auth/_form_fields.html' import email, password, submit %}
 
 {% block content %}
-<form class="form-signin" method=post>
-  <h2 class="form-signin-heading">Please sign in</h2>
-  {% if form.errors %}
-    <div class="has-error"><strong>Unable to login. Typo?</strong></div>
-  {% endif %}
+<form class="form-auth" method=post>
+  <h2 class="form-auth-heading">{{ title }}</h2>
 
   {{ form.hidden_tag() }}
-  <label for="inputEmail" class="sr-only">Email address</label>
-  {{ form.email_or_username(
-  id="inputEmail",
-  class="form-control",
-  type="text",
-  placeholder="Email or Username",
-  maxlength=128,
-  autocapitalize="off",
-  autocorrect="off",
-  ) }}
+  {{ email(form, type="text") }}
+  {{ password(form) }}
+  {{ submit(form) }}
 
-  <label for="inputPassword" class="sr-only">Password</label>
-  {{ form.password(id="inputPassword", class="form-control", type="password", placeholder="Password") }}
-
-  {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
-  <p>New user? <a href="{{ url_for('auth.register') }}">Click here to register</a>.</p>
+  <p>
+    Forgotten password? <a href="{{ url_for('auth.reset_password_request') }}">Reset your password</a>.
+    <br>
+    New user? <a href="{{ url_for('auth.register') }}">Register now!</a>
+  </p>
 </form>
 {% endblock %}

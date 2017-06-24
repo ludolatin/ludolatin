@@ -21,3 +21,4 @@ ruamel.yaml==0.14.6
 bleach==2.0.0
 markdown-nofollow==0.2.0
 flask-recaptcha==0.4.2
+flask-mail==0.9.1

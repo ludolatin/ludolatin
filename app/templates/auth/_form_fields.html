@@ -1,0 +1,26 @@
+{% macro email(form, type='email') %}
+  {{ form.email.label(class="sr-only") }}
+  {{ form.email(
+    class="form-control",
+    type=type,
+    placeholder=form.email.label.text,
+    maxlength=128,
+    autocapitalize="off",
+    autocorrect="off",
+  ) }}
+  {% if form.errors.email %}
+    <div class="form-control-feedback">{{ form.errors.email[0] }}</div>
+  {% endif %}
+{% endmacro %}
+
+{% macro password(form) %}
+  {{ form.password.label(class="sr-only") }}
+  {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+  {% if form.errors.password %}
+    <div class="form-control-feedback">{{ form.errors.password[0] }}</div>
+  {% endif %}
+{% endmacro %}
+
+{% macro submit(form) %}
+  {{ form.submit(class="btn btn-lg btn-primary btn-block mt-3 mb-3") }}
+{% endmacro %}

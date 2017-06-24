@@ -1,27 +1,20 @@
 import re
+import hashlib
 from datetime import datetime
 
-from flask import url_for
+from flask import url_for, current_app, request
 from flask_login import UserMixin
 from sqlalchemy.orm import synonym
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 from ._base_model import BaseModel
 from .score import Score
-from .comments import Comment
 from app import db
 
 
 EMAIL_REGEX = re.compile(r'^\S+@\S+\.\S+$')
 USERNAME_REGEX = re.compile(r'^\S+$')
-
-
-def check_length(attribute, length):
-    # Checks the attribute's length.
-    try:
-        return bool(attribute) and len(attribute) <= length
-    except:
-        return False
 
 
 def check_length(attribute, length):
@@ -48,6 +41,8 @@ class User(UserMixin, db.Model, BaseModel):
     streak_start_date = db.Column(db.DateTime)
     answers = db.relationship('Answer', backref='user')
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
+    confirmed = db.Column(db.Boolean, default=False)
+    avatar_hash = db.Column(db.String(32))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -136,3 +131,68 @@ class User(UserMixin, db.Model, BaseModel):
             return (datetime.utcnow() - self.streak_start_date).days
         else:
             return 0
+
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.id})
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        self.save()
+        return True
+
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'reset': self.id})
+
+    def reset_password(self, token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('reset') != self.id:
+            return False
+        self.password = new_password
+        self.save()
+        return True
+
+    def generate_email_change_token(self, new_email, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'change_email': self.id, 'new_email': new_email})
+
+    def change_email(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('change_email') != self.id:
+            return False
+        new_email = data.get('new_email')
+        if new_email is None:
+            return False
+        if self.query.filter_by(email=new_email).first() is not None:
+            return False
+        self.email = new_email
+        self.avatar_hash = hashlib.md5(
+            self.email.encode('utf-8')).hexdigest()
+        self.save()
+        return True
+
+    def gravatar(self, size=100, default='identicon', rating='g'):
+        if request.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'http://www.gravatar.com/avatar'
+        avatar_hash = self.avatar_hash or hashlib.md5(
+            self.email.encode('utf-8')).hexdigest()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
+            url=url, hash=avatar_hash, size=size, default=default, rating=rating)
