@@ -83,7 +83,7 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <img class="mr-1 nav-profile" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="20" height="20" alt="Profile picture">
+              <img class="mr-1 nav-profile-pic" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="20" height="20" alt="Profile picture">
               {{ current_user.username if current_user.username != None else 'Guest' }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">

@@ -19,7 +19,7 @@ def store():
         streak_time_left = 36
 
     pictures = [
-        {"id": 1, "name": "Default", "filename": "profile-1.png"},
+        {"id": 1, "name": "Sky (default)", "filename": "profile-1.png"},
         {"id": 2, "name": "Relish", "filename": "profile-2.png"},
         {"id": 3, "name": "Mango", "filename": "profile-3.png"},
         {"id": 4, "name": "Cherry", "filename": "profile-4.png"},

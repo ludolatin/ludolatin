@@ -150,6 +150,8 @@
       var audio = new Audio('/static/audio/item-bought.mp3');
       audio.play();
       $('#score').children("span").text(data.total_score);
+      $('.nav-profile-pic').attr("src", "/static/images/profiles/profile-" + data.profile_picture + ".png");
+
       $('#profile_pic_modal').modal('hide')
       $('#buy_pic_button').removeClass("btn-success");
       $('#buy_pic_button').addClass("disabled btn-secondary");

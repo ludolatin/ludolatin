@@ -360,7 +360,7 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
     border-bottom-style: solid;
 }
 
-.nav-profile {
+.nav-profile-pic {
   border-radius: 50%;
   border-width: 1px;
   border-style: solid;

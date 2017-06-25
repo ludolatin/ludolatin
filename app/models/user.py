@@ -113,6 +113,7 @@ class User(UserMixin, db.Model, BaseModel):
             'last_seen': self.last_seen,
             'total_score': self.total_score,
             'streak': self.streak,
+            'profile_picture': self.profile_picture,
             'user_url': url_for(
                 'api.get_user', id=self.id, _external=True
             ),
