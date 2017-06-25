@@ -23,7 +23,7 @@
               <div class="d-flex w-100 mb-1">{{ product.description }}</div>
               <div class="d-flex w-100 justify-content-end mb-1">
                 {% if product.available %}
-                  <button type="button" class="btn btn-sm btn-success" id="{{ product.id }}">
+                  <button type="button" class="btn btn-sm btn-success" id="{{ product.name | lower | replace(' ', '_') }}">
                     Get for: {{ product.total_price }}
                   </button>
                 {% else %}
@@ -46,11 +46,11 @@
     </div><!-- /sidebar -->
   </div><!-- /.row -->
 
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="profile_pic_modal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Select a profile picture</h5>
+          <h5 class="modal-title" id="profileModalLabel">Select a profile picture</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -74,7 +74,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="buy_profile" name="buy_profile" class="btn btn-secondary disabled">Buy for 50</button>
+          <button type="button" id="buy_pic_button" class="btn btn-secondary disabled">Buy for 50</button>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
 
 {% block js %}
 <script>
-  $('#1').click(function(){
+  $('#streak_recovery').click(function(){
     $.get('/api/store/recover_streak/', function(data) {
       $('#1').attr("disabled", true);
 
@@ -93,13 +93,13 @@
 
       $('#streak').children("span").text(data.streak);
       $('#score').children("span").text(data.total_score);
-      $('#1').removeClass("btn-success");
-      $('#1').addClass("disabled btn-secondary");
-      $('#1').text("Bought");
+      $('#streak_recovery').removeClass("btn-success");
+      $('#streak_recovery').addClass("disabled btn-secondary");
+      $('#streak_recovery').text("Bought");
     });
   });
 
-  $('#2').click(function(){
+  $('#triple_or_nothing').click(function(){
     $.get('/api/store/triple_or_nothing/', function(data) {
 
       if (data.result == 'success') {
@@ -113,39 +113,38 @@
 
       // Disable the button if they've run out of cash.
       if (data.user.total_score < 4) {
-        $('#2').attr("disabled", true);
-        $('#2').removeClass("btn-success");
-        $('#2').addClass("disabled btn-secondary");
-        $('#2').text("Unavailable");
-        $('#2').removeAttr("id");
+        $('#triple_or_nothing').attr("disabled", true);
+        $('#triple_or_nothing').removeClass("btn-success");
+        $('#triple_or_nothing').addClass("disabled btn-secondary");
+        $('#triple_or_nothing').text("Unavailable");
+        $('#triple_or_nothing').removeAttr("id");
       } else {
-        $('#2').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
+        $('#triple_or_nothing').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
       };
     });
   });
 
-  $('#3').click(function(){
-    $('#myModal').modal('show');
+  $('#profile_picture').click(function(){
+    $('#profile_pic_modal').modal('show');
   });
 
   $("input[name=picture]:radio").change(function () {
     if (this.value !== '{{ current_user.profile_picture }}') {
-      console.log("not current");
-      $('#buy_profile').removeClass("disabled btn-secondary");
-      $('#buy_profile').addClass("btn-success");
+      $('#buy_pic_button').removeClass("disabled btn-secondary");
+      $('#buy_pic_button').addClass("btn-success");
     }
   });
 
-  $('#buy_profile').click(function(){
+  $('#buy_pic_button').click(function(){
    if (this.value !== '{{ current_user.profile_picture }}') {
     var picture_id = $('input[name=picture]:checked').val()
     $.get('/api/store/profile_pictures/' + picture_id, function(data) {
       var audio = new Audio('/static/audio/item-bought.mp3');
       audio.play();
       $('#score').children("span").text(data.total_score);
-      $('#myModal').modal('hide')
-      $('#buy_profile').removeClass("btn-success");
-      $('#buy_profile').addClass("disabled btn-secondary");
+      $('#profile_pic_modal').modal('hide')
+      $('#buy_pic_button').removeClass("btn-success");
+      $('#buy_pic_button').addClass("disabled btn-secondary");
     });
    }
   });

@@ -126,7 +126,7 @@ def triple_or_nothing():
 
 @api.route('/store/profile_pictures/<int:picture_id>', methods=['GET'])
 def profile_pictures(picture_id):
-    product = Product.query.filter_by(name="Profile pictures").first()
+    product = Product.query.filter_by(name="Profile picture").first()
     if product.available:
         try:
             Purchase(
