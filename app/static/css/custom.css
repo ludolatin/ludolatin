@@ -359,3 +359,10 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
     border-color: #dadada;
     border-bottom-style: solid;
 }
+
+.nav-profile {
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
+}

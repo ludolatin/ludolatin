@@ -68,11 +68,11 @@
         {% else %}
         <a class="nav-link active" href="/" id="streak">
           <span>{{ current_user.streak }}</span>
-          <img src="/static/images/streak.png" alt="Streak flame" style="width:16px;height:20px;">
+          <img src="/static/images/streak.png" alt="Streak flame" style="width:16px; height:20px;">
         </a>
         <a class="nav-link active" href="/store" id="score">
           <span>{{ current_user.total_score }}</span>
-          <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px;height:20px;">
+          <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px; height:20px;">
         </a>
           <li class="nav-item dropdown active">
             <a
@@ -83,6 +83,7 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
+              <img class="mr-1 nav-profile" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="20" height="20" alt="Profile picture">
               {{ current_user.username if current_user.username != None else 'Guest' }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
