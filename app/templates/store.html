@@ -82,7 +82,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="buy_pic_button" class="btn btn-secondary disabled">Buy for 50</button>
+        <button type="button" id="buy_pic_button" class="btn btn-secondary disabled" disabled="disabled">Buy for 50</button>
       </div>
     </div>
   </div>
@@ -91,19 +91,18 @@
 
 {% block js %}
 <script>
-
-function updateTripleOrNothingButton(score) {
-  // Disable the button if they've run out of cash.
-  if (score < 4) {
-    $('#triple_or_nothing').attr("disabled", true);
-    $('#triple_or_nothing').removeClass("btn-success");
-    $('#triple_or_nothing').addClass("disabled btn-secondary");
-    $('#triple_or_nothing').text("Unavailable");
-    $('#triple_or_nothing').removeAttr("id");
-  } else {
-    $('#triple_or_nothing').text(`Get for: ${Math.floor(score / 4)}`);
-  };
-}
+  function updateTripleOrNothingButton(score) {
+    // Disable the button if they've run out of cash.
+    if (score < 4) {
+      $('#triple_or_nothing').attr("disabled", true);
+      $('#triple_or_nothing').removeClass("btn-success");
+      $('#triple_or_nothing').addClass("disabled btn-secondary");
+      $('#triple_or_nothing').text("Unavailable");
+      $('#triple_or_nothing').removeAttr("id");
+    } else {
+      $('#triple_or_nothing').text(`Get for: ${Math.floor(score / 4)}`);
+    };
+  }
   $('#streak_recovery').click(function(){
     $.get('/api/store/recover_streak/', function(data) {
       $('#1').attr("disabled", true);
@@ -114,6 +113,7 @@ function updateTripleOrNothingButton(score) {
       $('#streak').children("span").text(data.streak);
       $('#chart-streak').text(data.streak);
       $('#score').children("span").text(data.total_score);
+      $('#streak_recovery').attr("disabled", true);
       $('#streak_recovery').removeClass("btn-success");
       $('#streak_recovery').addClass("disabled btn-secondary");
       $('#streak_recovery').text("Bought");
@@ -146,11 +146,15 @@ function updateTripleOrNothingButton(score) {
     if (this.value !== '{{ current_user.profile_picture }}') {
       $('#buy_pic_button').removeClass("disabled btn-secondary");
       $('#buy_pic_button').addClass("btn-success");
+      $('#buy_pic_button').attr("disabled", false);
+    } else {
+      $('#buy_pic_button').attr("disabled", true);
+      $('#buy_pic_button').removeClass("btn-success");
+      $('#buy_pic_button').addClass("disabled btn-secondary");
     }
   });
 
   $('#buy_pic_button').click(function(){
-   if (this.value !== '{{ current_user.profile_picture }}') {
     var picture_id = $('input[name=picture]:checked').val()
     $.get('/api/store/profile_pictures/' + picture_id, function(data) {
       var audio = new Audio('/static/audio/item-bought.mp3');
@@ -161,10 +165,10 @@ function updateTripleOrNothingButton(score) {
       updateTripleOrNothingButton(data.total_score);
 
       $('#profile_pic_modal').modal('hide')
+      $('#buy_pic_button').attr("disabled", true);
       $('#buy_pic_button').removeClass("btn-success");
       $('#buy_pic_button').addClass("disabled btn-secondary");
     });
-   }
   });
 </script>
 
