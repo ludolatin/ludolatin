@@ -1,95 +1,92 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="container">
-  <div class="row">
-    <div class="col-md card px-0 mb-4">
-      <div class="card-block pb-1">
-        <div class="d-flex flex-row">
-          <div>
-            <h4 class="card-title">Store</h4>
-            <h6 class="card-subtitle mb-4 text-muted">Spend your aurei at the store.</h6>
-          </div>
-          <div class="ml-auto"><a href="{{ referrer }}" class="btn btn-sm btn-danger">Leave store</a></div>
+<div class="row">
+  <div class="col-md card mx-3 px-0"><!-- main =-->
+    <div class="card-block pb-1">
+      <div class="d-flex flex-row">
+        <div>
+          <h4 class="card-title">Store</h4>
+          <h6 class="card-subtitle mb-4 text-muted">Spend your aurei at the store.</h6>
         </div>
-        <ul class="list-group">
-          {% for product in products %}
-            <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
-                <small>{{ product.price }}</small>
-              </div>
-              <div class="d-flex w-100 mb-1">{{ product.description }}</div>
-              <div class="d-flex w-100 justify-content-end mb-1">
-                {% if product.available %}
-                  <button type="button" class="btn btn-sm btn-success" id="{{ product.name | lower | replace(' ', '_') }}">
-                    Get for: {{ product.total_price }}
-                  </button>
-                {% else %}
-                  <a href="#" class="btn btn-sm btn-secondary disabled">
-                    Get for: {{ product.total_price }}
-                  </a>
-                {% endif %}
-              </div>
-            </li>
-          {% endfor %}
+        <div class="ml-auto"><a href="{{ referrer }}" class="btn btn-sm btn-danger">Leave store</a></div>
+      </div>
+      <ul class="list-group">
+        {% for product in products %}
           <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
-            <h5 class="mb-1" style="font-weight:bold">Something else?</h5>
-
-            <div class="d-flex w-100 mb-1">More choices coming soon!</div>
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
+              <small>{{ product.price }}</small>
+            </div>
+            <div class="d-flex w-100 mb-1">{{ product.description }}</div>
             <div class="d-flex w-100 justify-content-end mb-1">
-                <button class="btn btn-sm btn-secondary disabled">
-                  Unavailable
+              {% if product.available %}
+                <button type="button" class="btn btn-sm btn-success" id="{{ product.name | lower | replace(' ', '_') }}">
+                  Get for: {{ product.total_price }}
                 </button>
+              {% else %}
+                <a href="#" class="btn btn-sm btn-secondary disabled">
+                  Get for: {{ product.total_price }}
+                </a>
+              {% endif %}
             </div>
           </li>
-        </ul>
-      </div>
+        {% endfor %}
+        <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
+          <h5 class="mb-1" style="font-weight:bold">Something else?</h5>
+
+          <div class="d-flex w-100 mb-1">More choices coming soon!</div>
+          <div class="d-flex w-100 justify-content-end mb-1">
+              <button class="btn btn-sm btn-secondary disabled">
+                Unavailable
+              </button>
+          </div>
+        </li>
+      </ul>
     </div>
+  </div><!-- main =-->
 
-    <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
 
-    <div class="col col-md-5 col-lg-4">
-      {% include 'common/_progress_chart.html' %}
-      {% include 'common/_account.html' %}
-    </div><!-- /sidebar -->
-  </div><!-- /.row -->
+  <div class="col col-md-5 col-lg-4"><!-- sidebar -->
+    {% include 'common/_progress_chart.html' %}
+    {% include 'common/_account.html' %}
+  </div><!-- /sidebar -->
+</div><!-- /.row -->
 
-  <div class="modal fade" id="profile_pic_modal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="profileModalLabel">Select a profile picture</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body d-flex justify-content-around flex-wrap">
-          {% for picture in pictures %}
-            <label>
-              {% if current_user.profile_picture == picture.id %}
-                <input type="radio" name="picture" value="{{ picture.id }}" checked/>
-              {% else %}
-                 <input type="radio" name="picture" value="{{ picture.id }}"/>
-              {% endif %}
-              <div class="card mt-3" style="width: 200px">
-                <img class="card-img-top img-fluid" src="/static/images/profiles/{{ picture.filename }}" alt="Card image cap">
-                <div class="card-block">
-                  <p class="card-text">{{ picture.name }}</p>
-                </div>
+<div class="modal fade" id="profile_pic_modal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">Select a profile picture</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex justify-content-around flex-wrap">
+        {% for picture in pictures %}
+          <label>
+            {% if current_user.profile_picture == picture.id %}
+              <input type="radio" name="picture" value="{{ picture.id }}" checked/>
+            {% else %}
+               <input type="radio" name="picture" value="{{ picture.id }}"/>
+            {% endif %}
+            <div class="card mt-3" style="width: 200px">
+              <img class="card-img-top img-fluid" src="/static/images/profiles/{{ picture.filename }}" alt="Card image cap">
+              <div class="card-block">
+                <p class="card-text">{{ picture.name }}</p>
               </div>
-            </label>
-          {% endfor %}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="buy_pic_button" class="btn btn-secondary disabled">Buy for 50</button>
-        </div>
+            </div>
+          </label>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="buy_pic_button" class="btn btn-secondary disabled">Buy for 50</button>
       </div>
     </div>
   </div>
-</div><!-- /.container -->
+</div>
 {% endblock %}
 
 {% block js %}
