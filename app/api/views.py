@@ -94,7 +94,7 @@ def recover_streak():
             ).save()
     except:
         abort(400)
-    return jsonify(current_user.to_dict()), 201
+    return jsonify(current_user.to_dict()), 200
 
 
 # TODO: Make POST
@@ -121,4 +121,21 @@ def triple_or_nothing():
     return jsonify({
         'user': current_user.to_dict(),
         'result': result,
-    }), 201
+    }), 200
+
+
+@api.route('/store/profile_pictures/<int:picture_id>', methods=['GET'])
+def profile_pictures(picture_id):
+    product = Product.query.filter_by(name="Profile pictures").first()
+    if product.available:
+        try:
+            Purchase(
+                product=product,
+                price=product.total_price,
+                user_id=current_user.id,
+            ).save()
+            current_user.profile_picture = picture_id
+            current_user.total_score -= product.total_price
+        except:
+            abort(400)
+    return jsonify(current_user.to_dict()), 200

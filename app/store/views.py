@@ -18,6 +18,15 @@ def store():
     else:
         streak_time_left = 36
 
+    pictures = [
+        {"id": 1, "name": "Default", "filename": "profile-1.png"},
+        {"id": 2, "name": "Relish", "filename": "profile-2.png"},
+        {"id": 3, "name": "Mango", "filename": "profile-3.png"},
+        {"id": 4, "name": "Cherry", "filename": "profile-4.png"},
+        {"id": 5, "name": "Grape", "filename": "profile-5.png"},
+        {"id": 6, "name": "Slate", "filename": "profile-6.png"},
+    ]
+
     return render_template(
         'store.html',
         title="Store",
@@ -26,4 +35,5 @@ def store():
         daily_scores=daily_scores(),
         referrer=request.referrer,
         streak_time_left=streak_time_left,
+        pictures=pictures
     )

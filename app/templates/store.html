@@ -1,49 +1,85 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-  <div class="card col-md mx-3 px-0">
-    <div class="card-block">
-      <div class="d-flex flex-row">
-        <div>
-          <h4 class="card-title">Store</h4>
-          <h6 class="card-subtitle mb-4 text-muted">Spend your aurei at the store.</h6>
-        </div>
-        <div class="ml-auto"><a href="{{ referrer }}" class="btn btn-sm btn-danger">Leave store</a></div>
-      </div>
-      <ul class="list-group">
-        {% for product in products %}
-          <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
 
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
-              <small>{{ product.price }}</small>
-            </div>
-            <div class="d-flex w-100 mb-1">{{ product.description }}</div>
-            <div class="d-flex w-100 justify-content-end mb-1">
-              {% if product.available %}
-                <button type="button" class="btn btn-sm btn-success" id="{{ product.id }}">
-                  Get for: {{ product.total_price }}
-                </button>
+<div class="container">
+  <div class="row">
+    <div class="col-md card px-0 mb-4">
+      <div class="card-block pb-1">
+        <div class="d-flex flex-row">
+          <div>
+            <h4 class="card-title">Store</h4>
+            <h6 class="card-subtitle mb-4 text-muted">Spend your aurei at the store.</h6>
+          </div>
+          <div class="ml-auto"><a href="{{ referrer }}" class="btn btn-sm btn-danger">Leave store</a></div>
+        </div>
+        <ul class="list-group">
+          {% for product in products %}
+            <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
+                <small>{{ product.price }}</small>
+              </div>
+              <div class="d-flex w-100 mb-1">{{ product.description }}</div>
+              <div class="d-flex w-100 justify-content-end mb-1">
+                {% if product.available %}
+                  <button type="button" class="btn btn-sm btn-success" id="{{ product.id }}">
+                    Get for: {{ product.total_price }}
+                  </button>
+                {% else %}
+                  <a href="#" class="btn btn-sm btn-secondary disabled">
+                    Get for: {{ product.total_price }}
+                  </a>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+
+    <div class="col col-md-5 col-lg-4">
+      {% include 'common/_progress_chart.html' %}
+      {% include 'common/_account.html' %}
+    </div><!-- /sidebar -->
+  </div><!-- /.row -->
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Select a profile picture</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body d-flex justify-content-around flex-wrap">
+          {% for picture in pictures %}
+            <label>
+              {% if current_user.profile_picture == picture.id %}
+                <input type="radio" name="picture" value="{{ picture.id }}" checked/>
               {% else %}
-                <a href="#" class="btn btn-sm btn-secondary disabled">
-                  Get for: {{ product.total_price }}
-                </a>
+                 <input type="radio" name="picture" value="{{ picture.id }}"/>
               {% endif %}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+              <div class="card mt-3" style="width: 200px">
+                <img class="card-img-top img-fluid" src="/static/images/profiles/{{ picture.filename }}" alt="Card image cap">
+                <div class="card-block">
+                  <p class="card-text">{{ picture.name }}</p>
+                </div>
+              </div>
+            </label>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="buy_profile" name="buy_profile" class="btn btn-secondary disabled">Buy for 50</button>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
-
-  <div class="col col-md-5 col-lg-4">
-    {% include 'common/_progress_chart.html' %}
-    {% include 'common/_account.html' %}
-  </div><!-- /sidebar -->
-</div><!-- /.row -->
+</div><!-- /.container -->
 {% endblock %}
 
 {% block js %}
@@ -86,6 +122,32 @@
         $('#2').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
       };
     });
+  });
+
+  $('#3').click(function(){
+    $('#myModal').modal('show');
+  });
+
+  $("input[name=picture]:radio").change(function () {
+    if (this.value !== '{{ current_user.profile_picture }}') {
+      console.log("not current");
+      $('#buy_profile').removeClass("disabled btn-secondary");
+      $('#buy_profile').addClass("btn-success");
+    }
+  });
+
+  $('#buy_profile').click(function(){
+   if (this.value !== '{{ current_user.profile_picture }}') {
+    var picture_id = $('input[name=picture]:checked').val()
+    $.get('/api/store/profile_pictures/' + picture_id, function(data) {
+      var audio = new Audio('/static/audio/item-bought.mp3');
+      audio.play();
+      $('#score').children("span").text(data.total_score);
+      $('#myModal').modal('hide')
+      $('#buy_profile').removeClass("btn-success");
+      $('#buy_profile').addClass("disabled btn-secondary");
+    });
+   }
   });
 </script>
 

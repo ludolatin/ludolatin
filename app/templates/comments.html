@@ -70,7 +70,7 @@
   {% for comment in comments %}
     <hr>
     <div class="media">
-      <img class="d-flex mr-3" src="/static/images/profile-default.png" width="60" height="60" alt="Generic placeholder image">
+      <img class="d-flex mr-3" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="60" height="60" alt="Generic placeholder image">
       <div class="media-body">
         <h5 class="mt-0">{{ comment.user.username }}</h5>
         {{ comment.body_html | safe }}

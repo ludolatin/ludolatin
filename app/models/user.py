@@ -42,7 +42,7 @@ class User(UserMixin, db.Model, BaseModel):
     answers = db.relationship('Answer', backref='user')
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     confirmed = db.Column(db.Boolean, default=False)
-    avatar_hash = db.Column(db.String(32))
+    profile_picture = db.Column(db.Integer, default=1)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -182,17 +182,7 @@ class User(UserMixin, db.Model, BaseModel):
         if self.query.filter_by(email=new_email).first() is not None:
             return False
         self.email = new_email
-        self.avatar_hash = hashlib.md5(
-            self.email.encode('utf-8')).hexdigest()
         self.save()
         return True
 
-    def gravatar(self, size=100, default='identicon', rating='g'):
-        if request.is_secure:
-            url = 'https://secure.gravatar.com/avatar'
-        else:
-            url = 'http://www.gravatar.com/avatar'
-        avatar_hash = self.avatar_hash or hashlib.md5(
-            self.email.encode('utf-8')).hexdigest()
-        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
-            url=url, hash=avatar_hash, size=size, default=default, rating=rating)
+
