@@ -102,6 +102,7 @@
       audio.play();
 
       $('#streak').children("span").text(data.streak);
+      $('#chart-streak').text(data.streak);
       $('#score').children("span").text(data.total_score);
       $('#streak_recovery').removeClass("btn-success");
       $('#streak_recovery').addClass("disabled btn-secondary");
