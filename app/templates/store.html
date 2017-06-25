@@ -91,6 +91,19 @@
 
 {% block js %}
 <script>
+
+function updateTripleOrNothingButton(score) {
+  // Disable the button if they've run out of cash.
+  if (score < 4) {
+    $('#triple_or_nothing').attr("disabled", true);
+    $('#triple_or_nothing').removeClass("btn-success");
+    $('#triple_or_nothing').addClass("disabled btn-secondary");
+    $('#triple_or_nothing').text("Unavailable");
+    $('#triple_or_nothing').removeAttr("id");
+  } else {
+    $('#triple_or_nothing').text(`Get for: ${Math.floor(score / 4)}`);
+  };
+}
   $('#streak_recovery').click(function(){
     $.get('/api/store/recover_streak/', function(data) {
       $('#1').attr("disabled", true);
@@ -104,6 +117,8 @@
       $('#streak_recovery').removeClass("btn-success");
       $('#streak_recovery').addClass("disabled btn-secondary");
       $('#streak_recovery').text("Bought");
+
+      updateTripleOrNothingButton(data.total_score);
     });
   });
 
@@ -119,16 +134,7 @@
       }
       $('#score').children("span").text(data.user.total_score);
 
-      // Disable the button if they've run out of cash.
-      if (data.user.total_score < 4) {
-        $('#triple_or_nothing').attr("disabled", true);
-        $('#triple_or_nothing').removeClass("btn-success");
-        $('#triple_or_nothing').addClass("disabled btn-secondary");
-        $('#triple_or_nothing').text("Unavailable");
-        $('#triple_or_nothing').removeAttr("id");
-      } else {
-        $('#triple_or_nothing').text(`Get for: ${Math.floor(data.user.total_score / 4)}`);
-      };
+      updateTripleOrNothingButton(data.user.total_score);
     });
   });
 
@@ -151,6 +157,8 @@
       audio.play();
       $('#score').children("span").text(data.total_score);
       $('.nav-profile-pic').attr("src", "/static/images/profiles/profile-" + data.profile_picture + ".png");
+
+      updateTripleOrNothingButton(data.total_score);
 
       $('#profile_pic_modal').modal('hide')
       $('#buy_pic_button').removeClass("btn-success");
