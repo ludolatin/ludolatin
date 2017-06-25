@@ -70,10 +70,11 @@
   {% for comment in comments %}
     <hr>
     <div class="media">
-      <img class="d-flex mr-3" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="60" height="60" alt="Generic placeholder image">
+      <img class="d-flex mr-3" src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" width="60" height="60" alt="Profile picture">
       <div class="media-body">
-        <h5 class="mt-0">{{ comment.user.username }}</h5>
-        {{ comment.body_html | safe }}
+        <h6 class="mt-0" style="display: inline">{{ comment.user.username }}</h6>
+        <em><small>{{ comment.created_at | humanize }}</small></em>
+        <p>{{ comment.body_html | safe }}</p>
       </div>
     </div>
   {% endfor %}
