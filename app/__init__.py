@@ -8,13 +8,15 @@ from flask_misaka import Misaka
 from flask_principal import Principal, UserNeed, RoleNeed, identity_loaded
 from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.ext.automap import automap_base
+from sqlalchemy import MetaData
 from flask_mail import Mail
+from wtforms.fields import HiddenField
 
 from config import config
 
 db = SQLAlchemy()
+from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment
+
 migrate = Migrate()
 login_manager = LoginManager()
 principal = Principal()
@@ -50,25 +52,15 @@ def create_app(config_name):
 
     mail.init_app(app)
 
-    from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment
-
     # Flask-Blogging database config
     with app.app_context():
         storage = SQLAStorage(db=db)
         db.create_all()
-        blog_engine.init_app(app, storage)
+    blog_engine.init_app(app, storage)
+    Post = storage.post_model  # the Post model class
+    Tag = storage.tag_model  # the Tag model class
 
     misaka.init_app(app)
-
-    # automap Post model for Flask-Blogging tables.
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    metadata.reflect(engine, only=['post'])
-    Base = automap_base(metadata=metadata)
-    Base.prepare()
-    Post = Base.classes.post
-    app.Post = Base.classes.post
-
-    from wtforms.fields import HiddenField
 
     def is_hidden_field_filter(field):
         return isinstance(field, HiddenField)
@@ -174,6 +166,7 @@ def create_app(config_name):
     admin.add_view(AuthenticatedModelView(Product, db.session))
     admin.add_view(AuthenticatedModelView(Purchase, db.session))
     admin.add_view(AuthenticatedModelView(Post, db.session, name='Post'))
+    admin.add_view(AuthenticatedModelView(Tag, db.session, name='Tag'))
     admin.add_view(AuthenticatedModelView(Comment, db.session))
 
     return app

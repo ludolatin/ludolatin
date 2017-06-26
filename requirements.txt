@@ -12,7 +12,7 @@ Flask-Misaka==0.4.1
 Flask-Principal==0.4.0
 Flask-Script==2.0.5
 Werkzeug==0.12.2
-Flask-Blogging==0.8.0
+Flask-Blogging==0.9.2
 Blogging-Plugins==0.2.0
 Jinja2==2.9.6
 jellyfish==0.5.6
