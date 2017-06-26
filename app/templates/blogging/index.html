@@ -16,15 +16,14 @@
     {% include 'blogging/_index_breadcrumbs.html' %}
   {% endif %}
 
-
 <div class="row">
   <div class="card col-md-8 mx-3 px-0 mb-3">
     <div class="card-block">
 
       {% if meta.is_user_blogger %}
-        <div class="small ml-auto">
+        <div class="small float-right">
           <a href="{{ url_for('blogging.editor') }}" id="new">
-            <span class="glyphicon glyphicon-plus"></span>&nbsp;New
+            <span class="fa fa-plus"></span>&nbsp;New
           </a>
         </div>
       {% endif %}

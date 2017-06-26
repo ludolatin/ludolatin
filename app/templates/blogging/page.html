@@ -24,20 +24,19 @@
 {% endif %}
 {% include 'blogging/_page_breadcrumbs.html' %}
 
-<div class="card card-block">
+<div class="row mx-0 card card-block">
   {% if meta.is_user_blogger %}
     <div class="small ml-auto">
       {% if post.editable %}
         <a href="#" id="delete">
-          <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+          <span class="fa fa-trash"></span>&nbsp;Delete
         </a>&nbsp&nbsp
-
         <a href="{{ url_for('blogging.editor', post_id=post.post_id) }}" id="edit">
-          <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+          <span class="fa fa-edit"></span>&nbsp;Edit
         </a>&nbsp&nbsp
       {% endif %}
       <a href="{{ url_for('blogging.editor') }}" id="new">
-        <span class="glyphicon glyphicon-plus"></span>&nbsp;New
+        <span class="fa fa-plus"></span>&nbsp;New
       </a>
     </div>
   {% endif %}
