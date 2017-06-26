@@ -1,12 +1,12 @@
 import os
 
-database_username = os.environ.get('DATABASE_USERNAME') or 'root'
-database_password = os.environ.get('DATABASE_PASSWORD') or ''
+database_username = os.getenv('DATABASE_USERNAME', 'root')
+database_password = os.getenv('DATABASE_PASSWORD', '')
 
 
 class Config(object):
     SITE_NAME = "LudoLatin"
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret key, just for testing'
+    SECRET_KEY = os.getenv('SECRET_KEY') or 'secret key, just for testing'
 
     # SQLAlchemy settings
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True

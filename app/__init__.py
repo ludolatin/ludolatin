@@ -140,7 +140,7 @@ def create_app(config_name):
     # Initialise flask-admin
     admin = Admin(
         app,
-        name='LudoLatin',
+        name=app.config.get('SITE_NAME'),
         template_mode='bootstrap3',
         base_template='admin_base.html',
         index_view=AuthenticatedAdminIndex()
