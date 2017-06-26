@@ -343,13 +343,16 @@ label > input { /* HIDE RADIO */
   visibility: hidden; /* Makes input not-clickable */
   position: absolute; /* Remove input from document flow */
 }
+
 label > input + .card { /* IMAGE STYLES */
   cursor: pointer;
 }
+
 label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   -webkit-box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.43);
   -moz-box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.43);
   box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.43);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
 /* Fixes a known issue with bootstrap img-top */
