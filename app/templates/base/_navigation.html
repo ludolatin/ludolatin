@@ -12,8 +12,11 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <a class="navbar-brand mr-1" href="/">LudoLatin</a>
+    {% if request.user_agent.browser == 'safari' %}
+      <a class="navbar-brand mr-1" href="/"><strong>LudoLatin</strong></a>
+    {% else %}
+      <a class="navbar-brand mr-1" href="/">LudoLatin</a>
+    {% endif %}
     <a href="/beta">
       <h6 style="display: inline-block;">
         <span class="badge badge-pill badge-danger mr-2">Beta</span>
