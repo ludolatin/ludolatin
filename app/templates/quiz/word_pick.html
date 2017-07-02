@@ -1,0 +1,99 @@
+{% extends "quiz/quiz_base.html" %}
+
+{% block right_col %}
+<style>
+  a.fa-arrow-left {
+    position:absolute;
+    z-index:1000;
+    top:20%;
+    left:93%;
+  }
+</style>
+<form class="form-quiz" method=post>
+  {{ form.hidden_tag() }}
+
+  <label class="sr-only" form="answer">Answer</label>
+  {{ form.answer(
+  class="form-control",
+  id="answer",
+  type="text",
+  autocomplete="off",
+  spellcheck="false",
+  autocapitalize="off",
+  autocorrect="off",
+  placeholder="Enter your translation",
+  value="",
+  maxlength=128,
+  style="pointer-events: none;"
+  ) }}
+  <a href="#" id="delete" class="fa fa-arrow-left"></a>
+  {% if form.errors %}
+    {% for field, errors in form.errors.items(): %}
+      {% for error in errors: %}
+        <div class="has-error"><strong>{{ error }}</strong></div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+
+  {% for word in words %}
+  <button type="button"
+          data-text="{{ word }}"
+          id="{{ loop.index }}"
+          class="word btn btn-secondary mt-2">
+    <span class="gray">{{ loop.index }}.</span> &nbsp;{{ word }}
+  </button>
+  {% endfor %}
+{% endblock %}
+
+
+{% block card_bottom %}
+  <div class="card-block rounded-bottom neutral">
+    {{ form.submit(class="btn btn-lg btn-success float-right", role="button") }}
+  </div>
+</form>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $('input[type=text]:first').blur();
+
+    $( ".word" ).click(function() {
+      var word = $(this).attr("data-text");
+      $( "#answer" ).val($( "#answer" ).val() + word + " ");
+      $( "#submit" ).focus();
+      $(this).attr("disabled", true).addClass("disabled");
+    });
+
+    function deleteWord() {
+      var words = $( "#answer" ).val().split(" ");
+      var deletedWord = words.splice(-2, 2);
+      words = words.join(" ") + " ";
+      $( "#answer" ).val(words);
+      console.log(words);
+      $(`[data-text=${deletedWord[0]}]`).removeClass("disabled").attr("disabled", false);
+    }
+
+    $( "#delete" ).click(deleteWord);
+
+    $('html').keyup(function(e){
+      if(e.keyCode == 8) {
+        deleteWord();
+      };
+    });
+
+    var numkeys = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+
+    $(document).keyup(function(e) {
+      console.log(e.keyCode);
+      if ($.inArray(e.keyCode, numkeys) + 1 && $( `#${ e.keyCode - 48 }` ).attr("disabled") !== "disabled") {
+        console.log('HERE');
+        var word = $(`#${ e.keyCode - 48 }`).attr("data-text");
+        $( "#answer" ).val($( "#answer" ).val() + word + " ");
+        $( "#submit" ).focus();
+        $(`#${ e.keyCode - 48 }`).attr("disabled", true).addClass("disabled");
+      };
+    });
+  });
+</script>
+{% endblock %}

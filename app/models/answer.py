@@ -23,7 +23,7 @@ class Answer(db.Model, BaseModel):
         # Is the submitted answer correct?
         is_correct = False  # Incorrect
         punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
-        answer = punctuation_regex.sub('', unicode(text.lower()))
+        answer = punctuation_regex.sub('', unicode(text.lower().rstrip(" ")))
 
         if sentence is not None:
             for translation in sentence.translations:

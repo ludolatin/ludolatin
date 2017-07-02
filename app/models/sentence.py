@@ -1,7 +1,6 @@
 from ._base_model import BaseModel
 from app import db
 
-
 sentence_to_sentence = db.Table(
     'sentence_to_sentence',
     db.Model.metadata,
@@ -15,6 +14,7 @@ class Sentence(db.Model, BaseModel):
     text = db.Column(db.String(128))
     answers = db.relationship('Answer', backref='sentence')
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
+    type = db.Column(db.String(16))
 
     translations = db.relationship(
         "Sentence",

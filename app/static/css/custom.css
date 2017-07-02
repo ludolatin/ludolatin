@@ -288,11 +288,6 @@ div.error {
   border-color: #dadada;
 }
 
-.btn-secondary {
-  color: #999;
-  border-color: #dadada;
-}
-
 .btn-secondary.disabled {
   color: #999;
   border-color: #dadada;

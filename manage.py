@@ -87,7 +87,10 @@ def load_sentences():
             quiz.save()
 
             for english, translations in sentences.items():
+                type = translations.pop(0)['type']
+
                 e = Sentence(
+                    type=type,
                     text=english,
                     quiz=quiz
                 )

@@ -21,7 +21,7 @@ def get_routes():
 def get_users():
     return jsonify({
         'users': [user.to_dict() for user in User.query.all()],
-        'user_count': url_for('api.count', _external=True),
+        'user_count': url_for('api.user_count', _external=True),
     })
 
 
