@@ -19,7 +19,7 @@ def correct_answers(id):
         Answer.attempt == attempt,
     ).all()
     # Convert it to a list, and the list to a set
-    correct = set([r for r, in correct])
+    correct = [r for r, in correct]
     return correct
 
 
