@@ -86,24 +86,25 @@ def load_sentences():
             print quiz
             quiz.save()
 
-            for english, translations in sentences.items():
-                type = translations.pop(0)['type']
+            for question, answers in sentences.items():
+                type = answers.pop(0)['type']
 
-                e = Sentence(
+                q = Sentence(
                     type=type,
-                    text=english,
+                    text=question,
                     quiz=quiz
                 )
 
-                for latin in translations:
-                    l = Sentence(
-                        text=latin,
+                for answer in answers:
+                    a = Sentence(
+                        text=answer,
                     )
-                    e.translations.append(l)
-                    l.translations.append(e)
+                    q.translations.append(a)
+                    a.translations.append(q)
 
-                db.session.add(e)
+                db.session.add(q)
                 db.session.commit()
+
 
 @manager.command
 def delete_sentences():
