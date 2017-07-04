@@ -70,12 +70,12 @@
           </li>
         {% else %}
         <a class="nav-link active" href="/" id="streak">
-          <span>{{ current_user.streak }}</span>
           <img src="/static/images/streak.png" alt="Streak flame" style="width:16px; height:20px;">
+          <span>{{ current_user.streak }}</span>
         </a>
         <a class="nav-link active" href="/store" id="score">
-          <span>{{ current_user.total_score }}</span>
           <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px; height:20px;">
+          <span>{{ current_user.total_score }}</span>
         </a>
           <li class="nav-item dropdown active">
             <a
