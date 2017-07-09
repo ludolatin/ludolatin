@@ -85,7 +85,6 @@
     var numkeys = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
 
     $(document).keyup(function(e) {
-      console.log(e.keyCode);
       if ($.inArray(e.keyCode, numkeys) + 1 && $( `#${ e.keyCode - 48 }` ).attr("disabled") !== "disabled") {
         console.log('HERE');
         var word = $(`#${ e.keyCode - 48 }`).attr("data-text");

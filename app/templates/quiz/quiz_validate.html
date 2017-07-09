@@ -1,4 +1,8 @@
-{% extends "quiz/quiz_base.html" %}
+{% if question.type == "picture" %}
+  {% extends "quiz/picture_validate.html" %}
+{% else %}
+  {% extends "quiz/quiz_base.html" %}
+{% endif %}
 
 {% block right_col %}
 <h4 class="mb-4 list-group-item disabled">
@@ -29,10 +33,14 @@
           <polyline class="path check" fill="none" stroke="#7eb530" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,46.2 51.5,94.8 29.8,73.5 "/>
         </svg>
         <div class="ml-3">
-          <strong>You have a typo.</strong> Correct solutions:<br>
+          <strong>You have a typo.</strong> Correct {{ "solution" | pluralize }}:<br>
           <ul>
           {% for translation in question.translations %}
-            <li>{{ translation.text }}</li>
+            {% if question.type == "picture" %}
+              <li>{{ picture }}</li>
+            {% else %}
+              <li>{{ translation.text }}</li>
+            {% endif %}
           {% endfor %}
           </ul>
         </div>
@@ -46,10 +54,14 @@
           <line class="path line" fill="none" stroke="#dd381d" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" x1="98" y1="40" x2="40" y2="98"/>
         </svg>
         <div class="ml-3">
-          <strong>Correct solutions:</strong><br>
+          <strong>Correct solution{{ question.translations | length | pluralize }}:</strong><br>
           <ul style="margin-bottom: 0;">
           {% for translation in question.translations %}
-            <li>{{ translation.text }}</li>
+            {% if question.type == "picture" %}
+              <li>{{ picture }}</li>
+            {% else %}
+              <li>{{ translation.text }}</li>
+            {% endif %}
           {% endfor %}
           </ul>
         </div>

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card quiz">
+  <div class="card-block">
+    <h1 class="mb-4 text-center">{{ quiz.name }}</h1>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped"
+           role="progressbar"
+           style="width:{{last_progress}}%;background-color:#1CBAF6"
+           aria-valuenow="{{progress}}"
+           aria-valuemin="0"
+           aria-valuemax="100">
+      </div>
+    </div>
+    <h2 class="text-center">Select translation of “{{ question.text }}”</h2>
+      <div class="d-flex justify-content-around">
+        {% for word in words %}
+          {% if word == answer.text %}
+          <div class="{{ 'correct' if answer.is_correct else 'incorrect' }}-border card mt-3" style="width: 200px">
+          {% else %}
+          <div class="card mt-3" style="width: 200px">
+          {% endif %}
+            <img class="card-img-top img-fit img-fluid" src="/static/images/questions/{{ word }}.jpg" alt="{{ word }}">
+            <div class="card-block">
+              <p class="card-text"><span class="gray">{{ loop.index }}.</span> &nbsp;{{ word }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+  </div>
+  {% block card_bottom %}
+  <div class="card-block rounded-bottom neutral">
+    {{ form.submit(class="btn btn-lg btn-success float-right", role="button") }}
+  </div>
+</div>
+  {% endblock %}
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+function nextQuestion(url) {
+  window.location.href = url;
+}
+
+$(document).ready(function() {
+  $( ".progress .progress-bar" ).css("width",
+    function() {
+      return $(this).attr("aria-valuenow") + "%";
+    }
+  )
+
+  $( ".pictures" ).click(function() {
+    $( "#submit" ).focus();
+  })
+});
+
+</script>
+{% endblock %}

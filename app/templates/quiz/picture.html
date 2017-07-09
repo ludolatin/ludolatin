@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card quiz">
+  <div class="card-block">
+    <h1 class="mb-4 text-center">{{ quiz.name }}</h1>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped"
+           role="progressbar"
+           style="width:{{last_progress}}%;background-color:#1CBAF6"
+           aria-valuenow="{{progress}}"
+           aria-valuemin="0"
+           aria-valuemax="100">
+      </div>
+    </div>
+    <h2 class="text-center">Select translation of “{{ question.text }}”</h2>
+    <form id="form" method="post">
+      {{ form.hidden_tag() }}
+      <div class="d-flex justify-content-around">
+        {% for subfield in form.answer %}
+          <label>
+            {{ subfield }}
+            <div class="card mt-3 pictures" style="width: 200px">
+              <img class="card-img-top img-fit img-fluid" src="/static/images/questions/{{ words[loop.index - 1] }}.jpg" alt="{{ words[loop.index - 1] }}">
+              <div class="card-block">
+                <p class="card-text"><span class="gray">{{ loop.index }}.</span> &nbsp;{{ words[loop.index - 1] }}</p>
+              </div>
+            </div>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="card-block rounded-bottom neutral">
+      {{ form.submit(class="btn btn-lg btn-success float-right", role="button", id="submit") }}
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+function nextQuestion(url) {
+  window.location.href = url;
+}
+
+$(document).ready(function() {
+  $( ".progress .progress-bar" ).css("width",
+    function() {
+      return $(this).attr("aria-valuenow") + "%";
+    }
+  )
+
+  $( ".pictures" ).click(function() {
+    $( "#submit" ).focus();
+  })
+
+  var numkeys = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+
+  $(document).keyup(function(e) {
+    if ($.inArray(e.keyCode, numkeys) + 1) {
+      console.log(e.keyCode - 48)
+      $(`#answer-${ e.keyCode - 49 }`).prop("checked", true);
+      $( "#submit" ).focus();
+    };
+  });
+});
+
+</script>
+{% endblock %}

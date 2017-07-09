@@ -50,3 +50,11 @@ def humanize_time(dt, past_='ago', future_='from now', default='just now'):
 def in_seconds(dt):
     # return int((dt - datetime(1970, 1, 1)).total_seconds())
     return int(time.mktime(dt.timetuple()))
+
+
+@utils.app_template_filter('pluralize')
+def pluralize(number, singular='', plural='s'):
+    if number == 1:
+        return singular
+    else:
+        return plural

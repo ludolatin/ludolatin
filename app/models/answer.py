@@ -19,26 +19,32 @@ class Answer(db.Model, BaseModel):
     attempt = db.Column(db.Integer)
 
     def __init__(self, text=None, sentence=None, user=None, attempt=0, created_at=None):
+        if sentence.type == "picture":
+            if sentence.translations[0].text.split(" ")[0] == unicode(text):
+                is_correct = True
+            else:
+                is_correct = False
 
-        # Is the submitted answer correct?
-        is_correct = False  # Incorrect
-        punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
-        answer = punctuation_regex.sub('', unicode(text.lower().rstrip(" ")))
+        else:
+            # Is the submitted answer correct?
+            is_correct = False  # Incorrect
+            punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
+            answer = punctuation_regex.sub('', unicode(text.lower().rstrip(" ")))
 
-        if sentence is not None:
-            for translation in sentence.translations:
-                if answer == punctuation_regex.sub('', unicode(translation.text.lower())):
-                    is_correct = True  # Correct
-                    break
+            if sentence is not None:
+                for translation in sentence.translations:
+                    if answer == punctuation_regex.sub('', unicode(translation.text.lower())):
+                        is_correct = True  # Correct
+                        break
 
-        if sentence is not None and not is_correct:
-            for translation in sentence.translations:
-                if levenshtein_distance(
-                        answer,
-                        punctuation_regex.sub('', unicode(translation.text.lower()))
-                ) == 1:
-                    is_correct = None  # Typo
-                    break
+            if sentence is not None and not is_correct:
+                for translation in sentence.translations:
+                    if levenshtein_distance(
+                            answer,
+                            punctuation_regex.sub('', unicode(translation.text.lower()))
+                    ) == 1:
+                        is_correct = None  # Typo
+                        break
 
         self.text = text
         self.sentence_id = sentence.id if sentence else None

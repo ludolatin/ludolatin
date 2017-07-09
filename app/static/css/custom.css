@@ -350,6 +350,16 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   transition: box-shadow 0.3s ease-in-out;
 }
 
+.correct-border {
+ border-color: #5cb85c;
+ border-width: 2px;
+}
+
+.incorrect-border {
+  border-color: #d9534f;
+  border-width: 2px;
+}
+
 /* Fixes a known issue with bootstrap img-top */
 .card-img-top {
     width: 100%;
@@ -363,4 +373,9 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   border-width: 1px;
   border-style: solid;
   border-color: #fff;
+}
+
+.img-fit {
+  object-fit: cover;
+  height: 130px
 }

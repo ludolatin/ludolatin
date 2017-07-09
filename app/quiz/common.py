@@ -40,6 +40,7 @@ def template_setup(question, id):
 
     return progress, unknown
 
+
 def calculate_score(quiz_id, user):
     score = Sentence.query.filter_by(quiz_id=quiz_id).count() * 2
     neg_score = Answer.query.join(Sentence) \

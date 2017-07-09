@@ -33,7 +33,6 @@ def user_count():
 @api.route('/user/<int:id>/')
 @admin_required
 def get_user(id):
-    print current_user
     user = User.query.get_or_404(id)
     return jsonify(user.to_dict())
 
