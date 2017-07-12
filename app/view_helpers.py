@@ -36,7 +36,14 @@ def daily_scores():
 
 
 def leaderboard():
+    top = User.query.order_by(User.total_score.desc()).limit(3).all()
     winners = User.query.filter(User.total_score > current_user.total_score).order_by(User.total_score).limit(2).all()
+    winners = [winner for winner in winners if winner not in top]
     winners.reverse()
     losers = User.query.filter(User.total_score < current_user.total_score).order_by(User.total_score.desc()).limit(2).all()
-    return winners + [current_user] + losers
+    blank = [{"username": "...", "total_score": ""}]
+
+    if winners:
+        return top + blank + winners + [current_user] + losers
+    else:
+        return top + blank + winners + losers

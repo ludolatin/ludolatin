@@ -133,6 +133,10 @@ class User(UserMixin, db.Model, BaseModel):
         else:
             return 0
 
+    @property
+    def rank(self):
+        return User.query.filter(self.total_score < User.total_score).count() + 1
+
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
