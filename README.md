@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ludolatin/ludolatin.png?label=ready&title=Ready)](https://waffle.io/ludolatin/ludolatin?utm_source=badge)
 # LudoLatin
 
 An open-source tool for learning Latin.
