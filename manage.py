@@ -57,7 +57,7 @@ def add_admin():
     print "Password: password\n"
 
     print "Visit http://localhost/admin, login as admin, "
-    print  "promote an existing user to admin, then delete this temporary admin user.\n"
+    print "Promote an existing user to admin, then delete this temporary admin user.\n"
 
 
 @manager.command
