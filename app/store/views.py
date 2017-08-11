@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 from app.models import Product
 from app.store import store
-from app.view_helpers import daily_scores, day_names
+from app.view_helpers import daily_scores, day_names, leaderboard
 
 
 def _get_user():
@@ -35,5 +35,6 @@ def store():
         daily_scores=daily_scores(),
         referrer=request.referrer,
         streak_time_left=streak_time_left,
-        pictures=pictures
+        pictures=pictures,
+        leaderboard=leaderboard()
     )
