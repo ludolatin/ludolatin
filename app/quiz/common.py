@@ -1,4 +1,4 @@
-from flask import request
+from flask import session
 from flask_login import current_user
 
 from app.models import Answer, Sentence
@@ -9,7 +9,7 @@ def _get_user():
 
 
 def correct_answers(id):
-    attempt = request.cookies.get('attempt')
+    attempt = session.get('attempt')
 
     # Collection of correct answers previously given, returning just the `text` column
     correct = Answer.query.join(Sentence).with_entities(Answer.text).filter(
