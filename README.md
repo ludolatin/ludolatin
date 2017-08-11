@@ -163,5 +163,8 @@ SSL redirection     | [Flask-SSLify](https://github.com/kennethreitz/flask-sslif
 CLI                 | [Flask-Script](https://flask-script.readthedocs.io/)
 
 ## Other libraries used
-CSS | [Bootstrap 4 Alpha](https://v4-alpha.getbootstrap.com/)
-JS  | [jQuery](https://jquery.com/)
+
+Function | Library
+-------- | -------
+CSS      | [Bootstrap 4 Alpha](https://v4-alpha.getbootstrap.com/)
+JS       | [jQuery](https://jquery.com/)
