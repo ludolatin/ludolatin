@@ -1,0 +1,41 @@
+{% if comments | count == 0 %}
+  {% set placeholder = "Be the first to comment!" %}
+{% else %}
+  {% set placeholder = "Leave a comment!" %}
+{% endif %}
+
+{% if current_user.username != None %}
+  <form id="commentForm" class="form-comment" method=post>
+    <div class="d-flex">
+      <textarea name="comment"
+                id="comment"
+                class="form-control"
+                style="width: 100%"
+                rows="1"
+                autocomplete="off"
+                placeholder="Join the discussion..."
+                maxlength=1024></textarea>
+      <div class="has-error"><strong></strong></div>
+
+      <input class="btn btn-success ml-1 g-recaptcha"
+             role="button"
+             type="submit"
+             value="Submit"
+             data-sitekey="6LfvDSsUAAAAAJBt4oCHoduQxUzRzY-6VMlYkrFB"
+             data-callback="submitForm">
+    </div>
+  </form>
+{% else %}
+  <div class="alert alert-danger hidden" role="alert" id="loginError">
+    <strong>Oh snap!</strong>
+    <a href="/auth/login" class="alert-link">Login</a> or
+    <a href="/auth/register" class="alert-link">sign up</a> and try submitting again.
+  </div>
+
+  <div class="d-flex">
+    <input id="disabledTextInput" style="width: 100%" class="form-control" placeholder="Enter your comment">
+    <button type="button" class="btn btn-success ml-1" id ="noSubmit">Submit</button>
+  </div>
+{% endif %}
+
+<div id="comments"></div>
