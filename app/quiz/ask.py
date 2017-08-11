@@ -1,6 +1,6 @@
 from random import shuffle, randint
 
-from flask import render_template, redirect, request, url_for, make_response, session
+from flask import render_template, redirect, request, url_for, session
 from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func
 
@@ -19,7 +19,7 @@ def _get_user():
 def ask(id):
     user = _get_user()
 
-    attempt = request.cookies.get('attempt')
+    attempt = session.get('attempt')
 
     # All correctly answered sentences for the current quiz
     answered_sentences = Sentence.query.join(Sentence.answers, Answer.user).\
@@ -38,11 +38,8 @@ def ask(id):
 
     # If there are no unanswered questions
     if len(questions) == 0:
-        response = make_response(
-            redirect(url_for('quiz.victory', quiz_id=id))
-        )
-        response.set_cookie('attempt', '', expires=0)
-        return response
+        session.pop('attempt')
+        return redirect(url_for('quiz.victory', quiz_id=id))
 
     last_answer = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first()
     last_question = last_answer.sentence if last_answer else None
@@ -89,36 +86,30 @@ def ask(id):
 
     # POST request:
     if form.validate_on_submit():
-        question_id = request.cookies.get('question_id')
+        question_id = session.get('question_id')
         question = Sentence.query.filter_by(id=question_id).first_or_404()
         answer = form.answer.data
         last_answer = Answer.query.filter_by(user=user).order_by(Answer.id.desc()).first()
-        attempt = request.cookies.get('attempt') or (last_answer.attempt + 1) if last_answer else 1
+
+        attempt = session.get('attempt', None) or (last_answer.attempt + 1) if last_answer else 1
 
         answer = Answer(answer, question, user, attempt).save()
 
-        response = make_response(
-            redirect(url_for('quiz.validate', quiz_id=id))
-        )
-        response.set_cookie('answer_id', str(answer.id))
-        response.set_cookie('attempt', str(attempt))
+        session['answer_id'] = str(answer.id)
+        session['attempt'] = str(attempt)
 
-        return response
+        return redirect(url_for('quiz.validate', quiz_id=id))
 
-    # Rather than returning `render_template`, build a response so that we can attach a cookie to it
-    response = make_response(
-        render_template(
-            templates[question.type],
-            title="LudoLatin",
-            question=question,
-            unknown=unknown,
-            form=form,
-            progress=progress,
-            last_progress=progress,
-            quiz=current_quiz,
-            words=words,
-        )
+    session['question_id'] = str(question.id)
+
+    return render_template(
+        templates[question.type],
+        title="LudoLatin",
+        question=question,
+        unknown=unknown,
+        form=form,
+        progress=progress,
+        last_progress=progress,
+        quiz=current_quiz,
+        words=words,
     )
-
-    response.set_cookie('question_id', str(question.id))
-    return response

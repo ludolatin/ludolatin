@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template
 from flask_login import current_user, login_required, session
 
 from app.models import Answer, Sentence, Quiz
@@ -16,8 +16,8 @@ def _get_user():
 def validate(quiz_id):
     form = QuizForm()
 
-    question_id = request.cookies.get('question_id')
-    answer_id = request.cookies.get('answer_id')
+    question_id = session.get('question_id')
+    answer_id = session.get('answer_id')
     question = Sentence.query.filter_by(id=question_id).first_or_404()
     answer = Answer.query.filter_by(id=answer_id).first()
     progress, unknown = template_setup(question, quiz_id)
