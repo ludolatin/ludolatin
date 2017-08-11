@@ -380,3 +380,7 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   height: 130px
 }
 
+.comments-row {
+  box-sizing: content-box;
+}
+
