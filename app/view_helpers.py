@@ -1,7 +1,6 @@
-import datetime
-import collections
+import datetime, collections, requests
 
-from flask_login import current_user
+from flask_login import current_user, request
 
 from app.models import Score, User
 
@@ -47,3 +46,17 @@ def leaderboard():
         return top + blank + winners + [current_user] + losers
     else:
         return top + blank + winners + losers
+
+VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
+SECRET_KEY = "6LfvDSsUAAAAADhqHU58iEWb5ta8jr1XGyf6AOIR"
+
+
+def recaptcha_verify(response=None, remote_ip=None):
+    data = {
+        "secret": SECRET_KEY,
+        "response": response,
+        "remoteip": remote_ip or request.environ.get('REMOTE_ADDR')
+    }
+
+    r = requests.get(VERIFY_URL, params=data)
+    return r.json()["success"] if r.status_code == 200 else False

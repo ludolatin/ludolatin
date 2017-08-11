@@ -108,15 +108,23 @@ class User(UserMixin, db.Model, BaseModel):
 
     def to_dict(self):
         return {
-            'username': self.username,
-            'member_since': self.member_since,
-            'last_seen': self.last_seen,
-            'total_score': self.total_score,
-            'streak': self.streak,
-            'profile_picture': self.profile_picture,
-            'user_url': url_for(
-                'api.get_user', id=self.id, _external=True
-            ),
+            "login": self.username,
+            "id": self.id,
+            "profile_id": self.profile_picture,
+            "url": "https://www.ludolatin.com/api/users/" + self.username,
+            "html_url": "https://www.ludolatin.com/users/" + self.username,
+            "member_since": self.member_since,
+            "(last_seen": self.last_seen,
+            "is_admin": self.is_admin,
+            "quiz_id": self.quiz_id,
+            "total_score": self.total_score,
+            "streak_start_date": self.streak_start_date,
+            "answers": "",
+            "comments_url": "https://www.ludolatin.com/api/users/%s/comments/" % self.username,
+            "confirmed": self.confirmed,
+            "last_score_age": self.last_score_age,
+            "streak": self.streak,
+            "rank": self.rank,
         }
 
     @property

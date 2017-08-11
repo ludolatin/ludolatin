@@ -65,7 +65,7 @@
     <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2">
       {{ post.rendered_text | safe }}
       <hr>
-      <iframe src="/comments/{{ post.post_id }}" style="width: 100%; height: 100%" frameborder="0"></iframe>
+      {% include 'blogging/comments.html' %}
       {% include 'blogging/_social.html' %}
     </div>
   </div>
@@ -83,4 +83,65 @@
       $("blockquote").addClass("blockquote");
   });
 </script>
+<script>
+  var comment_html = function(comment) {
+    return (
+        `<hr>
+    <div class="media">
+      <img class="d-flex mr-3" src="/static/images/profiles/profile-${comment.user.profile_picture}.png"
+           width="60" height="60" alt="Profile picture">
+      <div class="media-body">
+        <h6 class="mt-0" style="display: inline">${comment.user.username}</h6>
+        <em><small>${moment(comment.created_at).fromNow()}</small></em>
+        <p>${comment.body_html}</p>
+      </div>
+    </div>`
+    );
+  };
+
+function submitForm(data) {
+    // send ajax
+    $.ajax({
+      url: '/api/posts/{{ post.post_id }}/comments/', // url where to submit the request
+      type : "POST", // type of action POST || GET
+      dataType : 'json', // data type
+      data : JSON.stringify($("#commentForm").serializeArray()), // post data || get data
+      success : function(result) {
+        // you can see the result from the console
+        // tab of the developer tools
+        $( "#comments" ).prepend(comment_html(result))
+      },
+      error: function(xhr, resp, text) {
+      }
+    })
+  }
+
+  $(document).ready(function() {
+    $('input[type=text]:first').focus();
+
+    $.get('/api/posts/{{post.post_id}}/comments/', function(comments) {
+      comments.forEach(function(comment) {
+        $( "#comments" ).append(comment_html(comment))
+      });
+    });
+
+    $( "#noSubmit" ).click(function() {
+      $('#loginError').removeClass('hidden');
+    });
+
+    $( "#comment" ).click(function() {
+        $(this).attr("rows", 3);
+    });
+  });
+</script>
+
+{% if current_user.username == None %}
+  <script>
+    $(document).keypress(function(e) {
+      if(e.which == 13) {
+        p$('#loginError').removeClass('hidden');
+      }
+    });
+  </script>
+{% endif %}
 {% endblock js %}
