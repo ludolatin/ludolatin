@@ -33,7 +33,7 @@
           <polyline class="path check" fill="none" stroke="#7eb530" stroke-width="14" stroke-linecap="round" stroke-miterlimit="10" points="100.2,46.2 51.5,94.8 29.8,73.5 "/>
         </svg>
         <div class="ml-3">
-          <strong>You have a typo.</strong> Correct {{ "solution" | pluralize }}:<br>
+          <strong>You have a typo.</strong> Correct solution{{ question.translations | length | pluralize }}:<br>
           <ul>
           {% for translation in question.translations %}
             {% if question.type == "picture" %}
