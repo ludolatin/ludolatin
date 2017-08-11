@@ -29,8 +29,6 @@ def ask(id):
     # All sentences for the current quiz
     all_sentences = Sentence.query.filter(Sentence.quiz_id == id).all()
 
-    print "ALL", all_sentences
-
     # The set of unanswered questions
     # TODO: can we do this in a single DB query instead of the two above?
     for i in all_sentences[:]:
