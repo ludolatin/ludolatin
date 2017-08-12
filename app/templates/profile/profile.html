@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md card mx-3 px-0"><!-- main =-->
+    <div class="card-block pb-1">
+      <div class="d-flex flex-column align-items-center">
+        {% if current_user == user %}
+          <div class="row ml-auto mr-2">
+              <a href="{{ url_for('profile.edit') }}">
+                <span class="mr-2">Edit</span>
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </a>
+          </div>
+        {% endif %}
+        <img src="/static/images/profiles/profile-{{ user.profile_picture }}.png" style="border-radius: 50%" width="120" height="120" alt="Profile picture">
+        <h2>{{ username }}</h2>
+        <h5>
+          <span class="mr-2">{{ user.name if user.name else user.username }}</span>
+          <span class="gray">
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+            {{ user.location if user.location else "LudoLatin" }}
+          </span>
+        </h5>
+        <p class="gray">{{ user.bio if user.bio else "About" }}</p>
+      </div>
+    </div>
+
+  </div><!-- main =-->
+
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+
+  <div class="col col-md-5 col-lg-4"><!-- sidebar -->
+    <div class="card card-block">
+      <h4 class="card-title">Achievements</h4>
+      <h6>Streak</h6>
+      <span>
+        <img src="/static/images/streak.png" alt="Streak flame" style="width:16px; height:20px;">
+        <b>{{ user.streak }}</b> days
+      </span>
+    </div>
+  </div><!-- /sidebar -->
+
+</div><!-- /.row -->
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}

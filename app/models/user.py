@@ -43,6 +43,9 @@ class User(UserMixin, db.Model, BaseModel):
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     confirmed = db.Column(db.Boolean, default=False)
     profile_picture = db.Column(db.Integer, default=1)
+    name = db.Column(db.String(128))
+    location = db.Column(db.String(128))
+    bio = db.Column(db.String(1024))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -125,6 +128,9 @@ class User(UserMixin, db.Model, BaseModel):
             "last_score_age": self.last_score_age,
             "streak": self.streak,
             "rank": self.rank,
+            "name": self.name,
+            "location": self.location,
+            "bio": self.bio,
         }
 
     @property
@@ -144,6 +150,7 @@ class User(UserMixin, db.Model, BaseModel):
     @property
     def rank(self):
         return User.query.filter(self.total_score < User.total_score).count() + 1
+
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)

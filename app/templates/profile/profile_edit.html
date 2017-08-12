@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md card mx-3 px-0"><!-- main =-->
+    <div class="card-block pb-1">
+      <div class="d-flex flex-column align-items-center">
+        <div class="row ml-auto mr-2">
+            <a href="/" id="submitForm">
+              <span class="mr-2">Save</span>
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+            </a>
+        </div>
+        <img src="/static/images/profiles/profile-{{ current_user.profile_picture }}.png" style="border-radius: 50%" width="120" height="120" alt="Profile picture">
+        <h2>{{ current_user.username }}</h2>
+        <h5>
+          <form class="form" id="form">
+            <div class="row">
+              <div class="form-group mr-2">
+                <input name="name" type="text" class="form-control" id="formGroupExampleInput" placeholder="{{ 'Full name' if not current_user.name }}" value="{{ current_user.name if current_user.name }}">
+              </div>
+              <div class="form-group">
+                <input name="location" type="text" class="form-control" id="formGroupExampleInput2" placeholder="{{ 'Location' if not current_user.location }}" value="{{ current_user.location if current_user.location }}">
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea name="bio" class="form-control" id="exampleTextarea" rows="3" placeholder="{{ 'About' if not current_user.bio }}">{{ current_user.bio if current_user.bio }}</textarea>
+            </div>
+          </form>
+        </h5>
+      </div>
+    </div>
+
+  </div><!-- main =-->
+
+  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+
+  <div class="col col-md-5 col-lg-4"><!-- sidebar -->
+    <div class="card card-block">
+      <h4 class="card-title">Achievements</h4>
+      <h6>Streak</h6>
+      <span>
+        <img src="/static/images/streak.png" alt="Streak flame" style="width:16px; height:20px;">
+        <b>{{ current_user.streak }}</b> days
+      </span>
+    </div>
+  </div><!-- /sidebar -->
+
+</div><!-- /.row -->
+{% endblock %}
+
+{% block js %}
+<script>
+  $('#submitForm').click(function() {
+    // get all the inputs into an array.
+    var $inputs = $('#form :input');
+
+    // not sure if you wanted this, but I thought I'd add it.
+    // get an associative array of just the values.
+    var values = {};
+    $inputs.each(function() {
+        values[this.name] = $(this).val();
+    });
+
+      console.log(values);
+    $.ajax({
+      type: "POST",
+      url: "/api/users/profile/",
+      data: JSON.stringify(values),
+      contentType: "application/json",
+      success: function() {window.location.href = "{{ url_for('profile.view', username=current_user.username) }}"}
+    });
+  });
+
+
+</script>
+{% endblock %}

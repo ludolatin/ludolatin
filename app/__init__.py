@@ -119,14 +119,14 @@ def create_app(config_name):
     from .utils import utils as utils_blueprint
     app.register_blueprint(utils_blueprint)
 
+    from .profile import profile as profile_blueprint
+    app.register_blueprint(profile_blueprint)
+
     from .store import store as store_blueprint
     app.register_blueprint(store_blueprint)
 
     from .misc import misc as misc_blueprint
     app.register_blueprint(misc_blueprint)
-
-    from .comments import comments as comments_blueprint
-    app.register_blueprint(comments_blueprint)
 
     class AuthenticatedAdminIndex(AdminIndexView):
         @expose('/')

@@ -155,3 +155,19 @@ def profile_pictures(picture_id):
             return jsonify(current_user.to_dict()), 200
         except:
             abort(400)
+
+
+@api.route('/users/profile/', methods=['POST'])
+def edit_profile():
+    try:
+        data = request.get_json()
+
+        current_user.name = data["name"]
+        current_user.location = data["location"]
+        current_user.bio = data["bio"]
+
+        return jsonify({
+            'user': current_user.to_dict(),
+        }), 200
+    except:
+        abort(400)

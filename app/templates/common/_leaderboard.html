@@ -8,6 +8,9 @@
           style="background-color: rgba(32,168,233,0.8); color: white"
         {% endif %}
       >
+        {% if user.username %}
+        <a href="{{ url_for('profile.view', username=user.username) }}" style="color: inherit">
+        {% endif %}
         {% if user == current_user %}
           <span style="color: white"> {{ user.rank }}</span>
         {% else %}
@@ -24,6 +27,9 @@
         {% if user.total_score != "" %}
           <img src="/static/images/aureus_small.png" alt="Roman coin"
                class="ml-1 mr-3" style="width:20px; height:20px;">
+        {% endif %}
+        {% if user.username %}
+        </a>
         {% endif %}
       </li>
     {% endfor %}
