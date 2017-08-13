@@ -87,9 +87,14 @@ def load_sentences():
             quiz.save()
 
             for question, answers in sentences.items():
+                lang = ""
+                if "lang" in answers[0]:
+                    lang = answers.pop(0)['lang']
+
                 type = answers.pop(0)['type']
 
                 q = Sentence(
+                    lang=lang if lang else None,
                     type=type,
                     text=question,
                     quiz=quiz

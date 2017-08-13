@@ -15,6 +15,7 @@ class Sentence(db.Model, BaseModel):
     answers = db.relationship('Answer', backref='sentence')
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'))
     type = db.Column(db.String(16))
+    lang = db.Column(db.String(4))
 
     translations = db.relationship(
         "Sentence",

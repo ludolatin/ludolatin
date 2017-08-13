@@ -75,7 +75,7 @@ def ask(id):
             session["words"] = words
             session["answer"] = answer
 
-    if question.type == "word-pick":
+    elif question.type == "word-pick":
         # Used for addition words to pick from
         quiz_question = Sentence.query.filter(Sentence.quiz == current_quiz, Sentence.id != question.id,
                                               Sentence.type != "picture").order_by(func.random()).first()
@@ -83,6 +83,10 @@ def ask(id):
         words += quiz_question.translations[0].text.split(" ")
         words = list(filter(None, words))
         shuffle(words)
+
+    elif question.type == "simple":
+        words = question.text.split()
+        session["words"] = words
 
     # POST request:
     if form.validate_on_submit():

@@ -15,25 +15,24 @@
     </div>
     <div class="row">
       <div class="col-lg-6">
-        <h4 class="mb-4 text-center list-group-item">
+        <h4 class="mb-4 text-center list-group-item words">
           {% if unknown %}
-          <span
-            class="question underline"
-            id="hint-popover"
-            tabindex="0"
-            data-placement="bottom"
-            data-trigger="hover"
-          >
-            {{question.text}}
-          </span>
+            {% for word in words %}
+              <span class="question underline"
+                    id="word-{{ loop.index0 }}"
+                    tabindex="0"
+                    data-placement="bottom"
+                    data-trigger="hover">
+                {{ word }}
+              </span>&nbsp;
 
-          <ul id="hint-popover-content" class="hidden">
-            {% for translation in question.translations %}
-              <li class="list-group-item">{{ translation.text }}</li>
+              <ul id="translations-{{ loop.index0 }}" class="hidden"></ul>
             {% endfor %}
-          </ul>
+
           {% else %}
-          <span class="question">{{question.text}}</span>
+            {% for word in words %}
+              <span class="question">{{ word }}</span>&nbsp;
+            {% endfor %}
           {% endif %}
         </h4>
       </div> <!-- col -->
@@ -53,19 +52,6 @@ function nextQuestion(url) {
   window.location.href = url;
 }
 
-// popover hint
-$(document).ready(function() {
-  $(function() {
-    // Enables popover
-    $("#hint-popover").popover({
-      html : true,
-      content: function() {
-        return $("#hint-popover-content").html();
-      },
-    });
-  });
-});
-
 // animate progress bar
 $(document).ready(function() {
   $('.progress .progress-bar').css("width",
@@ -73,6 +59,72 @@ $(document).ready(function() {
       return $(this).attr("aria-valuenow") + "%";
     }
   )
+});
+
+// loop through the spans
+$( ".words" ).children( "span" ).each(function (i) {
+
+    // get the span's text, with punctuation and whitespace removed
+    var original_word = $( "#word-" + i ).text().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/ /g,'')
+
+    var urlLaEng = "https://glosbe.com/gapi/translate?from=la&dest=eng&format=json&phrase="
+    var urlEngLa = "https://glosbe.com/gapi/translate?from=eng&dest=la&format=json&phrase="
+
+    // get translations of the text
+    function getTranslations(url) {
+        $.ajax({
+            url: url + original_word,
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'jsonp',
+            success: function (data) {
+
+                if (data["tuc"].length === 0) {
+                    getTranslations(urlEngLa);
+                }
+
+                var translations = [];
+
+                // get all translations
+                data["tuc"].forEach(function (item) {
+                    if (item.hasOwnProperty("phrase")) {
+                        translations.push(item["phrase"]["text"])
+                    }
+                });
+
+                // limit translations to the first 3
+                translations = translations.slice(0, 3)
+
+                // add a rule between each translation
+                // translations = translations.join(" <hr style='border: 1px solid #fff; margin-top: 5px; margin-bottom: 5px'> ")
+
+                // set translations as tooltip title
+                // $( "#word-" + i ).attr('title', translations).tooltip();
+
+                // add each translation to the list group
+                translations.forEach(function (translation) {
+                    $("#translations-" + i).append('<li class="list-group-item">' + translation + '</li>');
+                });
+
+                // activate the popover
+                $( "#word-" + i ).popover({
+                    html: true,
+                    content: function () {
+                        return $("#translations-" + i).html();
+                    },
+                });
+            },
+        });
+    }
+
+    // only load data on hover
+    $( "#word-" + i ).mouseover(function() {
+        {% if question.lang == "eng" %}
+          getTranslations(urlEngLa);
+        {% else %}
+          getTranslations(urlLaEng);
+        {% endif %}
+    });
 });
 </script>
 {% endblock %}
