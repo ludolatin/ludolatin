@@ -63,6 +63,7 @@ def register():
             current_user.username = form.username.data
             current_user.email = form.email.data
             current_user.password = form.password.data
+            current_user.follow(current_user)
             current_user.save()
 
             send_confirmation_email()
@@ -75,6 +76,7 @@ def register():
                 username=form.username.data,
                 password=form.password.data,
             ).save()
+            user.follow(user)
             login_user(user.seen())
 
             # Flask-Principal: Create an Identity object and signal that the identity has changed,

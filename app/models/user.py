@@ -24,6 +24,11 @@ def check_length(attribute, length):
     except:
         return False
 
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('following_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 
 class User(UserMixin, db.Model, BaseModel):
     __tablename__ = 'user'
@@ -46,6 +51,12 @@ class User(UserMixin, db.Model, BaseModel):
     name = db.Column(db.String(128))
     location = db.Column(db.String(128))
     bio = db.Column(db.String(1024))
+    following = db.relationship('User',
+                                secondary=followers,
+                                primaryjoin=(followers.c.follower_id == id),
+                                secondaryjoin=(followers.c.following_id == id),
+                                backref=db.backref('followers', lazy='dynamic'),
+                                lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -205,4 +216,15 @@ class User(UserMixin, db.Model, BaseModel):
         self.save()
         return True
 
+    def follow(self, user):
+        if not self.is_following(user):
+            self.following.append(user)
+            return self
 
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.following.remove(user)
+            return self
+
+    def is_following(self, user):
+        return self.following.filter(followers.c.following_id == user.id).count() > 0
