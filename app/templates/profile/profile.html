@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% macro profile (user) %}
+  <div class="d-flex justify-content-center text-center" style="width: 76px;">
+    <a href="{{ url_for('profile.view', username=user.username) }}" onclick="window.location.href = '{{ url_for('profile.view', username=user.username) }}'">
+      <img class="nav-profile-pic" src="/static/images/profiles/profile-{{ user.profile_picture }}.png" width="30" height="30" alt="Profile picture">
+      <h6>{{ user.username }}</h6>
+    </a>
+  </div>
+{% endmacro %}
+
 {% block content %}
 <div class="row">
   <div class="col-md card mx-3 px-0"><!-- main =-->
@@ -12,6 +21,8 @@
                 <i class="fa fa-pencil" aria-hidden="true"></i>
               </a>
           </div>
+        {% else %}
+          <span>&nbsp;</span>
         {% endif %}
         <img src="/static/images/profiles/profile-{{ user.profile_picture }}.png" style="border-radius: 50%" width="120" height="120" alt="Profile picture">
         <h2>{{ username }}</h2>
@@ -22,7 +33,14 @@
             {{ user.location if user.location else "LudoLatin" }}
           </span>
         </h5>
-        <p class="gray">{{ user.bio if user.bio else "About" }}</p>
+        <p class="gray">{{ user.bio if user.bio else "" }}</p>
+        {% if current_user != user %}
+          {% if current_user.is_following(user) %}
+            <button type="button" class="btn btn-primary float-right unfollow" id="{{ user.username }}">Unfollow</button>
+          {% else %}
+            <button type="button" class="btn btn-secondary float-right follow" id="{{ user.username }}">Follow</button>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
 
@@ -45,13 +63,169 @@
         <b>{{ user.total_score }}</b> aurei
       </span>
     </div>
+
+    <ul class="nav nav-tabs mt-4" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Following: {{ user.following.count() - 1 }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Followers: {{ user.followers.count() - 1}}</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="card card-block" style="height: 152px;">
+      <div class="tab-content">
+        <div class="tab-pane active" id="home" role="tabpanel">
+          <div class="d-flex flex-row flex-wrap">
+            {% set profile_user = user %}
+            {% for user in user.following.limit(7) %}
+              {% if user != profile_user %}
+                {{ profile(user) }}
+              {% endif %}
+            {% endfor %}
+            {% if user.following.count() == 8 %}
+              {% set user = user.following.limit(8)[7] %}
+              {{ profile(user) }}
+            {% elif user.following.count() > 8 %}
+              <div class="d-flex justify-content-center text-center" style="width: 76px;">
+                <a data-toggle="modal" data-target="#followingModal" style="cursor: pointer;">
+                  <img class="nav-profile-pic" src="/static/images/ellipsis.png" width="30" height="30" alt="ellipsis">
+                  <h6>{{ user.followers.count() - 7}} more</h6>
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="tab-pane" id="profile" role="tabpanel">
+          <div class="d-flex flex-row flex-wrap">
+              {% for user in user.followers.limit(7) %}
+                {% if user != profile_user %}
+                  {{ profile(user) }}
+                {% endif %}
+              {% endfor %}
+              {% if user.followers.count() == 8 %}
+                {% set user = user.followers.limit(8)[7] %}
+                {{ profile(user) }}
+              {% elif user.followers.count() > 8 %}
+                <div class="d-flex justify-content-center text-center" style="width: 76px;">
+                  <a data-toggle="modal" data-target="#followersModal" style="cursor: pointer;">
+                    <img class="nav-profile-pic" src="/static/images/ellipsis.png" width="30" height="30" alt="ellipsis">
+                    <h6>{{ user.followers.count() - 7}} more</h6>
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
   </div><!-- /sidebar -->
 
 </div><!-- /.row -->
+
+<!-- Following modal -->
+<div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="followingModalTitle">Following</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% for user in user.following %}
+          <a href="{{ url_for('profile.view', username=user.username) }}">
+            <img class="nav-profile-pic ml-3 mr-3" src="/static/images/profiles/profile-{{ user.profile_picture }}.png" width="30" height="30" alt="Profile picture">
+            <span class="follow-{{ loop.index0 }}">{{ user.username }}</span>
+          </a>
+          {% if current_user.is_following(user) %}
+            <button type="button" class="btn btn-primary btn-sm float-right">Following</button>
+          {% else %}
+            <button type="button" class="btn btn-secondary btn-sm float-right" id="{{ user.username }}">Follow</button>
+          {% endif %}
+          <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Followers modal -->
+<div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="followersModalTitle">Followers</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% for user in user.followers %}
+          {% if user != profile_user %}
+            <a href="{{ url_for('profile.view', username=user.username) }}">
+              <img class="nav-profile-pic ml-3 mr-3" src="/static/images/profiles/profile-{{ user.profile_picture }}.png" width="30" height="30" alt="Profile picture">
+              <span class="follow-{{ loop.index0 }}">{{ user.username }}</span>
+            </a>
+            {% if current_user.is_following(user) %}
+              <button type="button" class="btn btn-primary btn-sm float-right unfollow" id="{{ user.username }}">Unfollow</button>
+            {% else %}
+              <button type="button" class="btn btn-secondary btn-sm float-right follow" id="{{ user.username }}">Follow</button>
+            {% endif %}
+            <hr>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block js %}
 <script>
+$('#followingModal').on('shown.bs.modal', function () {
+  $('#myInput').focus()
+})
 
+function follow_user (username) {
+    $.ajax({
+        type: "POST",
+        url: "/api/users/" + username + "/follow/",
+    });
+}
+
+function unfollow_user (username) {
+    $.ajax({
+        type: "POST",
+        url: "/api/users/" + username + "/unfollow/",
+    });
+}
+
+$(document).on('click','.follow', function(){
+  $('.btn').mouseup(function() { this.blur() })
+  follow_user($(this).attr("id"));
+  $(this).removeClass( "btn-secondary follow" ).addClass( "btn-primary unfollow" ).text( "Unfollow" );
+})
+
+$(document).on('click','.unfollow', function(){
+  $('.btn').mouseup(function() { this.blur() })
+  unfollow_user($(this).attr("id"));
+  $(this).removeClass( "btn-primary unfollow" ).addClass( "btn-secondary follow" ).text( "Follow" );
+})
+
+$('#home').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+
+$('#profile').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
 </script>
 {% endblock %}

@@ -384,3 +384,20 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   box-sizing: content-box;
 }
 
+/* Tabs */
+.nav-tabs > li > a{
+  color: inherit;
+}
+
+.nav-tabs > li > a.active{
+  border-color: #21A8E7 !important;
+  border-width: 1.5px;
+  background-color: inherit !important;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.nav-tabs > li > a:not(.active):hover{
+  border-color: transparent !important;
+}

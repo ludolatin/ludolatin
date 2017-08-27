@@ -52,6 +52,7 @@ def add_admin():
         password="password",
         is_admin="True"
     ).save()
+    user.follow(user)
 
     print "\nUser: admin"
     print "Password: password\n"
@@ -182,6 +183,21 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
+@manager.command
+def random_user():
+    """Add a random user for testing"""
+    import random, string
+    username = "".join(random.choice(string.lowercase) for i in range(5))
+    user = User(
+        email=username + "@example.com",
+        username=username,
+        password="password",
+    ).save()
+    user.follow(user)
+
+    print "\nUser:", username
+    print "Password: password\n"
 
 if __name__ == "__main__":
     manager.run()

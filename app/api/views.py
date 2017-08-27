@@ -171,3 +171,27 @@ def edit_profile():
         }), 200
     except:
         abort(400)
+
+
+@api.route('/users/<username>/follow/', methods=['POST'])
+def follow_user(username):
+    user = User.query.filter_by(username=username).first()
+    try:
+        current_user.follow(user)
+        return jsonify({
+            'user': current_user.to_dict(),
+        }), 200
+    except:
+        abort(400)
+
+
+@api.route('/users/<username>/unfollow/', methods=['POST'])
+def unfollow_user(username):
+    user = User.query.filter_by(username=username).first()
+    try:
+        current_user.unfollow(user)
+        return jsonify({
+            'user': current_user.to_dict(),
+        }), 200
+    except:
+        abort(400)
