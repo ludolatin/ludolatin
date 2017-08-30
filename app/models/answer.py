@@ -24,27 +24,8 @@ class Answer(db.Model, BaseModel):
                 is_correct = True
             else:
                 is_correct = False
-
         else:
-            # Is the submitted answer correct?
-            is_correct = False  # Incorrect
-            punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
-            answer = punctuation_regex.sub('', unicode(text.lower().rstrip(" ").replace("the", "").replace("a", "")))
-
-            if sentence is not None:
-                for translation in sentence.translations:
-                    if answer == punctuation_regex.sub('', unicode(translation.text.lower().replace("the", "").replace("a", ""))):
-                        is_correct = True  # Correct
-                        break
-
-            if sentence is not None and not is_correct:
-                for translation in sentence.translations:
-                    if levenshtein_distance(
-                            answer,
-                            punctuation_regex.sub('', unicode(translation.text.lower()))
-                    ) == 1:
-                        is_correct = None  # Typo
-                        break
+            is_correct = self.check_is_correct(sentence, text)
 
         self.text = text
         self.sentence_id = sentence.id if sentence else None
@@ -52,6 +33,27 @@ class Answer(db.Model, BaseModel):
         self.user = user
         self.created_at = created_at or datetime.utcnow()
         self.attempt = attempt
+
+    def check_is_correct(self, sentence, text):
+        # Is the submitted answer correct?
+        is_correct = False  # Incorrect
+
+        answer = self.normalize(text)
+        if sentence is not None:
+            for translation in sentence.translations:
+                if answer == self.normalize(translation.text):
+                    is_correct = True  # Correct
+                    break
+        if sentence is not None and not is_correct:
+            for translation in sentence.translations:
+                if levenshtein_distance(answer, self.normalize(translation.text)) == 1:
+                    is_correct = None  # Typo
+                    break
+        return is_correct
+
+    def normalize(self, text):
+        punctuation_regex = re.compile('[%s]' % re.escape(punctuation))
+        return punctuation_regex.sub('', unicode(text.lower().rstrip(" ").replace("the", "").replace("a", "")))
 
     def __repr__(self):
         return '<{0} answer: {1} by {2}>'.format(self.status, self.text, self.user or 'None')
