@@ -7,3 +7,4 @@ from .score import Score
 from .product import Product
 from .purchase import Purchase
 from .comments import Comment
+from .activity import Activity

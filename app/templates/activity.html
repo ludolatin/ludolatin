@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="row mx-0 card card-block">
+
+  <div class="row flex-column">
+    <h1 class="text-center">Activity</h1>
+  </div>
+
+  <div class="row comments-row">
+    <div class="col-md-10 offset-md-1 col-xl-8 offset-xl-2">
+      <hr>
+      {% for item in activity %}
+        <div class="media">
+          <img class="d-flex mr-3" src="/static/images/profiles/profile-1.png"
+               width="60" height="60" alt="Profile picture">
+          <div class="media-body">
+            <h6 class="mt-0" style="display: inline">{{ item.user.username }}</h6>
+            <em><small>{{ item.created_at | humanize }}</small></em>
+            <p>{{ item.body_html }}</p>
+          </div>
+        </div>
+      <hr>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

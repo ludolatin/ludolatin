@@ -15,7 +15,7 @@ from wtforms.fields import HiddenField
 from config import config
 
 db = SQLAlchemy()
-from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment
+from app.models import User, Answer, Sentence, Quiz, Score, Topic, Product, Purchase, Comment, Activity
 
 migrate = Migrate()
 login_manager = LoginManager()
@@ -128,6 +128,9 @@ def create_app(config_name):
     from .misc import misc as misc_blueprint
     app.register_blueprint(misc_blueprint)
 
+    from .activity import activity as activity_blueprint
+    app.register_blueprint(activity_blueprint)
+
     class AuthenticatedAdminIndex(AdminIndexView):
         @expose('/')
         def index(self):
@@ -168,5 +171,6 @@ def create_app(config_name):
     admin.add_view(AuthenticatedModelView(Post, db.session, name='Post'))
     admin.add_view(AuthenticatedModelView(Tag, db.session, name='Tag'))
     admin.add_view(AuthenticatedModelView(Comment, db.session))
+    admin.add_view(AuthenticatedModelView(Activity, db.session, endpoint="admin_activity"))
 
     return app

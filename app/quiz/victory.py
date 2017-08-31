@@ -3,7 +3,7 @@ import datetime
 from flask import render_template, redirect, url_for
 from flask_login import current_user, login_required
 
-from app.models import Answer, Quiz, Score
+from app.models import Answer, Quiz, Score, Activity
 from app.quiz import quiz
 from app.view_helpers import daily_scores, day_names
 from .common import calculate_score
@@ -36,6 +36,11 @@ def victory(quiz_id):
 
         user.total_score += final_score
         Score(score=final_score, user=user, quiz_id=quiz_id, attempt=last_attempt)
+
+        # Activity feed
+        Activity(user=user, body_html="%s finished %s in the %s skill" % (user.username, current_quiz.name, current_topic.name), public=True)
+        if current_topic.quizzes[-1] == current_quiz:
+            Activity(user=user, body_html="%s finished the %s skill" % (user.username, current_topic.name), public=True)
 
         # Don't update user.quiz _id if this is a redo
         if user.quiz_id <= quiz_id:

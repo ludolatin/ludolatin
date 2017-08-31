@@ -57,6 +57,7 @@ class User(UserMixin, db.Model, BaseModel):
                                 secondaryjoin=(followers.c.following_id == id),
                                 backref=db.backref('followers', lazy='dynamic'),
                                 lazy='dynamic')
+    activity = db.relationship('Activity', backref='user', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

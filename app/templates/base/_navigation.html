@@ -43,6 +43,15 @@
         >
           <a class="nav-link" href="/store">Store</a>
         </li>
+        <li
+          {% if request.endpoint == "activity.activity" %}
+            class="nav-item active"
+          {% else %}
+            class = "nav-item"
+          {% endif %}
+        >
+          <a class="nav-link" href="/activity">Activity</a>
+        </li>
 
         {% if request.endpoint %}
           <li

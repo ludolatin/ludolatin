@@ -2,11 +2,12 @@ from flask import render_template, redirect, request, url_for, session, current_
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_principal import Identity, AnonymousIdentity, identity_changed
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from datetime import datetime, timedelta
 
 from app.auth import auth
 from app.auth.forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, \
     PasswordResetForm, ChangeEmailForm
-from app.models import User
+from app.models import User, Activity
 from app.email import send_email
 
 
@@ -32,6 +33,9 @@ def login():
             identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
             return redirect(request.args.get('next') or url_for('dashboard.dashboard'))
+
+        if datetime.utcnow() - user.last_seen > timedelta(days=7):
+            Activity(user=user, body_html="%s just logged in." % user.username, public=True)
 
     return render_template(
         'auth/login.html',

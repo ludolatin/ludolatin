@@ -5,7 +5,7 @@ from flask_script import Manager, Shell, prompt_bool
 from ludolatin import app
 from app import db
 from app import models
-from app.models import User, Sentence, Quiz, Answer, Score, Topic, Product, Purchase, Comment
+from app.models import User, Sentence, Quiz, Answer, Score, Topic, Product, Purchase, Comment, Activity
 
 # output = dump(data, Dumper=Dumper)
 
@@ -88,6 +88,7 @@ def load_sentences():
             quiz.save()
 
             for question, answers in sentences.items():
+                print question
                 lang = ""
                 if "lang" in answers[0]:
                     lang = answers.pop(0)['lang']
