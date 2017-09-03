@@ -154,7 +154,7 @@ class User(UserMixin, db.Model, BaseModel):
 
     @property
     def streak(self):
-        if self.streak_start_date and self.last_score_age < 36:
+        if self.streak_start_date and self.last_score_age and self.last_score_age < 36:
             return (datetime.utcnow() - self.streak_start_date).days
         else:
             return 0
