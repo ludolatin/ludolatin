@@ -14,7 +14,7 @@
       <hr>
       {% for item in activity %}
         <div class="media">
-          <img class="d-flex mr-3" src="/static/images/profiles/profile-1.png"
+          <img class="d-flex mr-3" src="/static/images/profiles/profile-{{ item.user.profile_picture }}.png"
                width="60" height="60" alt="Profile picture">
           <div class="media-body">
             <h6 class="mt-0" style="display: inline">{{ item.user.username }}</h6>
