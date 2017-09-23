@@ -106,3 +106,7 @@ ENV/
 /data/
 
 app/static/fileupload/
+
+# Ignore sql files
+*.sql
+*.sql.old
