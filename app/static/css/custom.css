@@ -401,3 +401,24 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
 .nav-tabs > li > a:not(.active):hover{
   border-color: transparent !important;
 }
+
+.list-group-item {
+  display: block;
+}
+
+.link--hidden {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link--hidden:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.list-group-item.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #1caff6;
+  border-color: #1caff6;
+}

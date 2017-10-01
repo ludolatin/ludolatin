@@ -1,37 +1,55 @@
+{% macro blank_row(user) %}
+  <li class="list-group-item">
+    {{ user.username }}
+  </li>
+{% endmacro %}
+
+{% macro current_user_row(user) %}
+<li class="list-group-item active">
+  <a href="#" class="link--hidden">
+    <div class="row">
+      <div class="col text-nowrap">
+        <span>{{ user.rank }}.</span>
+        <span>{{ user.username or "Guest" }}</span>
+      </div>
+      <div class="col text-right">
+        <span>{{ user.total_score }}</span>
+        <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px; height:20px;">
+      </div>
+    </div>
+  </a>
+</li>
+{% endmacro %}
+
+{% macro default_row(user) %}
+  <li class="list-group-item">
+    <a href="#" class="link--hidden">
+      <div class="row">
+        <div class="col text-nowrap">
+          <span>{{ user.rank }}.</span>
+          <span>{{ user.username or "Guest" }}</span>
+        </div>
+        <div class="col text-right">
+          <span>{{ user.total_score }}</span>
+          <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px; height:20px;">
+        </div>
+      </div>
+    </a>
+  </li>
+{% endmacro %}
+
 <div class="card card-block mt-4">
   <h4 class="card-title">Leaderboard</h4>
   <h6 class="card-subtitle mb-3 text-muted">Check your progress against your nearest competitors.</h6>
   <ul class="list-group">
     {% for user in leaderboard %}
-      <li class="list-group-item"
-        {% if user == current_user %}
-          style="background-color: rgba(32,168,233,0.8); color: white"
-        {% endif %}
-      >
-        {% if user.username %}
-        <a href="{{ url_for('profile.view', username=user.username) }}" style="color: inherit">
-        {% endif %}
-        {% if user == current_user %}
-          <span style="color: white"> {{ user.rank }}</span>
-        {% else %}
-          <span class="gray"> {{ user.rank }}</span>
-        {% endif %}
-        <span class="ml-3 mr-auto">
-          {% if user == current_user %}
-            <strong>{{ user.username or "Guest"}}</strong>
-          {% else %}
-            {{ user.username or "Guest"}}
-          {% endif %}
-        </span>
-        <span class=" ">{{ user.total_score }}</span>
-        {% if user.total_score != "" %}
-          <img src="/static/images/aureus_small.png" alt="Roman coin"
-               class="ml-1 mr-3" style="width:20px; height:20px;">
-        {% endif %}
-        {% if user.username %}
-        </a>
-        {% endif %}
-      </li>
+      {% if user.username == "..." %}
+        {{ blank_row(user) }}
+      {% elif user == current_user %}
+        {{ current_user_row(user) }}
+      {% else %}
+        {{ default_row(user) }}
+      {% endif %}
     {% endfor %}
   </ul>
 </div>
