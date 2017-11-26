@@ -1,4 +1,4 @@
-<div class="card-block" style="flex: initial;">
+<div class="card-body" style="flex: initial;">
   <div class="d-flex flex-row">
     <div>
       <h4 class="card-title">Latin skills</h4>
@@ -9,11 +9,11 @@
     <div class="ml-auto"><a href="/store" class="btn btn-sm btn-success">Visit Store</a></div>
   </div>
 </div>
-<div class="card-block d-flex flex-row flex-wrap justify-content-around text-center">
+<div class="card-body d-flex flex-row flex-wrap justify-content-around text-center">
 {% for topic in topics %}
   {% if topic.id < current_topic.id %}
     <div class="ml-5 mr-5 mb-3">
-      <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
+      <a class="link--hidden" href="{{ url_for('topic.topic', topic_id=topic.id) }}">
         <div width="32" height="32" class="topicPieComplete"></div>
         <br>
         {{ current_topic.name }}
@@ -21,7 +21,7 @@
     </div>
   {% elif topic == current_topic %}
     <div class="ml-5 mr-5 mb-3">
-      <a href="{{ url_for('topic.topic', topic_id=topic.id) }}">
+      <a class="link--hidden" href="{{ url_for('topic.topic', topic_id=topic.id) }}">
         <!--https://www.smashingmagazine.com/2015/07/designing-simple-pie-charts-with-css/-->
         <svg class="topicPieContainer" viewBox="0 0 32 32">
           <circle class="topicPie" r="15.915" cx="15.915" cy="15.915" />

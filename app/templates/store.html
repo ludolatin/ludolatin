@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
   <div class="col-md card mx-3 px-0"><!-- main =-->
-    <div class="card-block pb-1">
+    <div class="card-body pb-1">
       <div class="d-flex flex-row">
         <div>
           <h4 class="card-title">Store</h4>
@@ -13,40 +13,39 @@
       </div>
       <ul class="list-group">
         {% for product in products %}
-          <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
+          <li href="#" class="list-group-item flex-column align-items-start mb-3">
             <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1" style="font-weight:bold">{{ product.name }}</h5>
+              <h5 class="mb-1 font-weight-bold">{{ product.name }}</h5>
               <small>{{ product.price }}</small>
             </div>
-            <div class="d-flex w-100 mb-1">{{ product.description }}</div>
-            <div class="d-flex w-100 justify-content-end mb-1">
+            <p class="mb-1">{{ product.description }}</p>
+            <div class="d-flex w-100 justify-content-end">
               {% if product.available %}
-                <button type="button" class="btn btn-sm btn-success" id="{{ product.name | lower | replace(' ', '_') }}">
-                  Get for: {{ product.total_price }}
-                </button>
+              <button type="button" class="btn btn-sm btn-success mb-1" id="{{ product.name | lower | replace(' ', '_') }}">
+                Get for: {{ product.total_price }}
+              </button>
               {% else %}
-                <a href="#" class="btn btn-sm btn-secondary disabled">
-                  Get for: {{ product.total_price }}
-                </a>
+              <a href="#" class="btn btn-sm btn-secondary disabled mb-1">
+                Get for: {{ product.total_price }}
+              </a>
               {% endif %}
             </div>
           </li>
         {% endfor %}
-        <li class="list-group-item d-flex w-100 mb-3"style="border-width: 2px" >
-          <h5 class="mb-1" style="font-weight:bold">Something else?</h5>
-
-          <div class="d-flex w-100 mb-1">More choices coming soon!</div>
-          <div class="d-flex w-100 justify-content-end mb-1">
-              <button class="btn btn-sm btn-secondary disabled">
-                Unavailable
-              </button>
+        <li href="#" class="list-group-item flex-column align-items-start mb-3">
+          <h5 class="mb-1 font-weight-bold">Something else?</h5>
+          <p class="mb-1">More choices coming soon!</p>
+          <div class="d-flex w-100 justify-content-end">
+            <button class="btn btn-sm btn-secondary disabled mb-1">
+              Unavailable
+            </button>
           </div>
         </li>
       </ul>
     </div>
   </div><!-- main =-->
 
-  <div class="col-md hidden-md-up">&nbsp;</div> <!-- separate the columns when stacked -->
+  <div class="col-md d-md-none">&nbsp;</div> <!-- separate the columns when stacked -->
 
   <div class="col col-md-5 col-lg-4"><!-- sidebar -->
     {% include 'common/_progress_chart.html' %}
@@ -75,7 +74,7 @@
             {% endif %}
             <div class="card mt-3" style="width: 200px">
               <img class="card-img-top img-fluid" src="/static/images/profiles/{{ picture.filename }}" alt="Card image cap">
-              <div class="card-block">
+              <div class="card-body">
                 <p class="card-text">{{ picture.name }}</p>
               </div>
             </div>
@@ -159,10 +158,11 @@
   $('#buy_pic_button').click(function(){
     var picture_id = $('input[name=picture]:checked').val()
     $.get('/api/store/profile_pictures/' + picture_id, function(data) {
+      console.log(data);
       var audio = new Audio('/static/audio/item-bought.mp3');
       audio.play();
       $('#score').children("span").text(data.total_score);
-      $('.nav-profile-pic').attr("src", "/static/images/profiles/profile-" + data.profile_picture + ".png");
+      $('.nav-profile-pic').attr("src", "/static/images/profiles/profile-" + data.profile_id + ".png");
 
       updateTripleOrNothingButton(data.total_score);
 

@@ -26,11 +26,11 @@
     {% include 'topic/_quizzes.html' %}
     {% if topic.text is not none %}
       <hr>
-      <div class="card-block">{{ topic.text | markdown }}</div>
+      <div class="card-body">{{ topic.text | markdown }}</div>
     {% endif %}
   </div><!-- /.main -->
 
-  <div class="col-lg hidden-lg-up">&nbsp;</div> <!-- separate the columns when stacked -->
+  <div class="col-lg d-lg-none">&nbsp;</div> <!-- separate the columns when stacked -->
 
   <div class="col mx-3 px-0"><!-- .sidebar -->
     {% include 'topic/_topic_progress.html' %}

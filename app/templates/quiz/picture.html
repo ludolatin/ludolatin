@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="card quiz">
-  <div class="card-block">
+  <div class="card-body">
     <h1 class="mb-4 text-center">{{ quiz.name }}</h1>
     <div class="progress">
       <div class="progress-bar progress-bar-striped"
@@ -22,7 +22,7 @@
             {{ subfield }}
             <div class="card mt-3 pictures" style="width: 200px">
               <img class="card-img-top img-fit img-fluid" src="/static/images/questions/{{ words[loop.index - 1] }}.jpg" alt="{{ words[loop.index - 1] }}">
-              <div class="card-block">
+              <div class="card-body">
                 <p class="card-text"><span class="gray">{{ loop.index }}.</span> &nbsp;{{ words[loop.index - 1] }}</p>
               </div>
             </div>
@@ -30,7 +30,7 @@
         {% endfor %}
       </div>
     </div>
-    <div class="card-block rounded-bottom neutral">
+    <div class="card-body rounded-bottom neutral">
       {{ form.submit(class="btn btn-lg btn-success float-right", role="button", id="submit") }}
     </div>
   </form>

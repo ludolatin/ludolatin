@@ -12,9 +12,9 @@
 
 {% block card_bottom %}
 {% if answer.is_correct or answer.is_correct is none %}
-  <div class="card-block rounded-bottom alert-success" style="background-color: #def0a5">
+  <div class="card-body rounded-bottom alert-success" style="background-color: #def0a5">
 {% else %}
-  <div class="card-block rounded-bottom alert-danger" style="background-color: #ffd4cc">
+  <div class="card-body rounded-bottom alert-danger" style="background-color: #ffd4cc">
 {% endif %}
   <div class="row">
     {% if answer.is_correct %}

@@ -283,15 +283,15 @@ div.error {
   border-color: #71a823;
 }
 
-.disabled {
-  color: #999;
-  border-color: #dadada;
-}
+/*.disabled {*/
+  /*color: #999;*/
+  /*border-color: #dadada;*/
+/*}*/
 
-.btn-secondary.disabled {
-  color: #999;
-  border-color: #dadada;
-}
+/*.btn-secondary.disabled {*/
+  /*color: #999;*/
+  /*border-color: #dadada;*/
+/*}*/
 
 .btn-info {
   background-color: #1caff6;

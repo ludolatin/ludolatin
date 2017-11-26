@@ -1,4 +1,4 @@
-<div class="card-block">
+<div class="card-body">
   <h4 class="card-title">{{topic.name}}</h4>
   <h6 class="card-subtitle mb-4 text-muted">
     Select a quiz to check your progress. Further quizzes unlock as you complete them.
@@ -6,7 +6,7 @@
   <div class="card-deck">
     {% for quiz in topic.quizzes %}
       <div class="card mb-4" style="border-width:2px">
-        <div class="card-block d-flex flex-column">
+        <div class="card-body d-flex flex-column">
           <div class="topicCardTitle">
             <h4 class="card-title">{{ quiz.name }}</h4>
             {% if quiz.id < current_user.quiz.id %}
