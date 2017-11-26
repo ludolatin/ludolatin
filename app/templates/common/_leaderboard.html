@@ -4,26 +4,9 @@
   </li>
 {% endmacro %}
 
-{% macro current_user_row(user) %}
-<li class="list-group-item active">
-  <a href="#" class="link--hidden">
-    <div class="row">
-      <div class="col text-nowrap">
-        <span>{{ user.rank }}.</span>
-        <span>{{ user.username or "Guest" }}</span>
-      </div>
-      <div class="col text-right">
-        <span>{{ user.total_score }}</span>
-        <img src="/static/images/aureus_small.png" alt="Roman coin" style="width:20px; height:20px;">
-      </div>
-    </div>
-  </a>
-</li>
-{% endmacro %}
-
-{% macro default_row(user) %}
-  <li class="list-group-item">
-    <a href="#" class="link--hidden">
+{% macro user_row(user) %}
+  <li class="list-group-item {{ 'active' if user == current_user }}">
+    <a href="{{ url_for('profile.view', username=user.username) }}" class="link--hidden">
       <div class="row">
         <div class="col text-nowrap">
           <span>{{ user.rank }}.</span>
@@ -45,10 +28,8 @@
     {% for user in leaderboard %}
       {% if user.username == "..." %}
         {{ blank_row(user) }}
-      {% elif user == current_user %}
-        {{ current_user_row(user) }}
       {% else %}
-        {{ default_row(user) }}
+        {{ user_row(user) }}
       {% endif %}
     {% endfor %}
   </ul>

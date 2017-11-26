@@ -36,15 +36,17 @@ def daily_scores():
 
 def leaderboard():
     top = User.query.order_by(User.total_score.desc()).limit(3).all()
-    winners = User.query.filter(User.total_score > current_user.total_score).order_by(User.total_score).limit(2).all()
+    winners = User.query.filter(User.total_score > current_user.total_score, User.username != None).order_by(User.total_score).limit(2).all()
     winners = [winner for winner in winners if winner not in top]
     winners.reverse()
-    losers = User.query.filter(User.total_score < current_user.total_score).order_by(User.total_score.desc()).limit(2).all()
+    losers = User.query.filter(User.total_score < current_user.total_score, User.username != None).order_by(User.total_score.desc()).limit(2).all()
     blank = [{"username": "...", "total_score": ""}]
 
     if winners:
+        print "LEADERBOARD: ", top + blank + winners + [current_user] + losers
         return top + blank + winners + [current_user] + losers
     else:
+        print "LEADERBOARD: ", top + blank + winners + losers
         return top + blank + winners + losers
 
 VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"

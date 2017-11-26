@@ -35,7 +35,7 @@ def login():
             return redirect(request.args.get('next') or url_for('dashboard.dashboard'))
 
         if datetime.utcnow() - user.last_seen > timedelta(days=7):
-            Activity(user=user, body_html="%s just logged in." % user.username, public=True)
+            Activity(user=user, body_html="%s logged in." % user.username, public=True)
 
     return render_template(
         'auth/login.html',
