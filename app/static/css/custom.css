@@ -1,6 +1,6 @@
 body {
   background-color: rgb(233, 233, 233);
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   color: #3c3c3c;
 }
 
@@ -43,7 +43,7 @@ h2.title {
 }
 .form-auth input {
   margin-bottom: 10px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .form-quiz .form-control {
@@ -64,7 +64,7 @@ h2.title {
 
 .answer {
   height:31px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .underline {
@@ -259,7 +259,7 @@ div.error {
 
 /* Buttons */
 .btn {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   border-width: 2px;
 }
 
