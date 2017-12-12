@@ -1,12 +1,22 @@
-[![Stories in Ready](https://badge.waffle.io/ludolatin/ludolatin.png?label=ready&title=Ready)](https://waffle.io/ludolatin/ludolatin?utm_source=badge)
 # LudoLatin
 
-An open-source tool for learning Latin.
+[![GitHub issues](https://img.shields.io/github/issues/ludolatin/ludolatin.svg?style=flat-square)]()
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/ludolatin/ludolatin.svg?style=flat-square)]()
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg?style=flat-square)](https://www.python.org/dev/peps/pep-0008/)
+[![gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://github.com/carloscuesta/gitmoji)
 
-See what's next on my [kanban](https://trello.com/b/NWzloF3z/ludolatin).
+[LudoLatin](https://www.ludolatin.com) is an open-source project to make learning a language free, fun and fast. The official implementation aims to teach Latin, but it is built flexibly enough that any language could be taught, by simply writing yml lesson data to the `data` directory.
 
-Test it out on [ludolatin.com](https://www.ludolatin.com/)
+LudoLatin is updated monthly with new features and bug fixes. You can use it on [the website](https://www.ludolatin.com).
 
+<p align="center">
+  <img alt="LudoLatin in action" src="https://user-images.githubusercontent.com/24858006/33909961-272933ce-df85-11e7-8c47-df6ab26d2b44.png">
+</p>
+
+The [`ludolatin`](https://github.com/ludolatin/ludolatin) repository is where I do development and there are many ways you can participate in the project, for example:
+
+* [Submit bugs and feature requests](https://github.com/ludolatin/ludolatin/issues) and help verify as they are checked in
+* Review [source code changes](https://github.com/ludolatin/ludolatin/pulls)
 
 ## Install
 [virtualenv](https://virtualenv.pypa.io/en/stable/) provides a local install of python, pip, and any installed extensions.
