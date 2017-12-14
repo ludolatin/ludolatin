@@ -1,22 +1,62 @@
+/* ==========================================================================
+   Table of Contents
+   ========================================================================== */
+/*
+    0. Elements
+    1. Layout
+    2. Components
+    3. Utilities
+    4. Experimentals
+    5. Other
+*/
+
+/* ==========================================================================
+   0. Elements
+   ========================================================================== */
+
+/*
+ * Typography
+ */
+
 body {
   background-color: rgb(233, 233, 233);
   font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   color: #3c3c3c;
 }
 
-.header {
-  padding-bottom: 1rem;
+/*
+ * Buttons
+ */
+
+.btn {
+  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  border-width: 2px;
 }
 
-h2.title {
-  word-wrap: break-word;
+.btn-primary {
+  background-color: #1caff6;
+  border-color: #1caff6;
 }
 
-.card.quiz {
-  box-shadow: 0 0 30px rgba(0,0,0,0.08);
+.btn-primary:hover {
+  background-color: #0FA2E9;
+  border-color: #0FA2E9;
 }
 
-/* Bootstrap form */
+.btn-success {
+  background-color: #7eb530;
+  border-color: #7eb530
+}
+
+.btn-success:hover {
+  background-color: #71a823;
+  border-color: #71a823;
+}
+
+/*
+ * Forms
+ */
+
 .form-auth {
   max-width: 500px;
   padding: 15px;
@@ -54,6 +94,92 @@ h2.title {
   padding: 10px;
   font-size: 23px;
   font-family: 'Raleway', sans-serif;
+}
+
+/* ==========================================================================
+   1. Layout
+   ========================================================================== */
+
+/* ==========================================================================
+   2. Components
+   ========================================================================== */
+
+/*
+ * Cards
+ */
+
+.card.quiz {
+  box-shadow: 0 0 30px rgba(0,0,0,0.08);
+}
+
+/*
+ * Charts
+ */
+
+.topicPieContainer {
+  width: 100px; height: 100px;
+  transform: rotate(-90deg);
+  background: #1cb0f6;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPie {
+  fill: #14d4f4;
+  stroke: #1cb0f6;
+  stroke-width: 32;
+}
+
+.topicPieLocked {
+  width: 100px; height: 100px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPieComplete {
+  width: 100px; height: 100px;
+  background: #1cb0f6;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.topicPie:hover {
+  fill: #1cdcfc;
+  stroke: #24b8fe;
+ }
+
+.topicPieComplete:hover {
+  background: #24b8fe
+ }
+
+/* ==========================================================================
+   3. Utilities
+   ========================================================================== */
+
+/*
+ * Colors
+ */
+
+.orange {
+  color: #ffbe46
+}
+
+.gray {
+  color: #999
+}
+
+
+/* ==========================================================================
+   4. Experimentals
+   ========================================================================== */
+
+ /* ==========================================================================
+   5. Other
+   ========================================================================== */
+
+.card-block a:hover {
+  text-decoration: none;
 }
 
 /* Quiz */
@@ -204,48 +330,6 @@ div.error {
   content: "...";
 }
 
-/* Pie chart */
-.topicPieContainer {
-  width: 100px; height: 100px;
-  transform: rotate(-90deg);
-  background: #1cb0f6;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.topicPie {
-  fill: #14d4f4;
-  stroke: #1cb0f6;
-  stroke-width: 32;
-}
-
-.topicPieLocked {
-  width: 100px; height: 100px;
-  background: #f0f0f0;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.topicPieComplete {
-  width: 100px; height: 100px;
-  background: #1cb0f6;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.topicPie:hover {
-  fill: #1cdcfc;
-  stroke: #24b8fe;
- }
-
-.topicPieComplete:hover {
-  background: #24b8fe
- }
-
-.card-block a:hover {
-  text-decoration: none;
-}
-
 /* Topic card */
 .topicCardTitle {
   display: flex;
@@ -257,46 +341,6 @@ div.error {
   margin-top: 4px;
 }
 
-/* Buttons */
-.btn {
-  font-family: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  border-width: 2px;
-}
-
-.btn-primary {
-  background-color: #1caff6;
-  border-color: #1caff6;
-}
-
-.btn-primary:hover {
-  background-color: #0FA2E9;
-  border-color: #0FA2E9;
-}
-
-.btn-success {
-  background-color: #7eb530;
-  border-color: #7eb530
-}
-
-.btn-success:hover {
-  background-color: #71a823;
-  border-color: #71a823;
-}
-
-/*.disabled {*/
-  /*color: #999;*/
-  /*border-color: #dadada;*/
-/*}*/
-
-/*.btn-secondary.disabled {*/
-  /*color: #999;*/
-  /*border-color: #dadada;*/
-/*}*/
-
-.btn-info {
-  background-color: #1caff6;
-  border-color: #1caff6
-}
 
 /* Topic card deck - Change breakpoint*/
 /* https://codepen.io/JacobLett/pen/rWXJPV */
@@ -325,13 +369,6 @@ div.error {
     font-size: 0.9rem;
 }
 
-.orange {
-  color: #ffbe46
-}
-
-.gray {
-  color: #999
-}
 
 /* Image radio buttons */
 label > input { /* HIDE RADIO */
@@ -421,4 +458,12 @@ label > input:checked + .card{ /* (RADIO CHECKED) IMAGE STYLES */
   color: #fff;
   background-color: #1caff6;
   border-color: #1caff6;
+}
+
+.header {
+  padding-bottom: 1rem;
+}
+
+h2.title {
+  word-wrap: break-word;
 }
