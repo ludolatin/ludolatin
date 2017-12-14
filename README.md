@@ -176,5 +176,5 @@ CLI                 | [Flask-Script](https://flask-script.readthedocs.io/)
 
 Function | Library
 -------- | -------
-CSS      | [Bootstrap 4 Alpha](https://v4-alpha.getbootstrap.com/)
+CSS      | [Bootstrap 4 Beta](https://getbootstrap.com/)
 JS       | [jQuery](https://jquery.com/)
