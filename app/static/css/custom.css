@@ -174,6 +174,19 @@ body {
     background-color: #fff
 }
 
+/*
+ * Version number
+ */
+
+.version {
+    /* Bootstrap otherwise hides empty pill */
+    display: block !important;
+}
+
+.version:after {
+    content: '1.0.0'
+}
+
 
 /* ==========================================================================
    4. Experimentals
