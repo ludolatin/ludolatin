@@ -1,0 +1,27 @@
+{
+  "name": "ingenuity",
+  "version": "1.0.0",
+  "description": "An open-source tool for learning Latin",
+  "main": "ludolatin.py",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merelinguist/ingenuity.git"
+  },
+  "author": "merelinguist",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ludolatin/ludolatin/issues"
+  },
+  "homepage": "https://github.com/ludolatin/ludolatin#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.0",
+    "tailwindcss": "^0.4.0"
+  }
+}

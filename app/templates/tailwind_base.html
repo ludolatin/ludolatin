@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Page head
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<head>
+  {% block title %}
+  {% if title %}
+    <title>LudoLatin - {{ title }}</title>
+  {% endif %}
+  {% endblock %}
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <meta name="description" content="Latin learning app.">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-title" content="LudoLatin">
+  <meta name="application-name" content="LudoLatin">
+
+  <!-- Custom Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block meta %}{% endblock %}
+
+  <!-- Favicons
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/static/images/favicons/manifest.json">
+  <link rel="mask-icon" href="/static/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/static/images/favicons/favicon.ico">
+  <meta name="msapplication-config" content="/static/images/favicons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='build/styles.css') }}">
+
+  <!-- Custom CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block css %}{% endblock %}
+
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://use.fontawesome.com/d19ac60d3d.js"></script>
+
+  <!-- Cookie consent-->
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+  <script>
+  window.addEventListener("load", function(){
+  window.cookieconsent.initialise({
+    "palette": {
+      "popup": {
+        "background": "#eceeef",
+        "text": "#000000"
+      },
+      "button": {
+        "background": "#7eb530",
+        "text": "#ffffff"
+      }
+    },
+    "theme": "classic",
+    "position": "bottom",
+    "content": {
+      "message": "Cookies help us improve our web content and deliver a personalized experience. By using this website, you agree to our use of cookies.",
+      "href": "/privacy#Cookies"
+    }
+  })});
+  </script>
+</head>
+
+<body class="bg-grey-lighter h-screen font-sans">
+  {% block content %}{% endblock %}
+  {% include 'base/_js.html' %}
+  {% block js %}{% endblock %}
+</body>
+
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</html>
